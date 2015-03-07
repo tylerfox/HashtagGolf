@@ -3,36 +3,3 @@
 | |_) |  _|   / _ \ | | | | |\/| |  _|  
 |  _ <| |___ / ___ \| |_| | |  | | |___ 
 |_| \_\_____/_/   \_\____/|_|  |_|_____|
-
-Known Bugs: None that I know of
-
-KDTREE
-I store a Point at each node. This is done to preserve the following invariant: At every level in the
-tree, nodes are sorted by a given axis. For example, at depth 1, nodes are sorted by their x coordinate. 
-That means that for root node's left child has a smaller x coordinate and its right child has a larger x coordinate.
-The same invariant is preserved for all nodes at depth 2, except for the Y coordinate.  The pattern continues to row
-3 with the Z coordinate, then restarts, comparing the X coordinate again in row 4 and so on. This can change depending on how many dimensions the tree is setup to hold. The correct axis can be found by doing depth % dimension, where 0 is x, 1 is y, 2 is z, and so on.
-
-Nearest neighbor search finds the nearest leaf node to the starting point, then propogates up the tree, checking if another 'split area' is closer than the worst point it has found so far. If so, it explores that area. For nearest neighbor search, I createed a data structure called a BoundedPriorityQueue that is initialized with a maximum size and a comparator. When it is already full and an element is added, it replaces the item with the least priority. If it is less that the item with the least priority, it is not added.
-
-Radius search is similar, in that it begins by finding the nearest leaf node to the starting point, then propogates up the tree, checking if each node is smaller than the radius and if the ares it's split on is closer. If so, it explores that subtree.
-
-My JUNIT test classes end in ...Test.java. They test various functions such as KDTree validity, nearestNeighborSearch, radiusSearch and other small functions like those of the BoundedPriorityQueue.
-
-System tests are located in stars/tests
-
-Design Questions
-1.My switch in handle input would have another case which would call a method called handleXXX. This method would perform the appropriate computations and make the appropraite method calls to compute the new command. A new method could be added in KDTree to perform the computation.
-
-2.The biggest problem I see would be knowing which way to go, since the earth is round and wraps around. If you were to make a 'bounding box,' you would have to find a way to make sure you chose the right one.  Furthermore, the earth's surface is curved, which would affect distance calculations.
-
-
-Optimizations
-The kdtree makes nearest neighbor and radius search very fast by storing points at each node and using the sorting method mentioned above to quickly eliminate large areas.
-
-I started with over 1000 checkstyle errors, but left a few that I thought would hinder readability
-
-FindBugs mentions serializable errors that I was told not to worry about.
-System.exit(1) is appropriate to terminate the program because of a fatal error
-Calling a static method in main should be fine
-
