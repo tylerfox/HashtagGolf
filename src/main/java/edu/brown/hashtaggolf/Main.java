@@ -1,4 +1,4 @@
-package edu.brown.cs.tjfox.hashtaggolf;
+package edu.brown.hashtaggolf;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,6 @@ public class Main {
   }
 
   public void run() {
-	  System.out.println("HI");
     runSparkServer();
   }
 

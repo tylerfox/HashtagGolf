@@ -1,4 +1,4 @@
-package golf;
+package edu.brown.imageprocessing;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,11 +13,12 @@ public class FileColour implements PixelColour {
     file = new File(filePath);
   }
 
+  @Override
   public void printColourAt(int x, int y) {
     try {
       BufferedImage image = ImageIO.read(file);
 
-      int clr = image.getRGB(x,y);
+      int clr = image.getRGB(x, y);
       int red = (clr & 0x00ff0000) >> 16;
       int green = (clr & 0x0000ff00) >> 8;
       int blue = clr & 0x000000ff;
