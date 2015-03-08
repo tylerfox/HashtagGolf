@@ -25,13 +25,13 @@ public class TwitterQuery {
   public void initTwitter() {
     cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
-    .setOAuthConsumerKey("LdHRl9Lp7AaoxTRp6p316IHd5")
-    .setOAuthConsumerSecret(
-        "gkE5FZJv1xNbInq01TWJqJjZ2vXuy2ra2FMpJO0X4G4v7ppLeD")
+        .setOAuthConsumerKey("LdHRl9Lp7AaoxTRp6p316IHd5")
+        .setOAuthConsumerSecret(
+            "gkE5FZJv1xNbInq01TWJqJjZ2vXuy2ra2FMpJO0X4G4v7ppLeD")
         .setOAuthAccessToken(
             "285842636-zuA21Cw3DNlpn6abviuFyUHqEaY5m4tM9GAE8YiH")
-            .setOAuthAccessTokenSecret(
-                "PMOLTk5nCagNlgLmfkaf6lx5ijPm2wJLJh3wiWJjKsIHv");
+        .setOAuthAccessTokenSecret(
+            "PMOLTk5nCagNlgLmfkaf6lx5ijPm2wJLJh3wiWJjKsIHv");
     TwitterFactory tf = new TwitterFactory(cb.build());
     twitter = tf.getInstance();
   }
@@ -61,6 +61,8 @@ public class TwitterQuery {
               return 0;
             }
           }
+        } else {
+          return 0;
         }
       }
     } catch (TwitterException e) {
