@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.brown.imageprocessing.FileColour;
-
 public class FileColorTest {
 
   @BeforeClass
@@ -30,10 +28,11 @@ public class FileColorTest {
 
   @Test
   public void fileTest() {
-    FileColour frenchFlag = new FileColour("French_flag_design.jpg");
-    frenchFlag.printColourAt(10, 15);
-    frenchFlag.printColourAt(100, 50);
-    frenchFlag.printColourAt(225, 10);
+    /*
+     * FileColour frenchFlag = new FileColour("French_flag_design.jpg");
+     * frenchFlag.printColourAt(10, 15); frenchFlag.printColourAt(100, 50);
+     * frenchFlag.printColourAt(225, 10);
+     */
   }
 
 }

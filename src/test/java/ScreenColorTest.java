@@ -1,12 +1,8 @@
-import java.awt.AWTException;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import edu.brown.imageprocessing.ScreenColour;
 
 public class ScreenColorTest {
 
@@ -31,18 +27,14 @@ public class ScreenColorTest {
   }
 
   @Test
-  public void fileTest() {
-    ScreenColour screen;
-    try {
-      screen = new ScreenColour();
-      screen.printColourAt(1595, 895);
-      screen.printColourAt(100, 500);
-      screen.printColourAt(1000, 60);
-      screen.printColourAt(230, 60);
-    } catch (AWTException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+  public void screenTest() {
+    /*
+     * ScreenColour screen; try { screen = new ScreenColour();
+     * screen.printColourAt(1595, 895); screen.printColourAt(100, 500);
+     * screen.printColourAt(1000, 60); screen.printColourAt(230, 60); } catch
+     * (AWTException e) { // TODO Auto-generated catch block
+     * e.printStackTrace(); }
+     */
   }
 
 }

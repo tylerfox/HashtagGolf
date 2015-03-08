@@ -16,6 +16,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 import com.google.common.collect.ImmutableMap;
 
+import edu.brown.socialdata.TwitterQuery;
 import freemarker.template.Configuration;
 
 /**
@@ -39,7 +40,8 @@ public class Main {
   }
 
   public void run() {
-    runSparkServer();
+    // runSparkServer();
+    TwitterQuery.query("timbers");
   }
 
   /**
