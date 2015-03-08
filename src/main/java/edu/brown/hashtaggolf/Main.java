@@ -41,7 +41,9 @@ public class Main {
 
   public void run() {
     // runSparkServer();
-    TwitterQuery.query("timbers");
+    TwitterQuery tq = new TwitterQuery();
+    // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
+    tq.getCount("#DaylightSavingTime", 300);
   }
 
   /**

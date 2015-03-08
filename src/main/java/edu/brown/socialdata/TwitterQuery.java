@@ -1,6 +1,7 @@
 package edu.brown.socialdata;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import twitter4j.Query;
@@ -13,8 +14,16 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterQuery {
 
-  public static void query(String queryString) {
-    ConfigurationBuilder cb = new ConfigurationBuilder();
+  ConfigurationBuilder cb;
+  Twitter twitter;
+  int numTweets;
+
+  public TwitterQuery() {
+    initTwitter();
+  }
+
+  public void initTwitter() {
+    cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
     .setOAuthConsumerKey("LdHRl9Lp7AaoxTRp6p316IHd5")
     .setOAuthConsumerSecret(
@@ -24,30 +33,56 @@ public class TwitterQuery {
             .setOAuthAccessTokenSecret(
                 "PMOLTk5nCagNlgLmfkaf6lx5ijPm2wJLJh3wiWJjKsIHv");
     TwitterFactory tf = new TwitterFactory(cb.build());
-    Twitter twitter = tf.getInstance();
-    Query query = new Query(queryString);
-    query.setCount(100);
-    query.setResultType(Query.RECENT);
-    QueryResult result;
+    twitter = tf.getInstance();
+  }
+
+  public long query(Query q, int duration) {
     try {
-      result = twitter.search(query);
-      int numTweets = 0;
       Date now = new Date();
-      for (Status status : result.getTweets()) {
-        // if (timeElapsed(now, status.getCreatedAt().getTime()) < 50) {
-        System.out.println("@" + status.getUser().getScreenName() + ":"
-            + status.getText());
-        numTweets++;
-        // }
+      long startTime = now.getTime();
+      System.out.println("start time: " + startTime);
+      QueryResult result;
+      result = twitter.search(q);
+      List<Status> tweets = result.getTweets();
+      int tweetsSize = tweets.size();
+      for (int i = 0; i < tweetsSize; i++) {
+        Status curStatus = tweets.get(i);
+        if (timeElapsed(now, curStatus.getCreatedAt().getTime()) < duration) {
+          numTweets++;
+          System.out.println("@" + curStatus.getUser().getScreenName() + ":"
+              + curStatus.getText());
+          int elapsedTime = (int) timeElapsed(now, curStatus.getCreatedAt()
+              .getTime());
+          System.out.println(elapsedTime + "seconds ago");
+          if (i == tweetsSize - 1) {
+            if (elapsedTime < duration) {
+              return curStatus.getId();
+            } else {
+              return 0;
+            }
+          }
+        }
       }
-      System.out.println("Number of Tweets:" + numTweets);
     } catch (TwitterException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    return -1;
   }
 
-  public static long timeElapsed(Date now, long time) {
+  public void getCount(String queryString, int duration) {
+    Query q = new Query(queryString);
+    q.setCount(100);
+    q.setResultType(Query.RECENT);
+    numTweets = 0;
+    long maxId;
+    while ((maxId = query(q, duration)) > 0) {
+      q.setMaxId(maxId);
+    }
+    System.out.println(numTweets);
+  }
+
+  public long timeElapsed(Date now, long time) {
     return TimeUnit.MILLISECONDS.toSeconds(now.getTime() - time);
   }
 }
