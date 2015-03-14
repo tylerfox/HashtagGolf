@@ -1,6 +1,6 @@
 package edu.brown.networking;
 
-import edu.brown.hashtaggolf.State;
+import edu.brown.hashtaggolf.Player;
 
 public class Client {
   private int id;
@@ -16,7 +16,7 @@ public class Client {
   public void handShake(String hostName, int portNum) {
   }
 
-  private void sendInfo(Player playerInfo) {  
+  private void sendInfo(Player playerInfo) {
   }
 
 }

@@ -1,8 +1,9 @@
 package edu.brown.networking;
 
+import java.net.Socket;
 import java.util.List;
 
-import edu.brown.hashtaggolf.State;
+import edu.brown.hashtaggolf.Player;
 
 public class Server {
   private List<Player> gameState;
@@ -10,7 +11,7 @@ public class Server {
   private List<Socket> clients;
 
   // runs server until all Players have connected
-  public static run(){
+  public static void run() {
   	// waits for handshake from all Players (until Host sends start game)
   }
 
