@@ -12,11 +12,27 @@ public class Client {
   	this.portNum = portNum;
   }
 
-  // Establishes connection with server, gets a client id assigned;
-  public void handShake(String hostName, int portNum) {
+  /**
+   * Establishes connection with server, gets a client ID assigned.
+   * @param hostName The name of the host server.
+   * @param portNum The port number.
+   * @return True on successful handshake, false otherwise.
+   */
+  public boolean handshake(String hostName, int portNum) {
+    try {
+      //...
+      return true;
+    } catch (Exception e){
+      return false;
+    }
   }
 
-  private void sendInfo(Player playerInfo) {
+  public boolean sendInfo(Player playerInfo) {
+    try {
+      //...
+      return true;
+    } catch (Exception e){
+      return false;
+    }
   }
-
 }
