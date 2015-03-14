@@ -28,7 +28,27 @@ public class TwitterQueryTest {
   }
 
   @Test
-  public void test() {
+  public void checkConnection() {
+  }
+
+  @Test
+  public void emptyQuery() {
+  }
+
+  @Test
+  public void noResults() {
+  }
+
+  @Test
+  public void noInternet() {
+  }
+
+  @Test
+  public void simpleQuery() {
+  }
+
+  @Test
+  public void compoundedQuery() {
   }
 
 }
