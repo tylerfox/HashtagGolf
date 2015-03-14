@@ -4,6 +4,8 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Robot;
 
+import edu.brown.hashtaggolf.Terrain;
+
 public class ScreenColour implements PixelColour {
   private Robot screen;
 
@@ -22,8 +24,15 @@ public class ScreenColour implements PixelColour {
   }
 
   @Override
-  public int getTerrainAt(int x, int y) {
+  public Terrain getTerrainAt(int x, int y) {
     Color colour = screen.getPixelColor(x, y);
-    return colour.getRGB();
+    
+    for (Terrain terrain : Terrain.values()) {
+      if (terrain.getColour() == colour.getRGB()) {
+        return terrain;
+      }
+    }
+    
+    return null;
   }
 }

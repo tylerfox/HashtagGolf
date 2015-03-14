@@ -9,11 +9,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import edu.brown.hashtaggolf.Terrain;
 import edu.brown.imageprocessing.FileColour;
 
 public class FileColorTest {
-  private static final int TEE = -1;
-
   @BeforeClass
   public static void setUpClass() throws Exception {
     // (Optional) Code to run before any tests begin goes here.
@@ -72,7 +71,7 @@ public class FileColorTest {
   public void whiteTerrain() {
     try {
       FileColour frenchFlag = new FileColour("French_flag_design.jpg");
-      assertTrue(frenchFlag.getTerrainAt(100, 50) == TEE);
+      assertTrue(frenchFlag.getTerrainAt(100, 50) == Terrain.TEE);
     } catch (IOException e) {
       assertTrue(false);
     }

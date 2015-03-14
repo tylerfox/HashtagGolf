@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import edu.brown.hashtaggolf.Terrain;
+
 public class FileColour implements PixelColour {
   private File file;
   private BufferedImage image;
@@ -17,16 +19,24 @@ public class FileColour implements PixelColour {
 
   @Override
   public String getColourAt(int x, int y) {
-    int clr = image.getRGB(x, y);
-    int red = (clr & 0x00ff0000) >> 16;
-    int green = (clr & 0x0000ff00) >> 8;
-    int blue = clr & 0x000000ff;
+    int colour = image.getRGB(x, y);
+    int red = (colour & 0x00ff0000) >> 16;
+    int green = (colour & 0x0000ff00) >> 8;
+    int blue = colour & 0x000000ff;
 
     return "Red: " + red + ", Green: " + green + ", Blue: " + blue;
   }
 
   @Override
-  public int getTerrainAt(int x, int y) {
-    return image.getRGB(x, y);
+  public Terrain getTerrainAt(int x, int y) {
+    int colour = image.getRGB(x, y);
+    
+    for (Terrain terrain : Terrain.values()) {
+      if (terrain.getColour() == colour) {
+        return terrain;
+      }
+    }
+    
+    return null;
   }
 }
