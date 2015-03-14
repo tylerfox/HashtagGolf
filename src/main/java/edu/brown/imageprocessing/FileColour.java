@@ -7,28 +7,26 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class FileColour implements PixelColour {
-  File file;
+  private File file;
+  private BufferedImage image;
 
-  public FileColour(String filePath) {
+  public FileColour(String filePath) throws IOException {
     file = new File(filePath);
+    image = ImageIO.read(file);
   }
 
   @Override
-  public void printColourAt(int x, int y) {
-    try {
-      BufferedImage image = ImageIO.read(file);
+  public String getColourAt(int x, int y) {
+    int clr = image.getRGB(x, y);
+    int red = (clr & 0x00ff0000) >> 16;
+    int green = (clr & 0x0000ff00) >> 8;
+    int blue = clr & 0x000000ff;
 
-      int clr = image.getRGB(x, y);
-      int red = (clr & 0x00ff0000) >> 16;
-      int green = (clr & 0x0000ff00) >> 8;
-      int blue = clr & 0x000000ff;
+    return "Red: " + red + ", Green: " + green + ", Blue: " + blue;
+  }
 
-      System.out.print("Red: " + red);
-      System.out.print(", Green: " + green);
-      System.out.println(", Blue: " + blue);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  @Override
+  public int getTerrainAt(int x, int y) {
+    return image.getRGB(x, y);
   }
 }

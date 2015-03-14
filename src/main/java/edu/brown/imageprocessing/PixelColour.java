@@ -1,5 +1,6 @@
 package edu.brown.imageprocessing;
 
 public interface PixelColour {
-  public void printColourAt(int x, int y);
+  public String getColourAt(int x, int y);
+  public int getTerrainAt(int x, int y);
 }

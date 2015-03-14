@@ -1,8 +1,14 @@
+import static org.junit.Assert.*;
+
+import java.awt.AWTException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import edu.brown.imageprocessing.ScreenColour;
 
 public class ScreenColorTest {
 
@@ -27,14 +33,28 @@ public class ScreenColorTest {
   }
 
   @Test
-  public void screenTest() {
-    /*
-     * ScreenColour screen; try { screen = new ScreenColour();
-     * screen.printColourAt(1595, 895); screen.printColourAt(100, 500);
-     * screen.printColourAt(1000, 60); screen.printColourAt(230, 60); } catch
-     * (AWTException e) { // TODO Auto-generated catch block
-     * e.printStackTrace(); }
-     */
+  public void eclipseWindow() {
+    try {
+      ScreenColour screen = new ScreenColour();
+      
+      assertTrue(screen.getColourAt(1595, 895).equals("Red: 31, Green: 42, Blue: 48"));
+      assertTrue(screen.getColourAt(100, 500).equals("Red: 255, Green: 255, Blue: 255"));
+      assertTrue(screen.getColourAt(1000, 60).equals("Red: 180, Green: 205, Blue: 230"));
+      assertTrue(screen.getColourAt(230, 60).equals("Red: 65, Green: 98, Blue: 90"));
+    } catch (AWTException e) {
+      assertTrue(false);
+    }
   }
-
+  
+  @Test
+  public void offScreen() {
+    try {
+      ScreenColour screen = new ScreenColour();
+      assertTrue(screen.getColourAt(200000, -387).equals("No screen of this size exists."));
+    } catch (AssertionError e) {
+      assertTrue(true);
+    } catch (AWTException e) {
+      assertTrue(false);
+    }
+  }
 }

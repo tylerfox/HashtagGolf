@@ -10,16 +10,20 @@ public class ScreenColour implements PixelColour {
   public ScreenColour() throws AWTException {
     screen = new Robot();
   }
-
-  public Color getColourAt(int x, int y) {
+  
+  @Override
+  public String getColourAt(int x, int y) {
     Color colour = screen.getPixelColor(x, y);
-    return colour;
+    int red = colour.getRed();
+    int green = colour.getGreen();
+    int blue = colour.getBlue();
+    
+    return "Red: " + red + ", Green: " + green + ", Blue: " + blue;
   }
 
   @Override
-  public void printColourAt(int x, int y) {
-    System.out.print("Red: " + getColourAt(x, y).getRed());
-    System.out.print(", Green: " + getColourAt(x, y).getGreen());
-    System.out.println(", Blue: " + getColourAt(x, y).getBlue());
+  public int getTerrainAt(int x, int y) {
+    Color colour = screen.getPixelColor(x, y);
+    return colour.getRGB();
   }
 }
