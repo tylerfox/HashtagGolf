@@ -11,6 +11,7 @@ import org.junit.Test;
 import edu.brown.imageprocessing.FileColour;
 
 public class FileColorTest {
+  private static final int TEE = -1;
 
   @BeforeClass
   public static void setUpClass() throws Exception {
@@ -70,7 +71,7 @@ public class FileColorTest {
   public void whiteTerrain() {
     try {
       FileColour frenchFlag = new FileColour("French_flag_design.jpg");
-      assertTrue(frenchFlag.getTerrainAt(100, 50) == -1);
+      assertTrue(frenchFlag.getTerrainAt(100, 50) == TEE);
     } catch (IOException e) {
       assertTrue(false);
     }
