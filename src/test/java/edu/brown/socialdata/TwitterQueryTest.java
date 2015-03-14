@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ServerTest {
+public class TwitterQueryTest {
 
   @BeforeClass
   public static void setUpClass() throws Exception {

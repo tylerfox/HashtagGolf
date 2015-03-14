@@ -1,11 +1,11 @@
-package edu.brown.socialdata;
+package edu.brown.networking;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ClientTest {
+public class ServerTest {
 
   @BeforeClass
   public static void setUpClass() throws Exception {
