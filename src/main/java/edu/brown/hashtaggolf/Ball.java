@@ -14,8 +14,12 @@ public class Ball {
 	}
 
 	// consider making copy of terrain
-	private Terrain getTerrain() {
+	public Terrain getTerrain() {
 		return terrain;
+	}
+
+	// updates location of the ball
+	public void updateLocation(int distance, double angle) {
 	}
 
 }

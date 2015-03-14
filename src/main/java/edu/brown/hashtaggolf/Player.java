@@ -29,7 +29,7 @@ public abstract class Player {
   }
 
   // returns clone of ball
-  public void getBall() {
+  public Ball getBall() {
   	return ball;
   }
 }
