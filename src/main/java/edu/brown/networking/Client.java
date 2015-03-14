@@ -3,14 +3,20 @@ package edu.brown.networking;
 import edu.brown.hashtaggolf.State;
 
 public class Client {
+  private int id;
+  private String hostname;
+  private int portNum;
 
-  int id;
+  public Client (String hostname, int portNum) {
+  	this.hostname = hostname;
+  	this.portNum = portNum;
+  }
 
   // Establishes connection with server, gets a client id assigned;
   public void handShake(String hostName, int portNum) {
   }
 
-  private void sendInfo(int id, State state, String query) {
+  private void sendInfo(Player playerInfo) {  
   }
 
 }
