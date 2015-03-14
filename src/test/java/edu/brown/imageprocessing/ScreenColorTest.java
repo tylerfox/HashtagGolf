@@ -1,4 +1,5 @@
-import static org.junit.Assert.*;
+package edu.brown.imageprocessing;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.AWTException;
 
@@ -7,8 +8,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import edu.brown.imageprocessing.ScreenColour;
 
 public class ScreenColorTest {
 

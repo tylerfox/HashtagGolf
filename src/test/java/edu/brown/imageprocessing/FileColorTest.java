@@ -1,3 +1,4 @@
+package edu.brown.imageprocessing;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
