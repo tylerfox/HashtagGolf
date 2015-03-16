@@ -2,7 +2,6 @@ package edu.brown.socialdata;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -12,17 +11,18 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class TwitterQuery {
+public class TwitterQuery implements SocialQuery {
 
   ConfigurationBuilder cb;
   Twitter twitter;
   int numTweets;
 
   public TwitterQuery() {
-    initTwitter();
+    init();
   }
 
-  public void initTwitter() {
+  @Override
+  public void init() {
     cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
         .setOAuthConsumerKey("LdHRl9Lp7AaoxTRp6p316IHd5")
@@ -72,7 +72,8 @@ public class TwitterQuery {
     return -1;
   }
 
-  public void getCount(String queryString, int duration) {
+  @Override
+  public int getCount(String queryString, int duration) {
     Query q = new Query(queryString);
     q.setCount(100);
     q.setResultType(Query.RECENT);
@@ -82,9 +83,6 @@ public class TwitterQuery {
       q.setMaxId(maxId);
     }
     System.out.println(numTweets);
-  }
-
-  public long timeElapsed(Date now, long time) {
-    return TimeUnit.MILLISECONDS.toSeconds(now.getTime() - time);
+    return numTweets;
   }
 }

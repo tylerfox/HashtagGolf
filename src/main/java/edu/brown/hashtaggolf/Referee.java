@@ -1,7 +1,10 @@
 package edu.brown.hashtaggolf;
 
-public class Referee {
+import edu.brown.imageprocessing.PixelColour;
 
+public class Referee {
+  private PixelColour image;
+  private int level;
 
   // gets word count
   // gets terrain of ball
@@ -21,5 +24,4 @@ public class Referee {
   public boolean isGameOver(Player player) {
     return false;
   }
-
 }
