@@ -8,7 +8,7 @@ import edu.brown.socialdata.TwitterQuery;
 
 
 /**
- * The main stars class that is used to invoke the program.
+ * The main golf class that is used to invoke the program.
  */
 public class Main {
   private boolean isGameOver = false;
@@ -45,7 +45,8 @@ public class Main {
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
       
-      while (!isGameOver && input != null) {
+      while (!isGameOver && input  != null) {
+        // TODO:  Add club choice (this may be an extra argument to the swing method in referee)
         ref.swing(player, input, 0);
         if (player.isGameOver()) {
           System.out.println("Congrats on finishing the course.");

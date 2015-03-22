@@ -12,8 +12,8 @@ public abstract class Player {
   	this.name = name;
   	this.terrain = Terrain.TEE;
   	
-  	// will have to figure out how to set this based on the level
-  	this.distanceToHole = 500;
+  	// TODO: will have to figure out how to set this based on the level
+  	this.distanceToHole = 250;
   	this.score = 0;
   	this.x = 0;
   	this.y = 0;
@@ -22,7 +22,7 @@ public abstract class Player {
  
   // Players with powerups will override
   // this method
-  public int powerUp(int distance) {
+  public int powerup(int distance) {
     // currently no powerup
   	return distance;
   }

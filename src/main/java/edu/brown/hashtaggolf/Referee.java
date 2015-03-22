@@ -28,8 +28,11 @@ public class Referee {
   // possibly add a club option
   public void swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
-    Terrain newTerrain = Terrain.FAIRWAY;//image.getTerrainAt(player.getX() + yards, 0);
-    
+
+    //TODO:  Add image processing (currently is not done yet)
+    //will look something like: image.getTerrainAt(player.getX() + yards, 0);
+    Terrain newTerrain = Terrain.FAIRWAY;
+
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
@@ -45,25 +48,24 @@ public class Referee {
   public int applyEnvironment(Player player, String word) {
     Terrain t = player.getTerrain();
     int yards = 0;
-    
+
     switch (t) {
       case BUNKER:
-        yards = player.powerUp(tq.getCount("#" + word, 20));
+        yards = player.powerup(tq.getCount("#" + word, 20));
         break;
       case ROUGH:
-        player.powerUp(tq.getCount("#" + word, 50));;
+        player.powerup(tq.getCount("#" + word, 50));;
         break;
       case WATER:
-        player.powerUp(tq.getCount("#" + word, 45));
+        player.powerup(tq.getCount("#" + word, 45));
         break;
       default:
-        yards = player.powerUp(tq.getCount("#" + word, 60));
+        yards = player.powerup(tq.getCount("#" + word, 60));
     }
-    
+
     return yards;
-    //return 50;
   }
-  
+
   @Override
   public String toString() {
     return "Level Number: " + level + " Par: " + par;

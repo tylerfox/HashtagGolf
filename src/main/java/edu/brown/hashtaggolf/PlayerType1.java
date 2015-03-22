@@ -6,4 +6,5 @@ public class PlayerType1 extends Player {
   }
   
   
+  
 }
