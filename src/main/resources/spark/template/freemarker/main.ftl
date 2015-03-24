@@ -11,9 +11,6 @@
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <p>
-    Hello World
-    </p>
      <!-- Again, we're serving up the unminified source for clarity. -->
      <script src="js/jx-2.1.1.js"></script>
      <script src="js/main.js"></script>

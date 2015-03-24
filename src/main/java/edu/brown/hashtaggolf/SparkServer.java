@@ -31,10 +31,10 @@ public final class SparkServer {
    * Starts running the GUI for #golf
    */
   public static void run() {
-
+    Spark.setPort(PORT);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
-
+    
     FreeMarkerEngine freeMarker = createEngine();
 
     // Setup Spark Routes
@@ -53,6 +53,19 @@ public final class SparkServer {
     Spark.post("/swing", new TempHandler(), new FreeMarkerEngine());
 
   }
+  
+  /**
+   * Displays menu page of #golf.
+   * @author btai
+   */
+  private static class FrontPageHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables =
+          ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "start.ftl");
+    }
+  }
 
   /**
    * 
@@ -69,18 +82,7 @@ public final class SparkServer {
     }
   }
 
-  /**
-   * Displays menu page of #golf.
-   * @author btai
-   */
-  private static class FrontPageHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables =
-          ImmutableMap.of("title", "#golf");
-      return new ModelAndView(variables, "start.ftl");
-    }
-  }
+
 
 
   /**

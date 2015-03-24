@@ -39,7 +39,6 @@ public class TwitterQuery implements SocialQuery {
   public long query(Query q, int duration) {
     try {
       Date now = new Date();
-      long startTime = now.getTime();
       QueryResult result;
       result = twitter.search(q);
       List<Status> tweets = result.getTweets();
@@ -48,11 +47,11 @@ public class TwitterQuery implements SocialQuery {
         Status curStatus = tweets.get(i);
         if (timeElapsed(now, curStatus.getCreatedAt().getTime()) < duration) {
           numTweets++;
-          System.out.println("@" + curStatus.getUser().getScreenName() + ":"
-              + curStatus.getText());
+          //System.out.println("@" + curStatus.getUser().getScreenName() + ":"
+            //  + curStatus.getText());
           int elapsedTime = (int) timeElapsed(now, curStatus.getCreatedAt()
               .getTime());
-          System.out.println(elapsedTime + "seconds ago");
+         // System.out.println(elapsedTime + "seconds ago");
           if (i == tweetsSize - 1) {
             if (elapsedTime < duration) {
               return curStatus.getId();
@@ -81,7 +80,7 @@ public class TwitterQuery implements SocialQuery {
     while ((maxId = query(q, duration)) > 0) {
       q.setMaxId(maxId);
     }
-    System.out.println(numTweets);
+    //System.out.println(numTweets);
     return numTweets;
   }
 }

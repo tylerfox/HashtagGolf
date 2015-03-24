@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="edu.brown.hashtaggolf.Ball" project="HashtagGolf" 
     file="/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Ball.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1350" y="286"/>    
+    <position height="-1" width="-1" x="1363" y="266"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <enumeration id="4" language="java" name="edu.brown.hashtaggolf.Terrain" project="HashtagGolf" 
     file="/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Terrain.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1363" y="565"/>    
+    <position height="-1" width="-1" x="1363" y="542"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,7 +66,7 @@
   </class>  
   <class id="8" language="java" name="edu.brown.hashtaggolf.Referee" project="HashtagGolf" 
     file="/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Referee.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="621" y="374"/>    
+    <position height="-1" width="-1" x="607" y="314"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
