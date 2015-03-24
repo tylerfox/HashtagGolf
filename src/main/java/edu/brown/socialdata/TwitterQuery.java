@@ -36,42 +36,37 @@ public class TwitterQuery implements SocialQuery {
     twitter = tf.getInstance();
   }
 
-  public long query(Query q, int duration) {
-    try {
-      Date now = new Date();
-      QueryResult result;
-      result = twitter.search(q);
-      List<Status> tweets = result.getTweets();
-      int tweetsSize = tweets.size();
-      for (int i = 0; i < tweetsSize; i++) {
-        Status curStatus = tweets.get(i);
-        if (timeElapsed(now, curStatus.getCreatedAt().getTime()) < duration) {
-          numTweets++;
-          //System.out.println("@" + curStatus.getUser().getScreenName() + ":"
-            //  + curStatus.getText());
-          int elapsedTime = (int) timeElapsed(now, curStatus.getCreatedAt()
-              .getTime());
-         // System.out.println(elapsedTime + "seconds ago");
-          if (i == tweetsSize - 1) {
-            if (elapsedTime < duration) {
-              return curStatus.getId();
-            } else {
-              return 0;
-            }
+  public long query(Query q, int duration) throws TwitterException {
+    Date now = new Date();
+    QueryResult result;
+    result = twitter.search(q);
+    List<Status> tweets = result.getTweets();
+    int tweetsSize = tweets.size();
+    for (int i = 0; i < tweetsSize; i++) {
+      Status curStatus = tweets.get(i);
+      if (timeElapsed(now, curStatus.getCreatedAt().getTime()) < duration) {
+        numTweets++;
+        // System.out.println("@" + curStatus.getUser().getScreenName() + ":"
+        // + curStatus.getText());
+        int elapsedTime = (int) timeElapsed(now, curStatus.getCreatedAt()
+            .getTime());
+        // System.out.println(elapsedTime + "seconds ago");
+        if (i == tweetsSize - 1) {
+          if (elapsedTime < duration) {
+            return curStatus.getId();
+          } else {
+            return 0;
           }
-        } else {
-          return 0;
         }
+      } else {
+        return 0;
       }
-    } catch (TwitterException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
     }
     return -1;
   }
 
   @Override
-  public int getCount(String queryString, int duration) {
+  public int getCount(String queryString, int duration) throws TwitterException {
     Query q = new Query(queryString);
     q.setCount(100);
     q.setResultType(Query.RECENT);
@@ -80,7 +75,6 @@ public class TwitterQuery implements SocialQuery {
     while ((maxId = query(q, duration)) > 0) {
       q.setMaxId(maxId);
     }
-    //System.out.println(numTweets);
     return numTweets;
   }
 }

@@ -4,19 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import edu.brown.socialdata.TwitterQuery;
-
-
 /**
  * The main golf class that is used to invoke the program.
  */
 public class Main {
   private boolean isGameOver = false;
+
   /**
    * standard main method.
-   *
-   * @param args
-   *          command line args
+   * @param args command line args
    */
   public static void main(String[] args) {
     new Main().run();
@@ -27,14 +23,15 @@ public class Main {
 
   public void run() {
     // runSparkServer();
-    //TwitterQuery tq = new TwitterQuery();
+    // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
-    //tq.getCount("#tbt", 60);
+    // tq.getCount("", 60);
     play();
   }
 
   public void play() {
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+        System.in))) {
       Referee ref = new Referee("image file");
 
       System.out.println("Please enter your name.");
@@ -44,9 +41,13 @@ public class Main {
       System.out.println(player);
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
-      
-      while (!isGameOver && input  != null) {
-        // TODO:  Add club choice (this may be an extra argument to the swing method in referee)
+      if (input.startsWith("#")) {
+        input = input.substring(1);
+      }
+
+      while (!isGameOver && input != null) {
+        // TODO: Add club choice (this may be an extra argument to the swing
+        // method in referee)
         ref.swing(player, input, 0);
         if (player.isGameOver()) {
           System.out.println("Congrats on finishing the course.");

@@ -2,7 +2,7 @@ package edu.brown.hashtaggolf;
 
 import java.io.IOException;
 
-import edu.brown.imageprocessing.FileColour;
+import twitter4j.TwitterException;
 import edu.brown.imageprocessing.PixelColour;
 import edu.brown.socialdata.SocialQuery;
 import edu.brown.socialdata.TwitterQuery;
@@ -15,7 +15,7 @@ public class Referee {
 
   public Referee(String courseImage) throws IOException {
     tq = new TwitterQuery();
-    //this.image = new FileColour(courseImage);
+    // this.image = new FileColour(courseImage);
   }
 
   // gets word count
@@ -28,9 +28,19 @@ public class Referee {
   // possibly add a club option
   public void swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
-
-    //TODO:  Add image processing (currently is not done yet)
-    //will look something like: image.getTerrainAt(player.getX() + yards, 0);
+    if (yards == -1) {
+      System.out
+          .println("Network Error. Please swing again when you have a connection.");
+      return;
+    } else if (yards == -2) {
+      System.out.println("Invalid query. Please try again");
+      return;
+    } else if (yards == -3) {
+      System.out.println("Problem fetching tweets. Please try again");
+      return;
+    }
+    // TODO: Add image processing (currently is not done yet)
+    // will look something like: image.getTerrainAt(player.getX() + yards, 0);
     Terrain newTerrain = Terrain.FAIRWAY;
 
     switch (newTerrain) {
@@ -45,25 +55,40 @@ public class Referee {
     System.out.println(newTerrain);
   }
 
+  /**
+   * Calculates the distance of the ball based on the current terain.
+   * @param player - the current player
+   * @param word - the query
+   * @return the distance, or -1 for network error, -2 for invalid query, or -3
+   * for twitter error
+   */
   public int applyEnvironment(Player player, String word) {
     Terrain t = player.getTerrain();
-    int yards = 0;
-
+    int seconds;
     switch (t) {
       case BUNKER:
-        yards = player.powerup(tq.getCount("#" + word, 20));
+        seconds = 20;
         break;
       case ROUGH:
-        player.powerup(tq.getCount("#" + word, 50));;
+        seconds = 50;
         break;
       case WATER:
-        player.powerup(tq.getCount("#" + word, 45));
+        seconds = 45;
         break;
       default:
-        yards = player.powerup(tq.getCount("#" + word, 60));
+        seconds = 60;
     }
-
-    return yards;
+    try {
+      return player.powerup(tq.getCount("#" + word, seconds));
+    } catch (TwitterException e) {
+      if (e.isCausedByNetworkIssue()) {
+        return -1;
+      } else if (e.getStatusCode() == 403) {
+        return -2;
+      } else {
+        return -3;
+      }
+    }
   }
 
   @Override
