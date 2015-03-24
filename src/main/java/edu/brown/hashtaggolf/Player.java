@@ -3,7 +3,7 @@ package edu.brown.hashtaggolf;
 public abstract class Player {
   private int distanceToHole;
   private String name;
-  private int score;
+  private int stroke;
   private int x;
   private int y;
   private Terrain terrain;
@@ -13,8 +13,8 @@ public abstract class Player {
   	this.terrain = Terrain.TEE;
   	
   	// TODO: will have to figure out how to set this based on the level
-  	this.distanceToHole = 250;
-  	this.score = 0;
+  	this.distanceToHole = 30;
+  	this.stroke = 1;
   	this.x = 0;
   	this.y = 0;
   }
@@ -31,9 +31,12 @@ public abstract class Player {
   // will increment score + 1
   public void moveBall(int distance, double angle) {
     System.out.println("Ball went " + distance + " yards!");
-    distanceToHole -= distance;
+    if (distanceToHole - distance < 0) {
+      System.out.println("Whoops! Overshot the hole.");
+    }
+    distanceToHole = Math.abs(distanceToHole - distance);
     x += distance;
-  	score++;
+  	stroke++;
   }
   
   public Terrain getTerrain() {
@@ -42,7 +45,7 @@ public abstract class Player {
 
   // if ball goes out of bounds, score increments by 3
   public void outOfBounds() {
-  	score += 3;
+  	stroke += 3;
   }
   
   public void setTerrain(Terrain t) {
@@ -56,7 +59,7 @@ public abstract class Player {
   
   @Override
   public String toString() {
-    return "Player Info:\nName: " + name + " Stroke #: " + score + " Distance to Hole: " + distanceToHole;
+    return "Player Info:\nName: " + name + " Stroke #: " + stroke + " Distance to Hole: " + distanceToHole;
   }
 
 
