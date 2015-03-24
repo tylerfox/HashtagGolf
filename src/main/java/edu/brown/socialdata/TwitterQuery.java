@@ -40,7 +40,6 @@ public class TwitterQuery implements SocialQuery {
     try {
       Date now = new Date();
       long startTime = now.getTime();
-      System.out.println("start time: " + startTime);
       QueryResult result;
       result = twitter.search(q);
       List<Status> tweets = result.getTweets();
