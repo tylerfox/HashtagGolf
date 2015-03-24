@@ -36,12 +36,17 @@ public class Main {
 
       System.out.println("Please enter your name.");
       String input = reader.readLine();
+      while (input == null || input.equals("")) {
+        System.out.println("Your name can't be blank!");
+        System.out.println("Please enter your name.");
+        input = reader.readLine();
+      }
       Player player = new PlayerType1(input);
       System.out.println("Hello " + input + "!  Let's play #golf.\n");
       System.out.println(player);
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
-      if (input.startsWith("#")) {
+      if (input != null && input.startsWith("#")) {
         input = input.substring(1);
       }
 
