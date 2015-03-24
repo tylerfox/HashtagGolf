@@ -47,41 +47,39 @@ public abstract class Player {
   public void outOfBounds() {
   	stroke += 3;
   }
-  
+
   public void setTerrain(Terrain t) {
     terrain = t;
   }
-  
+
   public boolean isGameOver() {
     return terrain == Terrain.HOLE;
   }
- 
-  
+
   @Override
   public String toString() {
     return "Player Info:\nName: " + name + " Stroke #: " + stroke + " Distance to Hole: " + distanceToHole;
   }
 
-
   public void setDistanceToHole(int distanceToHole) {
     this.distanceToHole = distanceToHole;
   }
 
+  public int getDistanceToHole() {
+    return distanceToHole;
+  }
 
   public int getX() {
     return x;
   }
 
-
   public void setX(int x) {
     this.x = x;
   }
 
-
   public int getY() {
     return y;
   }
-
 
   public void setY(int y) {
     this.y = y;

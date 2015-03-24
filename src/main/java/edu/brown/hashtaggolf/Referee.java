@@ -54,10 +54,10 @@ public class Referee {
         yards = player.powerup(tq.getCount("#" + word, 20));
         break;
       case ROUGH:
-        player.powerup(tq.getCount("#" + word, 50));;
+        yards = player.powerup(tq.getCount("#" + word, 50));;
         break;
       case WATER:
-        player.powerup(tq.getCount("#" + word, 45));
+        yards = player.powerup(tq.getCount("#" + word, 45));
         break;
       default:
         yards = player.powerup(tq.getCount("#" + word, 60));
