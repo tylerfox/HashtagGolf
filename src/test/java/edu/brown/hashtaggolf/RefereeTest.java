@@ -17,7 +17,7 @@ public class RefereeTest {
     int before = player.getDistanceToHole();
     ref.swing(player, "germanwings", 0);
     int after = player.getDistanceToHole();
-    System.out.println(before + " " + after);
+    System.out.println(player.getDistanceToHole() + " " + before + " " + after);
   }
 
 }
