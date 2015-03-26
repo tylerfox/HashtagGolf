@@ -26,7 +26,8 @@ public class Main {
     // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
-    play();
+    SparkServer.run();
+    // play();
   }
 
   public void play() {
