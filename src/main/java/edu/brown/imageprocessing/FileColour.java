@@ -16,6 +16,10 @@ public class FileColour implements PixelColour {
     file = new File(filePath);
     image = ImageIO.read(file);
   }
+  
+  public int getRGBAt(int x, int y) {
+    return image.getRGB(x, y);
+  }
 
   @Override
   public String getColourAt(int x, int y) {

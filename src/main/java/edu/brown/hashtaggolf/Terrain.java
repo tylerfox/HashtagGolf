@@ -1,8 +1,16 @@
 package edu.brown.hashtaggolf;
 
 public enum Terrain {
-  BUNKER, FAIRWAY, ROUGH, GREEN, HOLE, WATER, TEE (-1), OUT_OF_BOUNDS;
-
+  BUNKER(-1055568),
+  FAIRWAY(-14503604),
+  ROUGH(-4856291),
+  GREEN(-16711936),
+  OUT_OF_BOUNDS(-8421505),
+  WATER(-16735512),
+  TEE(-1),
+  HOLE(-16777216),
+  WIGGLE_ROOM(-16712192);
+  
   private int colour;
 
   private Terrain() {
