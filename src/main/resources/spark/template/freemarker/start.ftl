@@ -9,10 +9,22 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/html5bp.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/start.css">
   </head>
   <body>
-  
-  	<a href="#" class="myButton">start</a>
+    <div id="container">
+      <div id ="background">
+      <h1> #golf </h1>
+  	 <a href="/player_select" class="myButton" id = "start">start</a>
+     <a href="/multiplayer" class="myButton" id = "multiplayer">multiplayer</a>
+     <br><br>
+
+      <a href="/settings" class="myButton" id ="settings">settings</a>
+      <a href="/create" class="myButton" id ="create">create</a>
+
+    </div>
+   </div>
   	
      <!-- Again, we're serving up the unminified source for clarity. -->
      <script src="js/jx-2.1.1.js"></script>

@@ -42,8 +42,9 @@ public final class SparkServer {
     // Page Displayals
     Spark.get("/start", new FrontPageHandler(), freeMarker);
     Spark.get("/play", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/playerSelect", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/levelSelect", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/player_select", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
@@ -77,7 +78,7 @@ public final class SparkServer {
     public ModelAndView handle(Request req, Response res) {
 
       Map<String, Object> variables =
-          ImmutableMap.of("title", "title goes here");
+          ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "temp.ftl");
     }
   }

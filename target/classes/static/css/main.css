@@ -3,23 +3,12 @@
     src: url("comics.ttf")
 }
 
-.myButton {
-	background-color:#ff4d00;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	border-radius:4px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Comics;
-	font-size:30px;
-	padding:8px 36px;
-	text-decoration:none;
+#container {
+	margin: auto;
+	width: 600px;
+	height: 800px;
 }
-.myButton:hover {
-	background-color:#ff692e;
-}
-.myButton:active {
-	position:relative;
-	top:1px;
+
+body {
+	font-family: "Comics";
 }
