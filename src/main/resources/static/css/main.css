@@ -1,0 +1,14 @@
+@font-face {
+    font-family:"Comics";
+    src: url("comics.ttf")
+}
+
+#container {
+	margin: auto;
+	width: 600px;
+	height: 800px;
+}
+
+body {
+	font-family: "Comics";
+}
