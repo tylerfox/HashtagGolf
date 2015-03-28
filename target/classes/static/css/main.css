@@ -226,7 +226,7 @@ h1 {
 #text {
 	font-family:Comics;
 	margin: -290px auto 0px auto;
-	font-size: 50px;
+	font-size: 0px;
 	color: #009444;
 	text-shadow: 2px -2px 2px #606060;
 	text-align: center;
@@ -261,11 +261,12 @@ h1 {
 }	
 
 @-webkit-keyframes btext {
-0%  {-webkit-transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
+0%  {-webkit-transform:scale(0.0,0.0); font-size: 0px; visibility: visible;}
+1%  {-webkit-transform:scale(0.0,0.0); font-size: 100px; visibility: visible;}
 37% {-webkit-transform:scale(0.03,0.03); visibility: visible;}
 50% {-webkit-transform:scale(2,2); visibility: visible;}
 80% {-webkit-transform:scale(2,2);opacity:1.0; visibility: visible;}
-100%{-webkit-transform:scale(2,2);opacity:0.0;}
+100%{-webkit-transform:scale(2,2); font-size: 100px; opacity:0.0;}
 }
 @-o-keyframes btext {
 0%  {-o-transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
