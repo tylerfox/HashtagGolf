@@ -21,6 +21,9 @@ public class Main {
   public Main() {
   }
 
+  /**
+   * Runs the program.
+   */
   public void run() {
     // runSparkServer();
     // TwitterQuery tq = new TwitterQuery();
@@ -30,6 +33,9 @@ public class Main {
     // play();
   }
 
+  /**
+   * Opens a REPL to play a Command Line version of HashtagGolf.
+   */
   public void play() {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(
         System.in))) {

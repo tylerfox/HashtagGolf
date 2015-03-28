@@ -6,9 +6,16 @@ import java.awt.Robot;
 
 import edu.brown.hashtaggolf.Terrain;
 
+/**
+ * Uses the actual screen to get the color at a coordinate.
+ */
 public class ScreenColour implements PixelColour {
   private Robot screen;
 
+  /**
+   * Instantiate a new ScreenColor
+   * @throws AWTException If an AWTException was found
+   */
   public ScreenColour() throws AWTException {
     screen = new Robot();
   }

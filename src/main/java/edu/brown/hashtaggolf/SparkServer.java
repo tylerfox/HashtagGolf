@@ -69,7 +69,7 @@ public final class SparkServer {
   }
 
   /**
-   * 
+   * Temporary Handler for unimplemented buttons.
    * @author Beverly
    *
    */

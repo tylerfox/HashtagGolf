@@ -8,15 +8,29 @@ import javax.imageio.ImageIO;
 
 import edu.brown.hashtaggolf.Terrain;
 
+/**
+ * Uses the file to get the color at a coordinate.
+ */
 public class FileColour implements PixelColour {
   private File file;
   private BufferedImage image;
 
+  /**
+   * Instantiates a new FileColour.
+   * @param filePath the file path of the level
+   * @throws IOException if something goes wrong while reading the file
+   */
   public FileColour(String filePath) throws IOException {
     file = new File(filePath);
     image = ImageIO.read(file);
   }
-  
+
+  /**
+   * Gets the color at the coordinate.
+   * @param x the x coordinate of the color to find
+   * @param y the y coordinate of the color to find
+   * @return the integer representing the color at the coordinate
+   */
   public int getRGBAt(int x, int y) {
     return image.getRGB(x, y);
   }

@@ -1,5 +1,8 @@
 package edu.brown.hashtaggolf;
 
+/**
+ * An enum of different terrains based on their color.
+ */
 public enum Terrain {
   BUNKER(-1055568),
   FAIRWAY(-14503604),
@@ -13,14 +16,25 @@ public enum Terrain {
   
   private int colour;
 
+  /**
+   * Instantiates a new terrain.
+   */
   private Terrain() {
     //To make code compile until we decide upon the colours for each kind of terrain.
   }
 
+  /**
+   * Instantiate a new terrain with the given color value.
+   * @param colour the color of the terrain
+   */
   private Terrain(int colour) {
     this.colour = colour;
   }
 
+  /**
+   * Gets the color of the terrain.
+   * @return an integer representing the color of the terrain
+   */
   public int getColour() {
     return colour;
   }
