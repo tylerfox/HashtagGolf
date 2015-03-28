@@ -7,8 +7,7 @@
          concatenated. Here, separate normalize from our code, and
          avoid minification for clarity. -->
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/html5bp.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/html5bp.css">    
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/start.css">
   </head>
