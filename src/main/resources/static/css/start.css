@@ -1,0 +1,40 @@
+/*#background {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+} */
+
+#start {
+	margin: 50px;
+	float: left;
+}
+
+#multiplayer {
+	margin: 50px;
+	float: right;
+}
+
+#settings {
+	margin: 50px;
+	float: right;
+}
+
+#create {
+	margin: 50px;
+	float: left;
+}
+
+body {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+}
+
+h1 {
+	text-align: center;
+	font-size: 50px;
+}
+
+#container {
+	margin: auto;
+	width: 600px;
+	height: 800px;
+}

@@ -21,14 +21,21 @@ public class Main {
   public Main() {
   }
 
+  /**
+   * Runs the program.
+   */
   public void run() {
     // runSparkServer();
     // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
-    play();
+    SparkServer.run();
+    // play();
   }
 
+  /**
+   * Opens a REPL to play a Command Line version of HashtagGolf.
+   */
   public void play() {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(
         System.in))) {
@@ -47,10 +54,9 @@ public class Main {
       if (input != null && input.startsWith("#")) {
         input = input.substring(1);
       }
-
+      
       while (!isGameOver && input != null) {
-        // TODO: Add club choice (this may be an extra argument to the swing
-        // method in referee)
+        // TODO:  Add club choice (this may be an extra argument to the swing method in referee)
         ref.swing(player, input, 0);
         if (player.isGameOver()) {
           System.out.println("Congrats on finishing the course.");

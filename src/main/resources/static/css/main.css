@@ -1,0 +1,283 @@
+@font-face {
+    font-family:"Comics";
+    src: url("comics.ttf")
+}
+
+body {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+	font-family:"Comics";
+}
+
+#start {
+	margin: 50px;
+	float: left;
+}
+
+#multiplayer {
+	margin: 50px;
+	float: right;
+}
+
+#settings {
+	margin: 50px;
+	float: right;
+}
+
+#create {
+	margin: 50px;
+	float: left;
+}
+
+h1 {
+	text-align: center;
+	font-size: 50px;
+}
+
+#container {
+	margin: auto;
+	width: 600px;
+	height: 800px;
+	opacity: 1.0;	
+	animation: start 8s;	
+	animation-timing-function: start linear;
+	-moz-animation: start 8s;
+	-moz-animation-delay: 0.5s;
+	-moz-animation-timing-function: start linear;
+	-webkit-animation: start 8s;
+	-webkit-animation-delay: .5s;
+	-webkit-animation-duration: 7s;
+	-webkit-animation-timing-function: start linear;
+	-o-animation: start 8s;
+	-o-animation-delay: 0.5s;
+	-o-animation-timing-function: start linear;
+	-ms-animation: start 8s;
+	-ms-animation-delay: 0.5s;
+	-ms-animation-timing-function: start linear;
+}
+
+@keyframes start  {
+	0%{visibility: hidden;}
+	99%{visibility: hidden;}
+	100%{visibility: visible;}	
+}
+
+@-webkit-keyframes start  {
+	0%{visibility: hidden;}
+	99%{visibility: hidden;}
+	100%{visibility: visible;}	
+}
+
+@-moz-keyframes start  {
+	0%{visibility: hidden;}
+	99%{visibility: hidden;}
+	100%{visibility: visible;}	
+}
+
+@-ms-keyframes start  {
+	0%{visibility: hidden;}
+	99%{visibility: hidden;}
+	100%{visibility: visible;}	
+}
+
+@-o-keyframes start  {
+	0%{visibility: hidden;}
+	99%{visibility: hidden;}
+	100%{visibility: visible;}	
+}
+
+/* =============== Golfball Intro Animation  =================  */
+#shot {
+	position: absolute;
+	z-index: -1;
+	width: 500px;
+	height: 500px;
+	left: 50%;
+	top: 50%;
+	margin-left: -250px;
+	margin-top: -250px;
+}
+#prop {
+	content:url("club.png");
+	position: relative;
+	top: 50%;
+	left: 50%;
+	margin-top: -10px;
+	margin-left: -77px;
+}
+.club {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	visibility: hidden;
+	margin-top: -50px;
+	margin-left: 40px;
+	animation: swing 5s ;
+	animation-delay: 1s;
+	-moz-animation: swing 5s ;
+	-moz-animation-delay: 1s;
+	-webkit-animation: swing 5s ;
+	-webkit-animation-delay: 1s;
+	-o-animation: swing 5s ;
+	-o-animation-delay: 1s;
+	-ms-animation: swing 5s ;
+	-ms-animation-delay: 1s;
+}
+@keyframes swing  {
+	0%  {transform: rotateX(0deg); visibility: visible;}
+	20% {transform: rotateX(0deg);}
+	42% {transform: rotateX(-100deg);}
+	70% {transform: rotateX(205deg);}
+	100%{transform: rotateX(0deg);}
+}
+@-moz-keyframes swing  {
+	0%  {-moz-transform: rotateX(0deg); visibility: visible;}
+	20% {-moz-transform: rotateX(0deg);}
+	42% {-moz-transform: rotateX(-100deg);}
+	70% {-moz-transform: rotateX(205deg);}
+	100%{-moz-transform: rotateX(0deg);}
+}
+@-webkit-keyframes swing  {
+	0%  {-webkit-transform: rotateX(0deg); visibility: visible;}
+	20% {-webkit-transform: rotateX(0deg);}
+	42% {-webkit-transform: rotateX(-100deg);}
+	70% {-webkit-transform: rotateX(205deg);}
+	100%{-webkit-transform: rotateX(0deg);}
+}
+@-o-keyframes swing  {
+	0%  {-o-transform: rotate(0deg); visibility: visible;}
+	20% {-o-transform: rotate(0deg);}
+	42% {-o-transform: rotate(-100deg);}
+	70% {-o-transform: rotate(205deg);}
+	100%{-o-transform: rotate(0deg);}
+}
+@-o-keyframes swing  {
+	0%  {-ms-transform: rotate(0deg); visibility: visible;}
+	20% {-ms-transform: rotate(0deg);}
+	42% {-ms-transform: rotate(-100deg);}
+	70% {-ms-transform: rotate(205deg);}
+	100%{-ms-transform: rotate(0deg);}
+}
+#g-ball  {
+	content:url("ball.png");
+	position: relative;
+	margin-top: 195px;
+	margin-left: 66px;
+	opacity: 1.0;
+	visibility: hidden;
+	animation: g-ball 80s;
+	animation-delay: 0.5s;
+	animation-timing-function: g-ball linear;
+	-moz-animation: g-ball 8s;
+	-moz-animation-delay: 0.5s;
+	-moz-animation-timing-function: g-ball linear;
+	-webkit-animation: g-ball 8s;
+	-webkit-animation-delay: 0.5s;
+	-webkit-animation-timing-function: g-ball linear;
+	-o-animation: g-ball 8s;
+	-o-animation-delay: 0.5s;
+	-o-animation-timing-function: g-ball linear;
+	-ms-animation: g-ball 8s;
+	-ms-animation-delay: 0.5s;
+	-ms-animation-timing-function: g-ball linear;
+}
+@keyframes g-ball  {
+	0%  {transform:scale(0.09,0.09);  opacity:1.0; visibility: visible;}
+	25% {transform:scale(0.09,0.09);}
+	37% {transform:scale(0.09,0.09);}
+	50% {transform:scale(3,3);}
+	80% {transform:scale(3,3); opacity:1.0;}
+	100%{transform:scale(3,3); opacity:0.0;}
+}	
+@-moz-keyframes g-ball  {
+	0%  {-moz-transform:scale(0.09,0.09); visibility: visible;}
+	25% {-moz-transform:scale(0.09,0.09);}
+	37% {-moz-transform:scale(0.09,0.09);}
+	50% {-moz-transform:scale(3,3);}
+	80% {-moz-transform:scale(3,3); opacity:1.0;}
+	100%{-moz-transform:scale(3,3); opacity:0.0;}
+}
+@-webkit-keyframes g-ball  {
+	0%  {-webkit-transform:scale(0.09,0.09);  opacity:1.0; visibility: visible;}
+	25% {-webkit-transform:scale(0.09,0.09);}
+	37% {-webkit-transform:scale(0.09,0.09);}
+	50% {-webkit-transform:scale(3,3);}
+	80% {-webkit-transform:scale(3,3); opacity:1.0;}
+	100%{-webkit-transform:scale(3,3); opacity:0.0;}
+}
+@-o-keyframes g-ball  {
+	0%  {-o-transform:scale(0.09,0.09);  opacity:1.0; visibility: visible;}
+	25% {-o-transform:scale(0.09,0.09);}
+	37% {-o-transform:scale(0.09,0.09);}
+	50% {-o-transform:scale(3,3);}
+	80% {-o-transform:scale(3,3); opacity:1.0;}
+	100%{-o-transform:scale(3,3); opacity:0.0;}
+}
+@-ms-keyframes g-ball  {
+	0%  {-ms-transform:scale(0.09,0.09);  opacity:1.0; visibility: visible;}
+	25% {-ms-transform:scale(0.09,0.09);}
+	37% {-ms-transform:scale(0.09,0.09);}
+	50% {-ms-transform:scale(3,3);}
+	80% {-ms-transform:scale(3,3); opacity:1.0;}
+	100%{-ms-transform:scale(3,3); opacity:0.0;}
+}
+#text {
+	font-family:Comics;
+	margin: -290px auto 0px auto;
+	font-size: 0px;
+	color: #009444;
+	text-shadow: 2px -2px 2px #606060;
+	text-align: center;
+	font-weight: bold;
+	visibility: hidden;
+	position: relative;
+	z-index: 13;
+	animation: btext 8s;
+	animation-delay: 0.5s;
+	animation-timing-function: btext linear;
+	-moz-animation: btext 8s;
+	-moz-animation-delay: 0.5s;
+	-moz-animation-timing-function: btext linear;
+	-webkit-animation: btext 8s;
+	-webkit-animation-delay: 0.5s;
+	-webkit-animation-timing-function: btext linear;
+	-o-animation: btext 8s;
+	-o-animation-delay: 0.5s;
+	-o-animation-timing-function: btext linear;
+	-ms-animation: btext 8s;
+	-ms-animation-delay: 0.5s;
+	-ms-animation-timing-function: btext linear;
+	left: 15px;
+}
+
+@keyframes btext {
+0%  {transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
+37% {transform:scale(0.03,0.03);}
+50% {transform:scale(2,2);}
+80% {transform:scale(2,2); opacity:1.0;}
+100%{transform:scale(2,2); opacity:0.0;}
+}	
+
+@-webkit-keyframes btext {
+0%  {-webkit-transform:scale(0.0,0.0); font-size: 0px; visibility: visible;}
+1%  {-webkit-transform:scale(0.0,0.0); font-size: 100px; visibility: visible;}
+37% {-webkit-transform:scale(0.03,0.03); visibility: visible;}
+50% {-webkit-transform:scale(2,2); visibility: visible;}
+80% {-webkit-transform:scale(2,2);opacity:1.0; visibility: visible;}
+100%{-webkit-transform:scale(2,2); font-size: 100px; opacity:0.0;}
+}
+@-o-keyframes btext {
+0%  {-o-transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
+37% {-o-transform:scale(0.03,0.03); visibility: visible;}
+50% {-o-transform:scale(2,2); visibility: visible;}
+80% {-o-transform:scale(2,2);opacity:1.0; visibility: visible;}
+100%{-o-transform:scale(2,2);opacity:0.0;}
+
+@-ms-keyframes btext {
+0%  {-ms-transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
+37% {-ms-transform:scale(0.03,0.03); visibility: visible;}
+50% {-ms-transform:scale(2,2); visibility: visible;}
+80% {-ms-transform:scale(2,2);opacity:1.0; visibility: visible;}
+100%{-ms-transform:scale(2,2);opacity:0.0;}

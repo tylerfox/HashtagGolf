@@ -7,12 +7,22 @@ import edu.brown.imageprocessing.PixelColour;
 import edu.brown.socialdata.SocialQuery;
 import edu.brown.socialdata.TwitterQuery;
 
+/**
+ * Referee Class for HashtagGolf.
+ *
+ */
 public class Referee {
   private PixelColour image;
   private int level;
   private int par;
   private SocialQuery tq;
 
+  /**
+   * Instantiates a Referee class; A referee class is
+   * created at the start of a new level.
+   * @param courseImage the file path for the current level
+   * @throws IOException If TwitterQuery fails
+   */
   public Referee(String courseImage) throws IOException {
     tq = new TwitterQuery();
     // this.image = new FileColour(courseImage);
@@ -26,6 +36,12 @@ public class Referee {
   // else moves ball the distance
 
   // possibly add a club option
+  /**
+   * Updates all of the relevant information after a swing.
+   * @param player the player who is swinging
+   * @param word the word the player input
+   * @param angle the angle at which the ball should go in the direction of
+   */
   public void swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
