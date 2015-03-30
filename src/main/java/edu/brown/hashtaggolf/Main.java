@@ -54,11 +54,13 @@ public class Main {
       if (input != null && input.startsWith("#")) {
         input = input.substring(1);
       }
-      
+
       while (!isGameOver && input != null) {
-        // TODO:  Add club choice (this may be an extra argument to the swing method in referee)
+        // TODO: Add club choice (this may be an extra argument to the swing
+        // method in referee)
         ref.swing(player, input, 0);
         if (player.isGameOver()) {
+          isGameOver = true;
           System.out.println("Congrats on finishing the course.");
           System.out.println(ref);
         } else {
