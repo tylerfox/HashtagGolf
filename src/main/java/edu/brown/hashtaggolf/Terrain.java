@@ -1,5 +1,10 @@
 package edu.brown.hashtaggolf;
 
+import java.io.IOException;
+
+import edu.brown.imageprocessing.FileColour;
+import edu.brown.imageprocessing.PixelColour;
+
 public enum Terrain {
   BUNKER(-1055568),
   FAIRWAY(-14503604),
@@ -11,10 +16,28 @@ public enum Terrain {
   HOLE(-16777216),
   WIGGLE_ROOM(-16712192);
   
+  /**
+  BUNKER("0"),
+  FAIRWAY("1"),
+  ROUGH("2"),
+  GREEN("3"),
+  OUT_OF_BOUNDS("4"),
+  WATER("5"),
+  TEE("6"),
+  HOLE("7"),
+  WIGGLE_ROOM("8"); */
+  
   private int colour;
+  private int[] xCoordinates = {50, 150, 250, 350, 450, 550, 650, 750, 850};
+  private PixelColour terrainKey;
 
-  private Terrain() {
-    //To make code compile until we decide upon the colours for each kind of terrain.
+  private Terrain(String type) {
+    try {
+      terrainKey = new FileColour("path to terrain key");
+      this.colour = terrainKey.getRGBAt(xCoordinates[Integer.parseInt(type)], 50);
+    } catch (IOException e) {
+      System.out.println("Terrain key file not found.");
+    }
   }
 
   private Terrain(int colour) {

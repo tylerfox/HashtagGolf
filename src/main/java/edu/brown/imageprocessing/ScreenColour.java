@@ -16,6 +16,7 @@ public class ScreenColour implements PixelColour {
   @Override
   public String getColourAt(int x, int y) {
     Color colour = screen.getPixelColor(x, y);
+    
     int red = colour.getRed();
     int green = colour.getGreen();
     int blue = colour.getBlue();
@@ -34,5 +35,11 @@ public class ScreenColour implements PixelColour {
     }
     
     return null;
+  }
+
+  @Override
+  public int getRGBAt(int x, int y) {
+    Color colour = screen.getPixelColor(x, y);
+    return colour.getRGB();
   }
 }
