@@ -67,7 +67,7 @@ public class TerrainTest {
   @Test
   public void terrains() throws IOException {
     FileColour terrainKey = new FileColour("terrain_key.png");
-    Terrain.setTerrains(terrainKey);
+    Terrain.setColours(terrainKey);
     
     assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
     assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);
@@ -83,7 +83,7 @@ public class TerrainTest {
   @Test
   public void sampleHole() throws IOException {
     FileColour terrainKey = new FileColour("terrain_key.png");
-    Terrain.setTerrains(terrainKey);
+    Terrain.setColours(terrainKey);
     
     assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
     assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);
