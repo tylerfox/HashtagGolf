@@ -15,7 +15,7 @@ public class RefereeTest {
     assertTrue(ref.applyEnvironment(player, "word") >= 0);
 
     int before = player.getDistanceToHole();
-    ref.swing(player, "germanwings", 0);
+    ref.swing(player, "falksjflkaewjf", 0);
     int after = player.getDistanceToHole();
     System.out.println(player.getDistanceToHole() + " " + before + " " + after);
   }

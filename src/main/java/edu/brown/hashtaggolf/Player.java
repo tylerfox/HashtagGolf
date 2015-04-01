@@ -21,10 +21,10 @@ public abstract class Player {
   	this.terrain = Terrain.TEE;
   	
   	// TODO: will need to figure out how to set this based on the level
-  	this.distanceToHole = 150;
+  	this.distanceToHole = 165;
   	this.stroke = 1;
-  	this.x = 182;
-  	this.y = 217;
+  	this.x = 310;
+  	this.y = 350;
   }
 
  
