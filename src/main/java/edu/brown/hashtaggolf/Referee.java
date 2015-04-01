@@ -62,7 +62,7 @@ public class Referee {
     }
     
     int newX = player.getX() + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
-    int newY = player.getY() + (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+    int newY = player.getY() - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
     
     System.out.println("Ball hit to (" + newX + ", " + newY + ")");
     Terrain newTerrain = image.getTerrainAt(newX, newY);

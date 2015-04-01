@@ -61,7 +61,7 @@ public abstract class Player {
     
     //distanceToHole = Math.abs(distanceToHole - distance);
     x += (int) (distance * Math.cos(Math.toRadians(angle)) * SCALE_FACTOR);
-    y += (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
+    y -= (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
     
     distanceToHole = calcDistanceToHole();
   	stroke++;
