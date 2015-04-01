@@ -26,12 +26,10 @@ public class Referee {
    */
   public Referee(String courseImage, String terrainKey) throws IOException {
     tq = new TwitterQuery();
-    if (courseImage == null && terrainKey == null) {
-      
-    } else {
-      this.image = new FileColour(courseImage);
-      Terrain.setColours(new FileColour(terrainKey));
-    }
+
+    this.image = new FileColour(courseImage);
+    Terrain.setColours(new FileColour(terrainKey));
+
   }
 
   // gets word count
@@ -52,7 +50,7 @@ public class Referee {
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
       System.out
-          .println("Network Error. Please swing again when you have a connection.");
+      .println("Network Error. Please swing again when you have a connection.");
       return;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
@@ -64,7 +62,7 @@ public class Referee {
     // TODO: Add image processing (currently is not done yet)
     // will look something like: image.getTerrainAt(player.getX() + yards, 0);
     Terrain newTerrain = image.getTerrainAt(player.getX() + yards, player.getY());
-
+    
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
