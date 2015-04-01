@@ -26,8 +26,12 @@ public class Referee {
    */
   public Referee(String courseImage, String terrainKey) throws IOException {
     tq = new TwitterQuery();
-    this.image = new FileColour(courseImage);
-    Terrain.setColours(new FileColour(terrainKey));
+    if (courseImage == null && terrainKey == null) {
+      
+    } else {
+      this.image = new FileColour(courseImage);
+      Terrain.setColours(new FileColour(terrainKey));
+    }
   }
 
   // gets word count
@@ -97,7 +101,7 @@ public class Referee {
         seconds = 60;
     }
     try {
-      return player.powerup(tq.getCount("#" + word, seconds));
+      return player.powerup(tq.getCount(word, seconds));
     } catch (TwitterException e) {
       if (e.isCausedByNetworkIssue()) {
         return -1;

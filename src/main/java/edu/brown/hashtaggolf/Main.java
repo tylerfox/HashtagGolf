@@ -30,7 +30,7 @@ public class Main {
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
     //SparkServer.run();
-     play();
+    play();
   }
 
   /**
@@ -51,9 +51,9 @@ public class Main {
       System.out.println(player);
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
-      if (input != null && input.startsWith("#")) {
-        input = input.substring(1);
-      }
+      //if (input != null && input.startsWith("#")) {
+      //  input = input.substring(1);
+      //}
 
       while (!isGameOver && input != null) {
         // TODO: Add club choice (this may be an extra argument to the swing
@@ -63,7 +63,6 @@ public class Main {
           isGameOver = true;
           System.out.println("Congrats on finishing the course.");
           System.out.println(ref);
-          System.out.println();
         } else {
           System.out.println(player);
           System.out.println("Enter your query to swing.");
