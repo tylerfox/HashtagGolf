@@ -3,6 +3,7 @@ package edu.brown.hashtaggolf;
 import java.io.IOException;
 
 import twitter4j.TwitterException;
+import edu.brown.imageprocessing.FileColour;
 import edu.brown.imageprocessing.PixelColour;
 import edu.brown.socialdata.SocialQuery;
 import edu.brown.socialdata.TwitterQuery;
@@ -23,9 +24,10 @@ public class Referee {
    * @param courseImage the file path for the current level
    * @throws IOException If TwitterQuery fails
    */
-  public Referee(String courseImage) throws IOException {
+  public Referee(String courseImage, String terrainKey) throws IOException {
     tq = new TwitterQuery();
-    // this.image = new FileColour(courseImage);
+    this.image = new FileColour(courseImage);
+    Terrain.setColours(new FileColour(terrainKey));
   }
 
   // gets word count

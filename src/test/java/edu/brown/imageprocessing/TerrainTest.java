@@ -33,6 +33,26 @@ public class TerrainTest {
   @Test
   public void numericalRGB() throws IOException {
     FileColour terrainKey = new FileColour("terrain_key.png");
+    
+    System.out.println(terrainKey.getRGBAt(50, 100));
+    System.out.println(terrainKey.getRGBAt(150, 100));
+    System.out.println(terrainKey.getRGBAt(250, 100));
+    System.out.println(terrainKey.getRGBAt(350, 100));
+    System.out.println(terrainKey.getRGBAt(450, 100));
+    System.out.println(terrainKey.getRGBAt(550, 100));
+    System.out.println(terrainKey.getRGBAt(650, 100));
+    System.out.println(terrainKey.getRGBAt(750, 100));
+    
+    assertTrue(terrainKey.getRGBAt(50, 100) == -1063773);
+    assertTrue(terrainKey.getRGBAt(150, 100) == -12995254);
+    assertTrue(terrainKey.getRGBAt(250, 100) == -16739260);
+    assertTrue(terrainKey.getRGBAt(350, 100) == -7419548);
+    assertTrue(terrainKey.getRGBAt(450, 100) == -16750536);
+    assertTrue(terrainKey.getRGBAt(550, 100) == -16732433);
+    assertTrue(terrainKey.getRGBAt(650, 100) == -8797600);
+    assertTrue(terrainKey.getRGBAt(750, 100) == -12369085);
+    
+    /**
     assertTrue(terrainKey.getRGBAt(50, 100) == -1055568);
     assertTrue(terrainKey.getRGBAt(150, 100) == -14503604);
     assertTrue(terrainKey.getRGBAt(250, 100) == -4856291);
@@ -41,12 +61,14 @@ public class TerrainTest {
     assertTrue(terrainKey.getRGBAt(550, 100) == -16735512);
     assertTrue(terrainKey.getRGBAt(650, 100) == -1);
     assertTrue(terrainKey.getRGBAt(750, 100) == -16777216);
-    assertTrue(terrainKey.getRGBAt(850, 100) == -16712192);
+    assertTrue(terrainKey.getRGBAt(850, 100) == -16712192); */
   }
   
   @Test
   public void terrains() throws IOException {
     FileColour terrainKey = new FileColour("terrain_key.png");
+    Terrain.setTerrains(terrainKey);
+    
     assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
     assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);
     assertTrue(terrainKey.getTerrainAt(250, 100) == Terrain.ROUGH);
@@ -55,6 +77,21 @@ public class TerrainTest {
     assertTrue(terrainKey.getTerrainAt(550, 100) == Terrain.WATER);
     assertTrue(terrainKey.getTerrainAt(650, 100) == Terrain.TEE);
     assertTrue(terrainKey.getTerrainAt(750, 100) == Terrain.HOLE);
-    assertTrue(terrainKey.getTerrainAt(850, 100) == Terrain.WIGGLE_ROOM);
+    //assertTrue(terrainKey.getTerrainAt(850, 100) == Terrain.WIGGLE_ROOM);
+  }
+  
+  @Test
+  public void sampleHole() throws IOException {
+    FileColour terrainKey = new FileColour("terrain_key.png");
+    Terrain.setTerrains(terrainKey);
+    
+    assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
+    assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);
+    assertTrue(terrainKey.getTerrainAt(250, 100) == Terrain.ROUGH);
+    assertTrue(terrainKey.getTerrainAt(350, 100) == Terrain.GREEN);
+    assertTrue(terrainKey.getTerrainAt(450, 100) == Terrain.OUT_OF_BOUNDS);
+    assertTrue(terrainKey.getTerrainAt(550, 100) == Terrain.WATER);
+    assertTrue(terrainKey.getTerrainAt(650, 100) == Terrain.TEE);
+    assertTrue(terrainKey.getTerrainAt(750, 100) == Terrain.HOLE);
   }
 }
