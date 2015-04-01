@@ -47,14 +47,16 @@ public class FileColour implements PixelColour {
 
   @Override
   public Terrain getTerrainAt(int x, int y) {
-    int colour = image.getRGB(x, y);
-    
-    for (Terrain terrain : Terrain.values()) {
-      if (terrain.getColour() == colour) {
-        return terrain;
+    if (x < image.getWidth() && y < image.getHeight()) {
+      int colour = image.getRGB(x, y);
+      
+      for (Terrain terrain : Terrain.values()) {
+        if (terrain.getColour() == colour) {
+          return terrain;
+        }
       }
     }
     
-    return null;
+    return Terrain.OUT_OF_BOUNDS;
   }
 }
