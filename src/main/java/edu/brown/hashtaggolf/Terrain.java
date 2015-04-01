@@ -83,7 +83,7 @@ public enum Terrain {
         str = "Ball is in the rough!";
         break;
       case GREEN:
-        str = "Ball is in the bunker!";
+        str = "Ball is in the green!";
         break;
       case HOLE:
         str = "Congrats!  Ball made it to the hole.";

@@ -13,6 +13,7 @@ import edu.brown.socialdata.TwitterQuery;
  *
  */
 public class Referee {
+  private final double SCALE_FACTOR = 3.5;
   private PixelColour image;
   private int level;
   private int par;
@@ -50,8 +51,7 @@ public class Referee {
   public void swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
-      System.out
-      .println("Network Error. Please swing again when you have a connection.");
+      System.out.println("Network Error. Please swing again when you have a connection.");
       return;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
@@ -60,11 +60,13 @@ public class Referee {
       System.out.println("Problem fetching tweets. Please try again");
       return;
     }
-    // TODO: Add image processing (currently is not done yet)
-    // will look something like: image.getTerrainAt(player.getX() + yards, 0);
-    Terrain newTerrain = image.getTerrainAt(player.getX() + (int) (Math.cos(angle) * yards),
-        player.getY() + (int) (Math.sin(angle) * yards));
-    System.out.println(yards);
+    
+    int newX = player.getX() + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+    int newY = player.getY() + (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+    
+    System.out.println("Ball hit to (" + newX + ", " + newY + ")");
+    Terrain newTerrain = image.getTerrainAt(newX, newY);
+    
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
@@ -75,6 +77,7 @@ public class Referee {
     }
 
     System.out.println(newTerrain);
+    System.out.println("You are now at (" + player.getX() + ", " + player.getY() + ")");
   }
 
   /**

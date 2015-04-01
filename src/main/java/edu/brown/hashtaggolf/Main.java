@@ -51,6 +51,20 @@ public class Main {
       System.out.println(player);
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
+      
+      boolean prompt = true;
+      int angle = 0;
+      System.out.println("Enter the angle at which to swing.");
+      
+      while (prompt) {
+        try {
+          angle = Integer.parseInt(reader.readLine());
+          prompt = false;
+        } catch (NumberFormatException e) {
+          System.out.println("Please enter an integer for the swing angle.");
+        }
+      }
+      
       //if (input != null && input.startsWith("#")) {
       //  input = input.substring(1);
       //}
@@ -58,15 +72,27 @@ public class Main {
       while (!isGameOver && input != null) {
         // TODO: Add club choice (this may be an extra argument to the swing
         // method in referee)
-        ref.swing(player, input, 0);
+        ref.swing(player, input, angle);
         if (player.isGameOver()) {
           isGameOver = true;
           System.out.println("Congrats on finishing the course.");
           System.out.println(ref);
         } else {
           System.out.println(player);
-          System.out.println("Enter your query to swing.");
+          System.out.println("Enter your query to swing!");
           input = reader.readLine();
+
+          prompt = true;
+          System.out.println("Enter the angle at which to swing.");
+          
+          while (prompt) {
+            try {
+              angle = Integer.parseInt(reader.readLine());
+              prompt = false;
+            } catch (NumberFormatException e) {
+              System.out.println("Please enter an integer for the swing angle.");
+            }
+          }
         }
       }
     } catch (IOException e) {
