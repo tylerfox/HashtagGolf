@@ -29,8 +29,8 @@ public class Main {
     // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
-    SparkServer.run();
-    // play();
+    //SparkServer.run();
+     play();
   }
 
   /**
@@ -63,6 +63,7 @@ public class Main {
           isGameOver = true;
           System.out.println("Congrats on finishing the course.");
           System.out.println(ref);
+          System.out.println();
         } else {
           System.out.println(player);
           System.out.println("Enter your query to swing.");

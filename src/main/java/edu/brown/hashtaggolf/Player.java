@@ -20,8 +20,8 @@ public abstract class Player {
   	this.name = name;
   	this.terrain = Terrain.TEE;
   	
-  	// TODO: will have to figure out how to set this based on the level
-  	this.distanceToHole = 30;
+  	// TODO: will need to figure out how to set this based on the level
+  	this.distanceToHole = 150;
   	this.stroke = 1;
   	this.x = 0;
   	this.y = 0;
@@ -90,12 +90,16 @@ public abstract class Player {
    * @return if the game is over or not.
    */
   public boolean isGameOver() {
-    return terrain == Terrain.HOLE;
+    return terrain == Terrain.HOLE || distanceToHole < 5;
   }
 
   @Override
   public String toString() {
     return "Player Info:\nName: " + name + " Stroke #: " + stroke + " Distance to Hole: " + distanceToHole;
+  }
+  
+  public int getStroke() {
+    return stroke;
   }
 
   /**
