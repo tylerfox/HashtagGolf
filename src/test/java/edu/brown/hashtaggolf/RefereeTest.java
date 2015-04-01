@@ -10,7 +10,7 @@ public class RefereeTest {
 
   @Test
   public void test() throws IOException {
-    Referee ref = new Referee("hole1.png", "terrain_key.png");
+    Referee ref = new Referee("new_hole1.png", "key.png");
     Player player = new PlayerType1("name");
     assertTrue(ref.applyEnvironment(player, "word") >= 0);
 

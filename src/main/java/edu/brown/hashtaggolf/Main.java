@@ -39,7 +39,7 @@ public class Main {
   public void play() {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(
         System.in))) {
-      Referee ref = new Referee("hole1.png", "terrain_key.png");
+      Referee ref = new Referee("new_hole1.png", "key.png");
 
       System.out.println("Please enter your name.");
       String input = reader.readLine();

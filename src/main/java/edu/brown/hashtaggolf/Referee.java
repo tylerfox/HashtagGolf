@@ -29,6 +29,7 @@ public class Referee {
 
     this.image = new FileColour(courseImage);
     Terrain.setColours(new FileColour(terrainKey));
+    this.par = 3;
 
   }
 
@@ -61,14 +62,15 @@ public class Referee {
     }
     // TODO: Add image processing (currently is not done yet)
     // will look something like: image.getTerrainAt(player.getX() + yards, 0);
-    Terrain newTerrain = image.getTerrainAt(player.getX() + yards, player.getY());
+    Terrain newTerrain = image.getTerrainAt(player.getX() + (int) (Math.cos(angle) * yards),
+        player.getY() + (int) (Math.sin(angle) * yards));
     System.out.println(yards);
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
         break;
       default:
-        player.moveBall(yards, 0);
+        player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
     }
 

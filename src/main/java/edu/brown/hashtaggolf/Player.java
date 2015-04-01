@@ -5,12 +5,15 @@ package edu.brown.hashtaggolf;
  *
  */
 public abstract class Player {
+  private final double SCALE_FACTOR = 3.5;
   private int distanceToHole;
   private String name;
   private int stroke;
   private int x;
   private int y;
   private Terrain terrain;
+  private int hole_x;
+  private int hole_y;
 
   /**
    * Instantiates a player.
@@ -21,10 +24,12 @@ public abstract class Player {
   	this.terrain = Terrain.TEE;
   	
   	// TODO: will need to figure out how to set this based on the level
-  	this.distanceToHole = 165;
+  	this.distanceToHole = 190; // yards
   	this.stroke = 1;
   	this.x = 310;
   	this.y = 350;
+  	this.hole_x = 970;
+  	this.hole_y = 350;
   }
 
  
@@ -53,11 +58,20 @@ public abstract class Player {
     if (distanceToHole - distance < 0) {
       System.out.println("Whoops! Overshot the hole.");
     }
-    distanceToHole = Math.abs(distanceToHole - distance);
-    //x += distance * Math.cos(angle);
-    //y += distance * Math.sin(angle);
-    x += distance;
+    
+    //distanceToHole = Math.abs(distanceToHole - distance);
+    x += (int) (distance * Math.cos(angle) * SCALE_FACTOR);
+    y += (int) (distance * Math.sin(angle) * SCALE_FACTOR);
+    distanceToHole = Math.abs(calcDistanceToHole());
   	stroke++;
+  }
+  
+  /**
+   * Returns the distance to the hole.
+   * @return rounded to the closest yard, distance to hole
+   */
+  public int calcDistanceToHole() {
+    return (int) (Math.sqrt(Math.pow(x - hole_x, 2) + Math.pow(y - hole_y, 2)) / SCALE_FACTOR);
   }
 
   /**
@@ -73,7 +87,7 @@ public abstract class Player {
    * Performs whatever action necessary if the ball goes out of bounds.
    */
   public void outOfBounds() {
-  	stroke += 3;
+  	stroke += 2;
   }
 
   /**
