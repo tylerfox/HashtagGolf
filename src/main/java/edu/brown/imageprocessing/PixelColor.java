@@ -5,7 +5,7 @@ import edu.brown.hashtaggolf.Terrain;
 /**
  * The interface of the image processing classes.
  */
-public interface PixelColour {
+public interface PixelColor {
 
   /**
    * Gets the color at the coordinate.
@@ -13,7 +13,7 @@ public interface PixelColour {
    * @param y the y coordinate of the color to find
    * @return the string representing the color at the coordinate
    */
-  public String getColourAt(int x, int y);
+  public String getColorAt(int x, int y);
 
   /**
    * Gets the terrain at the coordinate.

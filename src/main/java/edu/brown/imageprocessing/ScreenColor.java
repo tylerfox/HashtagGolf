@@ -9,44 +9,44 @@ import edu.brown.hashtaggolf.Terrain;
 /**
  * Uses the actual screen to get the color at a coordinate.
  */
-public class ScreenColour implements PixelColour {
+public class ScreenColor implements PixelColor {
   private Robot screen;
 
   /**
    * Instantiate a new ScreenColor
    * @throws AWTException If an AWTException was found
    */
-  public ScreenColour() throws AWTException {
+  public ScreenColor() throws AWTException {
     screen = new Robot();
   }
-  
+
   @Override
-  public String getColourAt(int x, int y) {
-    Color colour = screen.getPixelColor(x, y);
-    
-    int red = colour.getRed();
-    int green = colour.getGreen();
-    int blue = colour.getBlue();
-    
+  public String getColorAt(int x, int y) {
+    Color color = screen.getPixelColor(x, y);
+
+    int red = color.getRed();
+    int green = color.getGreen();
+    int blue = color.getBlue();
+
     return "Red: " + red + ", Green: " + green + ", Blue: " + blue;
   }
 
   @Override
   public Terrain getTerrainAt(int x, int y) {
-    Color colour = screen.getPixelColor(x, y);
-    
+    Color color = screen.getPixelColor(x, y);
+
     for (Terrain terrain : Terrain.values()) {
-      if (terrain.getColour() == colour.getRGB()) {
+      if (terrain.getColor() == color.getRGB()) {
         return terrain;
       }
     }
-    
+
     return null;
   }
 
   @Override
   public int getRGBAt(int x, int y) {
-    Color colour = screen.getPixelColor(x, y);
-    return colour.getRGB();
+    Color color = screen.getPixelColor(x, y);
+    return color.getRGB();
   }
 }

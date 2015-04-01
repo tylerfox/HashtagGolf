@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.brown.hashtaggolf.Terrain;
-import edu.brown.imageprocessing.FileColour;
+import edu.brown.imageprocessing.FileColor;
 
 public class FileColorTest {
   @BeforeClass
@@ -36,11 +36,11 @@ public class FileColorTest {
   @Test
   public void frenchFlag() {
     try {
-      FileColour frenchFlag = new FileColour("French_flag_design.jpg");
+      FileColor frenchFlag = new FileColor("French_flag_design.jpg");
       
-      assertTrue(frenchFlag.getColourAt(10, 15).equals("Red: 0, Green: 0, Blue: 108"));
-      assertTrue(frenchFlag.getColourAt(100, 50).equals("Red: 255, Green: 255, Blue: 255"));
-      assertTrue(frenchFlag.getColourAt(225, 10).equals("Red: 255, Green: 0, Blue: 0"));
+      assertTrue(frenchFlag.getColorAt(10, 15).equals("Red: 0, Green: 0, Blue: 108"));
+      assertTrue(frenchFlag.getColorAt(100, 50).equals("Red: 255, Green: 255, Blue: 255"));
+      assertTrue(frenchFlag.getColorAt(225, 10).equals("Red: 255, Green: 0, Blue: 0"));
     } catch (IOException e) {
       assertTrue(false);
     }
@@ -49,8 +49,8 @@ public class FileColorTest {
   @Test
   public void exceedImageBounds() {
     try {
-      FileColour frenchFlag = new FileColour("French_flag_design.jpg");
-      frenchFlag.getColourAt(270, 219);
+      FileColor frenchFlag = new FileColor("French_flag_design.jpg");
+      frenchFlag.getColorAt(270, 219);
     } catch (ArrayIndexOutOfBoundsException e) {
       assertTrue(true);
     } catch (IOException e) {
@@ -61,7 +61,7 @@ public class FileColorTest {
   @Test
   public void fileNotFound() {
     try {
-      new FileColour("not a valid filepath");
+      new FileColor("not a valid filepath");
     } catch (IOException e) {
       assertTrue(true);
     }
@@ -70,7 +70,7 @@ public class FileColorTest {
   @Test
   public void whiteTerrain() {
     try {
-      FileColour frenchFlag = new FileColour("French_flag_design.jpg");
+      FileColor frenchFlag = new FileColor("French_flag_design.jpg");
       assertTrue(frenchFlag.getTerrainAt(100, 50) == Terrain.TEE);
     } catch (IOException e) {
       assertTrue(false);

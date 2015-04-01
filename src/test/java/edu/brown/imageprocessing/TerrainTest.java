@@ -32,7 +32,7 @@ public class TerrainTest {
 
   @Test
   public void numericalRGB() throws IOException {
-    FileColour terrainKey = new FileColour("terrain_key.png");
+    FileColor terrainKey = new FileColor("terrain_key.png");
     
     System.out.println(terrainKey.getRGBAt(50, 100));
     System.out.println(terrainKey.getRGBAt(150, 100));
@@ -66,8 +66,8 @@ public class TerrainTest {
   
   @Test
   public void terrains() throws IOException {
-    FileColour terrainKey = new FileColour("terrain_key.png");
-    Terrain.setColours(terrainKey);
+    FileColor terrainKey = new FileColor("terrain_key.png");
+    Terrain.setColors(terrainKey);
     
     assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
     assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);
@@ -82,8 +82,8 @@ public class TerrainTest {
   
   @Test
   public void sampleHole() throws IOException {
-    FileColour terrainKey = new FileColour("terrain_key.png");
-    Terrain.setColours(terrainKey);
+    FileColor terrainKey = new FileColor("terrain_key.png");
+    Terrain.setColors(terrainKey);
     
     assertTrue(terrainKey.getTerrainAt(50, 100) == Terrain.BUNKER);
     assertTrue(terrainKey.getTerrainAt(150, 100) == Terrain.FAIRWAY);

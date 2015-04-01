@@ -3,8 +3,8 @@ package edu.brown.hashtaggolf;
 import java.io.IOException;
 
 import twitter4j.TwitterException;
-import edu.brown.imageprocessing.FileColour;
-import edu.brown.imageprocessing.PixelColour;
+import edu.brown.imageprocessing.FileColor;
+import edu.brown.imageprocessing.PixelColor;
 import edu.brown.socialdata.SocialQuery;
 import edu.brown.socialdata.TwitterQuery;
 
@@ -14,7 +14,7 @@ import edu.brown.socialdata.TwitterQuery;
  */
 public class Referee {
   private final double SCALE_FACTOR = 3.5;
-  private PixelColour image;
+  private PixelColor image;
   private int level;
   private int par;
   private SocialQuery tq;
@@ -28,8 +28,8 @@ public class Referee {
   public Referee(String courseImage, String terrainKey) throws IOException {
     tq = new TwitterQuery();
 
-    this.image = new FileColour(courseImage);
-    Terrain.setColours(new FileColour(terrainKey));
+    this.image = new FileColor(courseImage);
+    Terrain.setColors(new FileColor(terrainKey));
     this.par = 3;
 
   }

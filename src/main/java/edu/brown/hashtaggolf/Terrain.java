@@ -1,9 +1,6 @@
 package edu.brown.hashtaggolf;
 
-import java.io.IOException;
-
-import edu.brown.imageprocessing.FileColour;
-import edu.brown.imageprocessing.PixelColour;
+import edu.brown.imageprocessing.FileColor;
 
 /**
  * An enum of different terrains based on their color.
@@ -17,7 +14,7 @@ public enum Terrain {
   WATER(550),
   TEE(650),
   HOLE(750);
-  
+
   /**
   BUNKER(-1055568),
   FAIRWAY(-14503604),
@@ -28,7 +25,7 @@ public enum Terrain {
   TEE(-1),
   HOLE(-16777216),
   WIGGLE_ROOM(-16712192); */
-  
+
   /**
   BUNKER("0"),
   FAIRWAY("1"),
@@ -39,10 +36,10 @@ public enum Terrain {
   TEE("6"),
   HOLE("7"),
   WIGGLE_ROOM("8"); */
-  
-  private int colour;
+
+  private int color;
   private int xCoordinate;
-  
+
   /**
    * Instantiates a new terrain.
    * @param xCoordinate The x-coordinate of this kind of terrain on the terrain key.
@@ -50,10 +47,10 @@ public enum Terrain {
   private Terrain(int xCoordinate) {
     this.xCoordinate = xCoordinate;
   }
-  
-  public static void setColours(FileColour terrainKey) {
+
+  public static void setColors(FileColor terrainKey) {
     for (Terrain terrain : Terrain.values()) {
-      terrain.setColour(terrainKey.getRGBAt(terrain.xCoordinate, 50));
+      terrain.setColor(terrainKey.getRGBAt(terrain.xCoordinate, 50));
     }
   }
 
@@ -61,12 +58,12 @@ public enum Terrain {
    * Gets the color of the terrain.
    * @return an integer representing the color of the terrain
    */
-  public int getColour() {
-    return colour;
+  public int getColor() {
+    return color;
   }
-  
-  public void setColour(int colour) {
-    this.colour = colour;
+
+  public void setColor(int color) {
+    this.color = color;
   }
 
   @Override
@@ -103,14 +100,14 @@ public enum Terrain {
 
     return str;
   }
-  
+
   //private int[] xCoordinates = {50, 150, 250, 350, 450, 550, 650, 750, 850};
 
   /**
   private Terrain(String type) {
     try {
-      terrainKey = new FileColour("path to terrain key");
-      this.colour = terrainKey.getRGBAt(xCoordinates[Integer.parseInt(type)], 50);
+      terrainKey = new FileColor("path to terrain key");
+      this.color = terrainKey.getRGBAt(xCoordinates[Integer.parseInt(type)], 50);
     } catch (IOException e) {
       System.out.println("Terrain key file not found.");
     }
