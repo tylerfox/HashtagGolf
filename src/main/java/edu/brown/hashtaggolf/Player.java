@@ -23,8 +23,8 @@ public abstract class Player {
   	// TODO: will need to figure out how to set this based on the level
   	this.distanceToHole = 150;
   	this.stroke = 1;
-  	this.x = 0;
-  	this.y = 0;
+  	this.x = 182;
+  	this.y = 217;
   }
 
  

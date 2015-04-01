@@ -63,7 +63,7 @@ public class Referee {
     }
     // TODO: Add image processing (currently is not done yet)
     // will look something like: image.getTerrainAt(player.getX() + yards, 0);
-    Terrain newTerrain = Terrain.FAIRWAY;
+    Terrain newTerrain = image.getTerrainAt(player.getX() + yards, player.getY());
 
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
