@@ -24,12 +24,12 @@ public abstract class Player {
   	this.terrain = Terrain.TEE;
   	
   	// TODO: will need to figure out how to set this based on the level
-  	this.distanceToHole = 190; // yards
   	this.stroke = 1;
   	this.x = 310;
   	this.y = 350;
   	this.hole_x = 970;
   	this.hole_y = 350;
+  	this.distanceToHole = calcDistanceToHole(); // yards
   }
 
  
@@ -60,9 +60,10 @@ public abstract class Player {
     }
     
     //distanceToHole = Math.abs(distanceToHole - distance);
-    x += (int) (distance * Math.cos(angle) * SCALE_FACTOR);
-    y += (int) (distance * Math.sin(angle) * SCALE_FACTOR);
-    distanceToHole = Math.abs(calcDistanceToHole());
+    x += (int) (distance * Math.cos(Math.toRadians(angle)) * SCALE_FACTOR);
+    y += (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
+    
+    distanceToHole = calcDistanceToHole();
   	stroke++;
   }
   
@@ -109,7 +110,7 @@ public abstract class Player {
 
   @Override
   public String toString() {
-    return "Player Info:\nName: " + name + " Stroke #: " + stroke + " Distance to Hole: " + distanceToHole;
+    return "Player Info:\nName: " + name + ", Stroke #: " + stroke + ", Distance to Hole: " + distanceToHole;
   }
   
   public int getStroke() {

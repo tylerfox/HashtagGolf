@@ -1,0 +1,71 @@
+Please enter your name.
+Dan
+Hello Dan!  Let's play #golf.
+
+Player Info:
+Name: Dan, Stroke #: 1, Distance to Hole: 188
+Enter your query to swing!
+angle
+Enter the angle at which to swing.
+0.9
+Please enter an integer for the swing angle.
+kjgh
+Please enter an integer for the swing angle.
+0
+Ball hit to (341, 350)
+Ball went 9 yards!
+Ball is in the rough!
+You are now at (341, 350)
+Player Info:
+Name: Dan, Stroke #: 2, Distance to Hole: 179
+Enter your query to swing!
+hey
+Enter the angle at which to swing.
+0
+Ball hit to (743, 350)
+Ball went 115 yards!
+Ball is in the fairway!
+You are now at (743, 350)
+Player Info:
+Name: Dan, Stroke #: 3, Distance to Hole: 64
+Enter your query to swing!
+cheese
+Enter the angle at which to swing.
+0
+Ball hit to (827, 350)
+Ball went 24 yards!
+Ball is in the fairway!
+You are now at (827, 350)
+Player Info:
+Name: Dan, Stroke #: 4, Distance to Hole: 40
+Enter your query to swing!
+cheese
+Enter the angle at which to swing.
+0
+Ball hit to (904, 350)
+Ball went 22 yards!
+Ball is in the green!
+You are now at (904, 350)
+Player Info:
+Name: Dan, Stroke #: 5, Distance to Hole: 18
+Enter your query to swing!
+cheese
+Enter the angle at which to swing.
+0
+Ball hit to (988, 350)
+Ball went 24 yards!
+Whoops! Overshot the hole.
+Ball is in the green!
+You are now at (988, 350)
+Player Info:
+Name: Dan, Stroke #: 6, Distance to Hole: 5
+Enter your query to swing!
+tbt
+Enter the angle at which to swing.
+180
+Ball hit to (974, 350)
+Ball went 4 yards!
+Congrats!  Ball made it to the hole.
+You are now at (974, 350)
+Congrats on finishing the course.
+Level Number: 0 Par: 3
