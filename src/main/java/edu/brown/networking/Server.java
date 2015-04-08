@@ -1,7 +1,13 @@
 package edu.brown.networking;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+//import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+//import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -14,7 +20,7 @@ import edu.brown.hashtaggolf.PlayerType1;
  * The server side of networking.
  */
 public class Server {
-  private List<Player> gameState;
+ // private List<Player> gameState;
   private ServerSocket myServer;
   private List<Socket> clients;
 
@@ -40,6 +46,7 @@ public class Server {
       if (myServer == null) {
         break;
       } else {
+        System.out.println("Accepting new client.");
         Socket socket = myServer.accept();
         clients.add(socket);
         handshake(socket, clients.size());
@@ -61,11 +68,17 @@ public class Server {
    * @param socket socket to handshake with
    * @param id client id (index of Player in the clients list)
    * @return True on successful handshake, false otherwise
+   * @throws IOException 
    */
-  public boolean handshake(Socket socket, int id) {
+  public boolean handshake(Socket socket, int id) throws IOException {
+    BufferedWriter client = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+    BufferedReader clientResponse = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    client.write(id);
+    String response = clientResponse.readLine();
+    System.out.println(response);
     // send id back to the client
     // wait to receive player information & save info
-    return true;
+    return (response != null);
   }
 
   // updates the state of the player with the given id
@@ -99,6 +112,15 @@ public class Server {
       return true;
     } catch (Exception e){
       return false;
+    }
+  }
+  
+  public static void main(String[] args) {
+    try {
+      Server server = new Server(1234);
+      server.run();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }

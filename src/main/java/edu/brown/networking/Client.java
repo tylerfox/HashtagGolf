@@ -1,8 +1,13 @@
 package edu.brown.networking;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import edu.brown.hashtaggolf.Player;
 
@@ -13,15 +18,20 @@ public class Client {
   private int id;
   private String hostname;
   private int portNum;
+  private Socket mySocket;
 
   /**
    * Instantiates a new Client.
    * @param hostname the name of the host of the client
    * @param portNum the port number of the client
+   * @throws IOException 
+   * @throws UnknownHostException 
    */
-  public Client (String hostname, int portNum) {
+  public Client (String hostname, int portNum) throws UnknownHostException, IOException {
   	this.hostname = hostname;
   	this.portNum = portNum;
+  	this.mySocket = new Socket(hostname, portNum);
+  	handshake();
   }
 
   /**
@@ -30,9 +40,13 @@ public class Client {
    * @param portNum The port number.
    * @return True on successful handshake, false otherwise.
    */
-  public boolean handshake(String hostName, int portNum) {
+  public boolean handshake() {
     try {
-      //...
+      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream()));
+      BufferedReader reader = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+      
+      id = Integer.parseInt(reader.readLine());
+      writer.write("Player1");
       return true;
     } catch (Exception e){
       return false;
@@ -64,6 +78,15 @@ public class Client {
     else {
        // something gone wrong - this should not happen if your
        // socket is connected to the sending side above.
+    }
+  }
+  
+  public static void main(String[] args) {
+    try {
+      Client client = new Client("localhost", 1234);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
   }
 }
