@@ -1,9 +1,10 @@
-package edu.brown.hashtaggolf;
+package edu.brown.gui;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Map;
 
 import spark.ExceptionHandler;
@@ -17,15 +18,17 @@ import spark.template.freemarker.FreeMarkerEngine;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.hashtaggolf.Player;
 import freemarker.template.Configuration;
 
 /**
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServer {
-  private static final int REQ_STATUS = 500;
   private static final int PORT = 4567;
   private static final Gson GSON = new Gson();
+  private static Player myPlayer;
+  private static List<Player> otherPlayers;
 
   /**
    * Starts running the GUI for #golf
@@ -50,7 +53,7 @@ public final class SparkServer {
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-    Spark.post("/host", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/host", new SetupServer(), new FreeMarkerEngine());
     Spark.post("/join", new TempHandler(), new FreeMarkerEngine());
     Spark.post("/swing", new TempHandler(), new FreeMarkerEngine());
 
@@ -91,23 +94,9 @@ public final class SparkServer {
       return new ModelAndView(variables, "temp.ftl");
     }
   }
+  
 
-  /**
-   * Exception Printer to take care of exceptions.
-   */
-  private static class ExceptionPrinter implements ExceptionHandler {
-    @Override
-    public void handle(Exception e, Request req, Response res) {
-      res.status(REQ_STATUS);
-      StringWriter stacktrace = new StringWriter();
-      try (PrintWriter pw = new PrintWriter(stacktrace)) {
-        pw.println("<pre>");
-        e.printStackTrace(pw);
-        pw.println("</pre>");
-      }
-      res.body(stacktrace.toString());
-    }
-  }
+
 
   /**
    * Uses template for FrontHandler.

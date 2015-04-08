@@ -1,10 +1,16 @@
 package edu.brown.hashtaggolf;
 
+import java.io.Serializable;
+
 /**
  * Class for players.
  *
  */
-public abstract class Player {
+public abstract class Player implements Serializable {
+  /**
+   * UID for networking.
+   */
+  private static final long serialVersionUID = -2317689451679552386L;
   private final double SCALE_FACTOR = 3.5;
   private int distanceToHole;
   private String name;

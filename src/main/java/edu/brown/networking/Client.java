@@ -1,5 +1,9 @@
 package edu.brown.networking;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
+
 import edu.brown.hashtaggolf.Player;
 
 /**
@@ -46,6 +50,20 @@ public class Client {
       return true;
     } catch (Exception e){
       return false;
+    }
+  }
+  
+  public void receiveInfo() throws IOException, ClassNotFoundException {
+    Socket socket = new Socket();
+    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+    Object o = ois.readObject();
+    if(o instanceof Player) {
+       Player ds = (Player)o;
+       System.out.println(ds.toString());
+    }
+    else {
+       // something gone wrong - this should not happen if your
+       // socket is connected to the sending side above.
     }
   }
 }
