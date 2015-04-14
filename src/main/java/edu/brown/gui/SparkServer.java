@@ -2,12 +2,9 @@ package edu.brown.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
-import spark.ExceptionHandler;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -45,9 +42,9 @@ public final class SparkServer {
     // Pages
     Spark.get("/", new FrontPageHandler(), freeMarker);
     Spark.get("/start", new StartHandler(), freeMarker);
-    Spark.get("/play", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/play", new PlayHandler(), new FreeMarkerEngine());
     Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/player_select", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/player_select", new PlayerSelectHandler(), new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
@@ -83,6 +80,28 @@ public final class SparkServer {
   }
 
   /**
+   * Displays player select page of #golf.
+   */
+  private static class PlayerSelectHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "player_select.ftl");
+    }
+  }
+
+  /**
+   * Displays main gameplay of #golf.
+   */
+  private static class PlayHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "play.ftl");
+    }
+  }
+
+  /**
    * Temporary Handler for unimplemented buttons.
    * @author Beverly
    */
@@ -94,9 +113,6 @@ public final class SparkServer {
       return new ModelAndView(variables, "temp.ftl");
     }
   }
-  
-
-
 
   /**
    * Uses template for FrontHandler.

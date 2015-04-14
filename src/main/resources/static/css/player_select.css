@@ -1,0 +1,124 @@
+/*#background {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+} */
+
+#start {
+	margin: 50px;
+	float: left;
+}
+
+#multiplayer {
+	margin: 50px;
+	float: right;
+}
+
+#settings {
+	margin: 50px;
+	float: right;
+}
+
+#create {
+	margin: 50px;
+	float: left;
+}
+
+body {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+}
+
+h1 {
+	text-align: center;
+	font-size: 50px;
+}
+
+#container {
+	margin: auto;
+	width: 600px;
+	height: 800px;
+}
+
+.redPlayerButton {
+	background-color:#ff0000;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Comics;
+	font-size:30px;
+	padding:8px 36px;
+	text-decoration:none;
+}
+.redPlayerButton:hover {
+	background-color:#ff4040;
+}
+.redPlayerButton:active {
+	position:relative;
+	top:1px;
+}
+
+.bluePlayerButton {
+	background-color:#001eff;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Comics;
+	font-size:30px;
+	padding:8px 36px;
+	text-decoration:none;
+}
+.bluePlayerButton:hover {
+	background-color:#374fff;
+}
+.bluePlayerButton:active {
+	position:relative;
+	top:1px;
+}
+
+.greenPlayerButton {
+	background-color:#18b510;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Comics;
+	font-size:30px;
+	padding:8px 36px;
+	text-decoration:none;
+}
+.greenPlayerButton:hover {
+	background-color:#33b42c;
+}
+.greenPlayerButton:active {
+	position:relative;
+	top:1px;
+}
+
+.yellowPlayerButton {
+	background-color:#f1e90c;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Comics;
+	font-size:30px;
+	padding:8px 36px;
+	text-decoration:none;
+}
+.yellowPlayerButton:hover {
+	background-color:#f1ea2b;
+}
+.yellowPlayerButton:active {
+	position:relative;
+	top:1px;
+}

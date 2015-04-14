@@ -1,0 +1,12 @@
+@font-face {
+    font-family:"Comics";
+    src: url("comics.ttf")
+}
+
+body {
+	background-image: url(tempbackground.png);
+	background-size: cover;
+	font-family:"Comics";
+	background-image: url("gui_hole1.png");
+}
+
