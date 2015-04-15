@@ -1,6 +1,15 @@
 @font-face {
     font-family:"Comics";
-    src: url("comics.ttf")
+    src: url("comics.ttf");
+}
+
+#tweetme {
+    font-family:"Comics";
+    src: url("comics.ttf");
+	width: 300px;
+	height: 40px;
+	margin :50px;
+	padding:8px 36px;
 }
 
 body {
@@ -10,3 +19,11 @@ body {
 	background-image: url("gui_hole1.png");
 }
 
+p {
+	font-size:20pt;
+	float: right;
+	background-color: white;
+	/*height: 50px;*/
+	margin: 30px;
+	padding:10px;
+}

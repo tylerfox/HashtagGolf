@@ -31,8 +31,8 @@ public abstract class Player implements Serializable {
   	
   	// TODO: will need to figure out how to set this based on the level
   	this.stroke = 1;
-  	this.x = 310;
-  	this.y = 350;
+  	this.x = 380;
+  	this.y = 430;
   	this.hole_x = 970;
   	this.hole_y = 350;
   	this.distanceToHole = calcDistanceToHole(); // yards

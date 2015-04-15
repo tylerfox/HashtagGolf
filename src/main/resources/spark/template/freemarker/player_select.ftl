@@ -15,12 +15,12 @@
     <div id="container">
       <div id ="background">
       <h1> Choose a Player </h1>
-     <a href="/play" class="redPlayerButton" id = "start">red</a>
-     <a href="/play" class="bluePlayerButton" id = "multiplayer">multiplayer</a>
+     <a href="/play" class="redPlayerButton" id = "start">Red</a>
+     <a href="/play" class="bluePlayerButton" id = "multiplayer">Blue</a>
      <br><br>
 
-      <a href="/play" class="greenPlayerButton" id ="settings">green</a>
-      <a href="/play" class="yellowPlayerButton" id ="create">yellow</a>
+      <a href="/play" class="greenPlayerButton" id ="settings">Green</a>
+      <a href="/play" class="yellowPlayerButton" id ="create">Yellow</a>
       
 
     </div>

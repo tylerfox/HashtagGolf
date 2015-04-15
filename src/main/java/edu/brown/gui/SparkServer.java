@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import spark.ModelAndView;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -16,6 +18,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.hashtaggolf.Player;
+import edu.brown.hashtaggolf.PlayerType1;
+import edu.brown.hashtaggolf.Referee;
 import freemarker.template.Configuration;
 
 /**
@@ -26,6 +30,7 @@ public final class SparkServer {
   private static final Gson GSON = new Gson();
   private static Player myPlayer;
   private static List<Player> otherPlayers;
+  private static Referee ref;
 
   /**
    * Starts running the GUI for #golf
@@ -52,7 +57,7 @@ public final class SparkServer {
     // Front End Requesting Information
     Spark.get("/host", new SetupServer(), new FreeMarkerEngine());
     Spark.post("/join", new TempHandler(), new FreeMarkerEngine());
-    Spark.post("/swing", new TempHandler(), new FreeMarkerEngine());
+    Spark.post("/swing", new SwingHandler());
 
   }
 
@@ -96,6 +101,13 @@ public final class SparkServer {
   private static class PlayHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      try {
+        ref = new Referee("new_hole1.png", "key.png");
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      myPlayer = new PlayerType1("Brandon");
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "play.ftl");
     }
@@ -129,5 +141,19 @@ public final class SparkServer {
       System.exit(1);
     }
     return new FreeMarkerEngine(config);
+  }
+
+  /**
+   * Displays menu page of #golf.
+   * @author btai
+   */
+  private static class SwingHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String word = qm.value("word");
+      ref.swing(myPlayer, word, 0);
+      return GSON.toJson(myPlayer);
+    }
   }
 }

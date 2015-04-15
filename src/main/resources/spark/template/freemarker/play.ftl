@@ -14,10 +14,15 @@
   <body>
     <div id="container">
       <div id ="background">
-      <canvas id="myCanvas" width="1280" height="720"></canvas>
+      <p class="hud" id= "distancehud"> Distance To Hole: 900 yards</p>
+      <p class="hud"> Par#: 3</p>
+      <p class="hud" id="strokehud"> Stroke#: 1</p>
+      <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
       
 
     </div>
+    <input type="text" id = "tweetme" name = "tweetme" placeholder="Type a Word or Phrase"></input>
+    <button class="myButton" onclick="swing()"> Swing!</button>
    </div>
     
      <!-- Again, we're serving up the unminified source for clarity. -->
@@ -25,6 +30,6 @@
      <script src="js/play.js"></script>
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
-       dealing with real world issues like old browsers.  -->
+       dealing with real world issues like old bowsers.  -->
 </html>
      
