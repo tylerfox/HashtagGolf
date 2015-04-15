@@ -2,10 +2,13 @@ var START_X = 380;
 var START_Y = 430;
 var dest_X = 200;
 var dest_Y = 375;
+var target_x = 0;
+var target_y = 0;
 var strokenum = 1;
 var hole_x = 900;
 var hole_y = 375;
 var linemoveable = true;
+var angle = 0;
 /*var START_X = 900;
 var START_Y = 375;
 var dest_X = 500;
@@ -99,11 +102,16 @@ function linedraw(evt) {
   //context.setLineDash([2,2]);
   //context.lineWidth = 3;
   context.moveTo(myBall.x, myBall.y);
-  context.lineTo(evt.pageX, evt.pageY - canvas.offsetTop);
+  target_x = evt.pageX - canvas.offsetLeft;
+  target_y = evt.pageY - canvas.offsetTop;
+  context.lineTo(evt.pageX - canvas.offsetLeft, evt.pageY - canvas.offsetTop);
   context.stroke();
   drawCircle(myBall, context);
-  //linedraw(evt);
-  //setInterval(drawmyline(evt),.1);
+
+
+  var deltax = target_x - myBall.x;
+  var deltay = myBall.y - target_y;
+  angle = Math.atan(deltay/deltax) *180 / Math.PI;
   }
 }
 
@@ -133,7 +141,8 @@ function toggleline() {
 
 function swing() {
   var word = document.getElementById("tweetme").value;
-  postParameters={"word":word};
+
+  postParameters={"word":word, "angle":angle};
   $.post("/swing", postParameters, function(responseJSON){
     responseObject = JSON.parse(responseJSON);
     var startTime = (new Date()).getTime();

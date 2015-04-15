@@ -151,8 +151,9 @@ public final class SparkServer {
     @Override
     public Object handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      double angle = Double.parseDouble(qm.value("angle"));
       String word = qm.value("word");
-      ref.swing(myPlayer, word, 0);
+      ref.swing(myPlayer, word, angle);
       return GSON.toJson(myPlayer);
     }
   }
