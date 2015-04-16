@@ -83,7 +83,7 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
 
   drawCircle(myBall, context);
   var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
-  document.getElementById("distancehud").innerHTML = "Distance to Hole: " + disttohole + " yards";
+  document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
   //check if at destination
     //console.log(Math.abs(myBall.x - destX)/xspeed + " " + Math.abs(myBall.y - destY)/yspeed);
   if (outofbounds(myBall, canvas)) {
@@ -106,7 +106,7 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
     START_Y = destY;
   if (isgameover(myBall)) {
     console.log("win!");
-    alert("win!");
+    alert("win in " + strokenum + " strokes!");
   }
   }
 }
@@ -209,16 +209,14 @@ function swing() {
     toHole();
   }
   postParameters={"word":word, "angle":angle};
-  //cheat
-  if (word == "hole!") {
+  //cheats
+  if(!isNaN(+word)) {
+    var num = +word;
+    var startTime = (new Date()).getTime();
+    animate(myBall, canvas, context, startTime, true, myBall.x + num*Math.cos(angle*Math.PI / 180), myBall.y - num*Math.sin(angle*Math.PI / 180));
+  } else if (word == "hole!") {
     var startTime = (new Date()).getTime();
     animate(myBall, canvas, context, startTime, true, hole_x, hole_y);
-  } else if (word == "10"){
-    var startTime = (new Date()).getTime();
-    animate(myBall, canvas, context, startTime, true, myBall.x + 10*Math.cos(angle*Math.PI / 180), myBall.y - 10*Math.sin(angle*Math.PI / 180));
-  } else if (word == "100"){
-    var startTime = (new Date()).getTime();
-    animate(myBall, canvas, context, startTime, true, myBall.x + 100*Math.cos(angle*Math.PI / 180), myBall.y - 100*Math.sin(angle*Math.PI / 180));
   } else {
 
   $.post("/swing", postParameters, function(responseJSON){
@@ -233,7 +231,7 @@ function swing() {
   });
 }
   strokenum += 1;
-  document.getElementById("strokehud").innerHTML = "Stroke#: " + strokenum;
+  document.getElementById("strokehud").innerHTML = "stroke#: " + strokenum;
   //var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
   //document.getElementById("distancehud").innerHTML = "Distance to Hole: " + disttohole + " yards";
 }

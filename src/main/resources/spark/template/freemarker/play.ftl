@@ -14,8 +14,8 @@
   <body>
     <div id="container">
       <div id ="background">
-      <p class="hud" id= "distancehud"> distance to hole: 900 yards</p>
-      <p class="hud"> Par#: 3</p>
+      <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
+      <p class="hud"> par#: 3</p>
       <p class="hud" id="strokehud"> stroke#: 1</p>
       <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
       <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
