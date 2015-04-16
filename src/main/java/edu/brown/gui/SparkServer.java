@@ -3,6 +3,7 @@ package edu.brown.gui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +62,11 @@ public final class SparkServer {
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
+
+    Spark.post("/playgame", new PlayGameHandler());
+    Spark.get("/host", new SetupServer(), new FreeMarkerEngine());
+    Spark.post("/join", new TempHandler(), new FreeMarkerEngine());
+    
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
@@ -119,15 +125,28 @@ public final class SparkServer {
   private static class PlayHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "play.ftl");
+    }
+  }
+
+  private static class PlayGameHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      int startx = Integer.parseInt(qm.value("startx"));
+      int starty = Integer.parseInt(qm.value("starty"));
+      int holex = Integer.parseInt(qm.value("holex"));
+      int holey = Integer.parseInt(qm.value("holey"));
       try {
         ref = new Referee("new_hole1.png", "key.png");
       } catch (IOException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      myPlayer = new PlayerType1("Brandon");
+      myPlayer = new PlayerType1("Brandon", startx, starty, holex, holey);
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
-      return new ModelAndView(variables, "play.ftl");
+      return GSON.toJson(variables);
     }
   }
 
@@ -184,8 +203,13 @@ public final class SparkServer {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
       String word = qm.value("word");
-      ref.swing(myPlayer, word, angle);
-      return GSON.toJson(myPlayer);
+      boolean outofbounds = false;
+      int count = ref.swing(myPlayer, word, angle);
+      System.out.println("me this far! " + count);
+      if (count == -4) {
+        outofbounds = true;
+      }
+      return GSON.toJson(new Object[]{myPlayer, outofbounds});
     }
   }
 
