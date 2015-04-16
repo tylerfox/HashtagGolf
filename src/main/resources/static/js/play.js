@@ -1,12 +1,12 @@
-var START_X = 380;
-var START_Y = 430;
+var START_X = 310;
+var START_Y = 355;
 var dest_X = 200;
 var dest_Y = 375;
 var target_x = 0;
 var target_y = 0;
 var strokenum = 1;
-var hole_x = 900;
-var hole_y = 375;
+var hole_x = 968;
+var hole_y = 350;
 var linemoveable = true;
 var angle = 0;
 /*var START_X = 900;
@@ -70,6 +70,8 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   drawCircle(myBall, context);
+  var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
+  document.getElementById("distancehud").innerHTML = "Distance to Hole: " + disttohole + " yards";
   //check if at destination
   if (Math.abs(myBall.x - destX) > 10 || Math.abs(myBall.y - destY) > 10) {
   // request new frame
@@ -113,7 +115,6 @@ function linedraw(evt) {
   var deltay = myBall.y - target_y;
   //angle = Math.atan(deltay/deltax) *180 / Math.PI;
   angle = Math.atan2(deltay, deltax) *180 / Math.PI;
-  console.log(angle);
   }
 }
 
@@ -140,6 +141,11 @@ function toggleline() {
   var startTime = (new Date()).getTime();
   animate(myBall, canvas, context, startTime, true, dest_X, dest_Y);
 }, 1000);*/
+function isenter(evt) {
+  if (evt.keyCode == 13) {
+    swing();
+  }
+}
 
 function swing() {
   var word = document.getElementById("tweetme").value;
@@ -152,7 +158,6 @@ function swing() {
   });
   strokenum += 1;
   document.getElementById("strokehud").innerHTML = "Stroke#: " + strokenum;
-  var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
-  console.log(disttohole);
-  document.getElementById("distancehud").innerHTML = "Distance to Hole: " + disttohole + " yards";
+  //var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
+  //document.getElementById("distancehud").innerHTML = "Distance to Hole: " + disttohole + " yards";
 }

@@ -16,6 +16,16 @@ body {
 	background-image: url(tempbackground.png);
 	background-size: cover;
 	font-family:"Comics";
+	/*background-image: url("gui_hole1.png");*/
+		user-select:none;
+        -moz-user-select: none; 
+        -khtml-user-select: none; 
+        -webkit-user-select: none; 
+        -o-user-select: none;
+}
+
+#myCanvas {
+
 	background-image: url("gui_hole1.png");
 }
 

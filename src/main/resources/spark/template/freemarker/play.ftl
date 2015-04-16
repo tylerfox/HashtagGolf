@@ -21,7 +21,7 @@
       
 
     </div>
-    <input type="text" id = "tweetme" name = "tweetme" placeholder="Type a Word or Phrase"></input>
+    <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="Type a Word or Phrase"></input>
     <button class="myButton" onclick="swing()"> Swing!</button>
    </div>
     
