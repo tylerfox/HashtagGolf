@@ -14,20 +14,19 @@
   <body>
     <div id="container">
       <div id ="background">
-      <h1> #golf </h1>
-  	 <a href="/player_select" class="myButton" id = "start">start</a>
-     <a href="/multiplayer" class="myButton" id = "multiplayer">multiplayer</a>
-     <br><br>
+      <h1> Host Lobby </h1>
 
-      <a href="/settings" class="myButton" id ="settings">settings</a>
-      <a href="/create" class="myButton" id ="create">create</a>
 
+
+
+      
     </div>
    </div>
   	
      <!-- Again, we're serving up the unminified source for clarity. -->
-    <script src="js/jquery-2.1.1.js"></script>
-    <script src="js/main.js"></script>
+     <script src="js/jquery-2.1.1.js"></script>
+     <script src="js/main.js"></script>
+     <script src="js/multiplayer.js"></script>
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
        dealing with real world issues like old browsers.  -->

@@ -2,6 +2,8 @@ package edu.brown.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +31,9 @@ public final class SparkServer {
   private static final int PORT = 4567;
   private static final Gson GSON = new Gson();
   private static Player myPlayer;
-  private static List<Player> otherPlayers;
+  private static final int MAX_PLAYERS = 4;
   private static Referee ref;
+  private static Map<String, List<Player>> rooms;
 
   /**
    * Starts running the GUI for #golf
@@ -41,7 +44,7 @@ public final class SparkServer {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-
+    rooms = new HashMap<>();
     // Setup Spark Routes
 
     // Pages
@@ -51,18 +54,21 @@ public final class SparkServer {
     Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/player_select", new PlayerSelectHandler(), new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/multiplayer", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
+
+    Spark.get("/lobby/:lobby", new LobbyHandler(), new FreeMarkerEngine());
+
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-    Spark.get("/host", new SetupServer(), new FreeMarkerEngine());
-    Spark.post("/join", new TempHandler(), new FreeMarkerEngine());
     Spark.post("/swing", new SwingHandler());
-
+    Spark.post("/host", new HostHandler());
+    Spark.post("/join", new JoinHandler());
   }
 
+
   /**
-   * Displays front page of #golf.
+   * Displays front page of #golf. Sets cookie information.
    */
   private static class FrontPageHandler implements TemplateViewRoute {
     @Override
@@ -73,12 +79,24 @@ public final class SparkServer {
   }
 
   /**
+   * Displays front page of #golf.
+   */
+  private static class MultiplayerHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "multiplayer.ftl");
+    }
+  }
+
+
+  /**
    * Displays menu page of #golf.
-   * @author btai
    */
   private static class StartHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "start.ftl");
     }
@@ -144,8 +162,21 @@ public final class SparkServer {
   }
 
   /**
+   * Sets cookies.
+   */
+  private static class LobbyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+
+
+      Map<String, Object> variables =
+          ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "lobby.ftl");
+    }
+  }
+
+  /**
    * Displays menu page of #golf.
-   * @author btai
    */
   private static class SwingHandler implements Route {
     @Override
@@ -155,6 +186,60 @@ public final class SparkServer {
       String word = qm.value("word");
       ref.swing(myPlayer, word, angle);
       return GSON.toJson(myPlayer);
+    }
+  }
+
+
+  private static class HostHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String roomName = qm.value("room");
+      String playerName = qm.value("player");
+      boolean success = !rooms.containsKey(roomName);
+
+      if (success) {
+        List<Player> playerList = new ArrayList<>();
+        rooms.put(roomName, playerList);
+        res.cookie("id", String.valueOf(0));
+        playerList.add(new PlayerType1(playerName));
+      }
+
+      final Map<String, Object> variables = new ImmutableMap
+          .Builder<String, Object>()
+          .put("success", success).build();
+      return GSON.toJson(variables);
+    }
+  }
+
+  private static class JoinHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String roomName = qm.value("room");
+      String playerName = qm.value("player");
+
+      boolean roomExists = rooms.containsKey(roomName);
+      boolean roomFull = false;
+
+      if (roomExists) {
+        List<Player> game = rooms.get(roomName);
+
+        if (game.size() < MAX_PLAYERS) {
+          res.cookie("id", String.valueOf(game.size()));
+          game.add(new PlayerType1(playerName));
+        } else {
+          roomFull = true;
+        }
+      }
+
+      final Map<String, Object> variables = new ImmutableMap
+          .Builder<String, Object>()
+          .put("roomExists", roomExists)
+          .put("roomFull", roomFull)
+          .build();
+
+      return GSON.toJson(variables);
     }
   }
 }
