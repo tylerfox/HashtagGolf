@@ -37,6 +37,19 @@ public abstract class Player implements Serializable {
   	this.hole_y = 350;
   	this.distanceToHole = calcDistanceToHole(); // yards
   }
+  
+  public Player(String name, int startx, int starty, int holex, int holey) {
+    this.name = name;
+    this.terrain = Terrain.TEE;
+    
+    // TODO: will need to figure out how to set this based on the level
+    this.stroke = 1;
+    this.x = startx;
+    this.y = starty;
+    this.hole_x = holex;
+    this.hole_y = holey;
+    this.distanceToHole = calcDistanceToHole(); // yards
+  }
 
  
   // Players with powerups will override

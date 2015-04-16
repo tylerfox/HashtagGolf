@@ -13,8 +13,9 @@
 }
 
 body {
-	background-image: url(tempbackground.png);
-	background-size: cover;
+	/*background-image: url(tempbackground.png);
+	background-size: cover;*/
+	background-color: #00ADEF;
 	font-family:"Comics";
 	/*background-image: url("gui_hole1.png");*/
 		user-select:none;
@@ -24,9 +25,18 @@ body {
         -o-user-select: none;
 }
 
+#container {
+	position: relative;
+	width: 100%;
+	text-align: center;
+}
 #myCanvas {
-
 	background-image: url("gui_hole1.png");
+}
+
+#check {
+	width: 30px;
+	height: 30px;
 }
 
 p {

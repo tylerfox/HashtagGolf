@@ -14,15 +14,17 @@
   <body>
     <div id="container">
       <div id ="background">
-      <p class="hud" id= "distancehud"> Distance To Hole: 900 yards</p>
+      <p class="hud" id= "distancehud"> distance to hole: 900 yards</p>
       <p class="hud"> Par#: 3</p>
-      <p class="hud" id="strokehud"> Stroke#: 1</p>
+      <p class="hud" id="strokehud"> stroke#: 1</p>
       <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
+      <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
       
 
     </div>
     <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="Type a Word or Phrase"></input>
-    <button class="myButton" onclick="swing()"> Swing!</button>
+    <input type="checkbox" id = "check" onclick="toggleable();"> always to hole </input> 
+    <button class="myButton" onclick="swing()"> swing!</button>
    </div>
     
      <!-- Again, we're serving up the unminified source for clarity. -->

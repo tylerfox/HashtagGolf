@@ -48,17 +48,17 @@ public class Referee {
    * @param word the word the player input
    * @param angle the angle at which the ball should go in the direction of
    */
-  public void swing(Player player, String word, double angle) {
+  public int swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
       System.out.println("Network Error. Please swing again when you have a connection.");
-      return;
+      return -1;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
-      return;
+      return -2;
     } else if (yards == -3) {
       System.out.println("Problem fetching tweets. Please try again");
-      return;
+      return -3;
     }
     
     int newX = player.getX() + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
@@ -70,7 +70,7 @@ public class Referee {
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
-        break;
+        return -4;
       default:
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
@@ -78,6 +78,7 @@ public class Referee {
 
     System.out.println(newTerrain);
     System.out.println("You are now at (" + player.getX() + ", " + player.getY() + ")");
+    return yards;
   }
 
   /**
