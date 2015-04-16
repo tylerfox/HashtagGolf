@@ -136,7 +136,6 @@ function linedraw(evt) {
 
   var deltax = target_x - myBall.x;
   var deltay = myBall.y - target_y;
-  //angle = Math.atan(deltay/deltax) *180 / Math.PI;
   angle = Math.atan2(deltay, deltax) *180 / Math.PI;
   }
 }
