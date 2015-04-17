@@ -124,7 +124,7 @@ var myBall = {
 
 var otherBall = {
   x: START_X,
-  y: START_Y + 10,
+  y: START_Y + 15,
   radius: 5
 };
 
@@ -142,6 +142,7 @@ function linedraw(evt) {
   context.lineTo(evt.pageX - canvas.offsetLeft, evt.pageY - canvas.offsetTop);
   context.stroke();
   drawCircle(myBall, context);
+  drawCircle(otherBall, context);
 
 
   var deltax = target_x - myBall.x;
@@ -232,10 +233,11 @@ function swing() {
     var responseObject = JSON.parse(responseJSON);
     var outOfBounds = responseObject.outOfBounds; 
     var myPlayer = responseObject.myPlayer;
+	var otherPlayer = responseObject.otherPlayer;
     var gameOver = responseObject.gameOver;
 
     var startTime = (new Date()).getTime();
-    if(outOfBounds) {
+    if (outOfBounds) {
       animate(myBall, canvas, context, startTime, true, (target_x - myBall.x) * 5, (target_y - myBall.y) * 5);
     } else if (gameOver) {
       //animate(myBall, canvas, context, startTime, true, hole_x, hole_y);
@@ -243,6 +245,7 @@ function swing() {
       window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
     } else {
       animate(myBall, canvas, context, startTime, true, myPlayer.x, myPlayer.y);
+	  animate(otherBall, canvas, context, startTime, true, otherPlayer.x, otherPlayer.y);
     }
 
 
