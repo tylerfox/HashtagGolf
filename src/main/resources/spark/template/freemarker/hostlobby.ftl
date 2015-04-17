@@ -14,12 +14,8 @@
   <body>
     <div id="container">
       <div id ="background">
-      <h1> Host Lobby </h1>
-
-
-
-
-      
+        <h1> Host Lobby </h1>
+		<button class="myButton" onclick="startGame()">Start game</button>
     </div>
    </div>
   	

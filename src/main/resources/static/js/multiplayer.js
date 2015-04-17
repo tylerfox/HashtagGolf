@@ -12,7 +12,7 @@ function host() {
       var valid = JSON.parse(responseJSON).success;
 
       if (valid) {
-        window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
+        window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
       } else {
         alert("Room name has already been taken. Please enter a new room name.");
         host();
@@ -21,8 +21,6 @@ function host() {
   }
 
 }
-
-
 
 function join() {
   var room = prompt("Room name");
@@ -53,3 +51,30 @@ function join() {
     }
   }
 }
+
+function startGame() {
+	postParameters = {"startGame" : true};
+	
+	$.post("/hostlobby", postParameters, function(responseJSON) {
+		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+	});
+}
+
+function readyToPlay() {
+	postParameters =
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

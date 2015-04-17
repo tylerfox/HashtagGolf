@@ -35,6 +35,7 @@ public final class SparkServer {
   private static final int MAX_PLAYERS = 4;
   private static Referee ref;
   private static Map<String, List<Player>> rooms;
+  private static boolean start = false;
 
   /**
    * Starts running the GUI for #golf
@@ -58,6 +59,7 @@ public final class SparkServer {
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
 
     Spark.get("/lobby/:lobby", new LobbyHandler(), new FreeMarkerEngine());
+    Spark.get("/hostlobby/:lobby"), new HostLobbyHandler(), new FreeMarkerEngine());
 
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
@@ -186,11 +188,26 @@ public final class SparkServer {
   private static class LobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-
-
+      while (!start) {
+        if (start) {
+          break;
+        }
+      }
+      
       Map<String, Object> variables =
           ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "lobby.ftl");
+    }
+  }
+  
+  private static class HostLobbyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      start = true;
+
+      Map<String, Object> variables =
+          ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "hostlobby.ftl");
     }
   }
 

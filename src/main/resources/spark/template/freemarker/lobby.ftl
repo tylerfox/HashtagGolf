@@ -14,11 +14,9 @@
   <body>
     <div id="container">
       <div id ="background">
-      <h1> lobby </h1>
-
-
-
-    </div>
+        <h1> Lobby </h1>
+		<button class="myButton" onclick="readyToPlay()">Ready to play!</button>
+	  </div>
    </div>
     
      <!-- Again, we're serving up the unminified source for clarity. -->
