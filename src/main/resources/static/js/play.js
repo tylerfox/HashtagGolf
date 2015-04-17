@@ -112,7 +112,11 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
     drawCircle(myBall, context);
     START_X = destX;
     START_Y = destY;
-
+  }
+  
+  if (isgameover(myBall)) {
+	alert("Congratulations!  You've won in: " + strokenum + " strokes!");
+	window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
   }
 }
 var canvas = document.getElementById('myCanvas');
@@ -222,27 +226,23 @@ function swing() {
     var startTime = (new Date()).getTime();
     animate(myBall, canvas, context, startTime, true, hole_x, hole_y);
   } else {
+	$.post("/swing", postParameters, function(responseJSON) {
+		var responseObject = JSON.parse(responseJSON);
+		var outOfBounds = responseObject.outOfBounds; 
+		var myPlayer = responseObject.myPlayer;
+		var gameOver = responseObject.gameOver;
+		console.log(gameOver);
 
-  $.post("/swing", postParameters, function(responseJSON){
-    var responseObject = JSON.parse(responseJSON);
-    var outOfBounds = responseObject.outOfBounds; 
-    var myPlayer = responseObject.myPlayer;
-    var gameOver = responseObject.gameOver;
-
-    var startTime = (new Date()).getTime();
-    if(outOfBounds) {
-      animate(myBall, canvas, context, startTime, true, (target_x - myBall.x) * 5, (target_y - myBall.y) * 5);
-    } else if (gameOver) {
-      //animate(myBall, canvas, context, startTime, true, hole_x, hole_y);
-      alert("Congratulations!  You've won in: " + strokenum + " strokes!");
-      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
-    } else {
-      animate(myBall, canvas, context, startTime, true, myPlayer.x, myPlayer.y);
-    }
-
-
-  });
-}
+		var startTime = (new Date()).getTime();
+		if (outOfBounds) {
+		  animate(myBall, canvas, context, startTime, true, (target_x - myBall.x) * 5, (target_y - myBall.y) * 5);
+		} else if (gameOver) {
+		  animate(myBall, canvas, context, startTime, true, hole_x, hole_y);
+		} else {
+		  animate(myBall, canvas, context, startTime, true, myPlayer.x, myPlayer.y);
+		}
+	});
+  }
   strokenum += 1;
   document.getElementById("strokehud").innerHTML = "stroke#: " + strokenum;
   //var disttohole = Math.round(Math.sqrt(Math.pow(myBall.x - hole_x,2) + Math.pow(myBall.y - hole_y,2)));
