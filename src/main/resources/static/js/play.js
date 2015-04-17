@@ -69,13 +69,15 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
   if(newY != destY) {
     myBall.y = newY;
   }
-
   //bouncing
-  if(myBall.radius < 10 && ascending) {
-    myBall.radius += .05;         
+  /*if(myBall.radius < 10 && ascending) {*/
+  if(newX < (destX + START_X)/2 && ascending) {
+    //myBall.radius += .05;         
+    myBall.radius += .1;         
   } else if (myBall.radius >= 5) {          
     ascending = false;
-    myBall.radius = myBall.radius - .05;
+    //myBall.radius = myBall.radius - .05;
+    myBall.radius -= .1;         
   }
 
   // clear
