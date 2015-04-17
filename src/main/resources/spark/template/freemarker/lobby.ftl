@@ -14,8 +14,8 @@
   <body>
     <div id="container">
       <div id ="background">
-        <h1> Lobby </h1>
-		<button class="myButton" onclick="readyToPlay()">Ready to play!</button>
+        <h1> lobby </h1>
+		<button class="myButton" onclick="readyToPlay()" id="lobbybutton">ready to play!</button>
 	  </div>
    </div>
     

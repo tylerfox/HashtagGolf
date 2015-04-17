@@ -31,6 +31,11 @@ body {
 h1 {
 	text-align: center;
 	font-size: 50px;
+	font-family:"Comics";
+}
+
+#center {
+	margin: auto;
 }
 
 #container {

@@ -20,6 +20,7 @@ public abstract class Player implements Serializable {
   private Terrain terrain;
   private int hole_x;
   private int hole_y;
+  private boolean ready = false;
 
   /**
    * Instantiates a player.
@@ -182,5 +183,13 @@ public abstract class Player implements Serializable {
    */
   public void setY(int y) {
     this.y = y;
+  }
+
+  public boolean isReady() {
+    return ready;
+  }
+
+  public void setReady(boolean ready) {
+    this.ready = ready;
   }
 }

@@ -3,7 +3,7 @@ function host() {
   if (room != null) {
     var player = prompt("Your name");
 
-    postParameters = {
+    var postParameters = {
       "room" : room,
       "player" : player
     };
@@ -19,7 +19,6 @@ function host() {
       }
     });
   }
-
 }
 
 function join() {
@@ -30,12 +29,13 @@ function join() {
     if (player != null) {
       var userId = 0;
 
-      postParameters = {
+      var postParameters = {
         "room" : room,
         "player" : player
       };
 
       $.post("/join", postParameters, function(responseJSON) {
+
         var roomExists = JSON.parse(responseJSON).roomExists;
         var roomFull = JSON.parse(responseJSON).roomFull;
         if (roomExists && !roomFull) {
@@ -53,15 +53,25 @@ function join() {
 }
 
 function startGame() {
-	postParameters = {"startGame" : true};
-	
-	$.post("/hostlobby", postParameters, function(responseJSON) {
-		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+	var postParameters = {};
+
+	$.post("/hoststart", postParameters, function(responseJSON) {
+    var startGame = JSON.parse(responseJSON).startGame;
+    if (startGame){
+      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+    } else {
+      alert("Not all players are ready yet. Please tell all players to click the ready button.");
+    }
+		
 	});
 }
 
 function readyToPlay() {
-	postParameters =
+  var postParameters = {};
+  $.post("/ready", postParameters, function(responseJSON) {
+     window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+  });
+
 }
 
 

@@ -57,21 +57,21 @@ public final class SparkServer {
     Spark.get("/player_select", new PlayerSelectHandler(), new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
+    //Spark.get("/multiplay", new MultiPlayHandler(), new FreeMarkerEngine());
 
-    Spark.get("/lobby/:lobby", new LobbyHandler(), new FreeMarkerEngine());
-    Spark.get("/hostlobby/:lobby"), new HostLobbyHandler(), new FreeMarkerEngine());
+    Spark.get("/lobby/:room", new LobbyHandler(), new FreeMarkerEngine());
+    Spark.get("/hostlobby/:room", new HostLobbyHandler(), new FreeMarkerEngine());
 
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-
     Spark.post("/playgame", new PlayGameHandler());
-    Spark.get("/host", new SetupServer(), new FreeMarkerEngine());
-    Spark.post("/join", new TempHandler(), new FreeMarkerEngine());
-    
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
+    
+    Spark.post("/hoststart", new HostStartHandler());
+    Spark.post("/ready", new PlayerReadyHandler());
   }
 
 
@@ -243,6 +243,7 @@ public final class SparkServer {
         List<Player> playerList = new ArrayList<>();
         rooms.put(roomName, playerList);
         res.cookie("id", String.valueOf(0));
+        res.cookie("room", roomName);
         playerList.add(new PlayerType1(playerName));
       }
 
@@ -268,6 +269,7 @@ public final class SparkServer {
 
         if (game.size() < MAX_PLAYERS) {
           res.cookie("id", String.valueOf(game.size()));
+          res.cookie("room", roomName);
           game.add(new PlayerType1(playerName));
         } else {
           roomFull = true;
@@ -280,6 +282,64 @@ public final class SparkServer {
           .put("roomFull", roomFull)
           .build();
 
+      return GSON.toJson(variables);
+    }
+  }
+  
+
+  private static class HostStartHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      String id = req.cookie("id");
+      String room = req.cookie("room");
+      
+      assert rooms.get(room) != null;
+      List<Player> players = rooms.get(room);
+      Player thisPlayer = players.get(Integer.parseInt(id));
+      thisPlayer.setReady(true);
+      boolean allPlayersReady = true;
+      
+      // we can indicate which players are not ready if we want
+      for (Player player : players) {
+        allPlayersReady = allPlayersReady && player.isReady();
+      }
+      if (!allPlayersReady) {
+        thisPlayer.setReady(false);
+      }
+      
+      final Map<String, Object> variables = new ImmutableMap
+          .Builder<String, Object>()
+          .put("startGame", allPlayersReady)
+          .build();
+
+      return GSON.toJson(variables);
+    }
+  }
+  
+  private static class PlayerReadyHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      String id = req.cookie("id");
+      String room = req.cookie("room");
+      
+      assert rooms.get(room) != null;
+      List<Player> players = rooms.get(room);
+      Player thisPlayer = players.get(Integer.parseInt(id));
+      thisPlayer.setReady(true);
+      
+      boolean allPlayersReady = false;
+      
+      while (!allPlayersReady) {
+        allPlayersReady = true;
+        for (Player player : players) {
+          allPlayersReady = allPlayersReady && player.isReady();
+        }
+      }
+
+      final Map<String, Object> variables = new ImmutableMap
+          .Builder<String, Object>()
+          .put("success", true)
+          .build();
       return GSON.toJson(variables);
     }
   }
