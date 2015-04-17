@@ -115,7 +115,7 @@ function animate(myBall, canvas, context, startTime, ascending, destX, destY) {
   }
   
   if (isgameover(myBall)) {
-	alert("Congratulations!  You've won in: " + strokenum + " strokes!");
+	alert("Congratulations!  You've won in " + strokenum + " strokes!");
 	window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
   }
 }
