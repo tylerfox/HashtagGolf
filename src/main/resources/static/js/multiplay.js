@@ -122,7 +122,14 @@ var myBall = {
   radius: 5,        
 };
 
+var otherBall = {
+  x: START_X,
+  y: START_Y + 10,
+  radius: 5
+};
+
 drawCircle(myBall, context);
+drawCircle(otherBall, context);
 
 function linedraw(evt) {
   if(linemoveable){
