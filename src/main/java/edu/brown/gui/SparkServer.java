@@ -226,7 +226,13 @@ public final class SparkServer {
       if (count == -4) {
         outofbounds = true;
       }
-      return GSON.toJson(new Object[]{myPlayer, outofbounds});
+      
+      final Map<String, Object> variables = new ImmutableMap
+          .Builder<String, Object>()
+          .put("myPlayer", myPlayer)
+          .put("outOfBounds", outofbounds)
+          .put("gameOver", myPlayer.isGameOver()).build();
+      return GSON.toJson(variables);
     }
   }
 

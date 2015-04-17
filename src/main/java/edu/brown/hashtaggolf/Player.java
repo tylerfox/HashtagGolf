@@ -125,7 +125,7 @@ public abstract class Player implements Serializable {
    * @return if the game is over or not.
    */
   public boolean isGameOver() {
-    return terrain == Terrain.HOLE || distanceToHole < 5;
+    return terrain == Terrain.HOLE || distanceToHole < 10;
   }
 
   @Override

@@ -18,6 +18,7 @@ public class Referee {
   private int level;
   private int par;
   private SocialQuery tq;
+  public static final int OUT = 4;
 
   /**
    * Instantiates a Referee class; A referee class is
@@ -70,7 +71,7 @@ public class Referee {
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
-        return -4;
+        return OUT;
       default:
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
