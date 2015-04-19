@@ -28,7 +28,7 @@ import freemarker.template.Configuration;
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServer {
-  private static final int PORT = 4567;
+  private static final int PORT = 1234;
   private static final Gson GSON = new Gson();
   private static Player myPlayer;
   private static final int MAX_PLAYERS = 4;

@@ -1,3 +1,10 @@
+/*
+ * Redirects to the start page
+ */
+function back() {
+  window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+}
+
 function host() {
   var room = prompt("Room name");
   if (room != null) {

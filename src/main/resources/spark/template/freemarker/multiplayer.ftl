@@ -10,16 +10,17 @@
     <link rel="stylesheet" href="css/html5bp.css">    
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/start.css">
+    <link rel="stylesheet" href="css/multiplayer.css">
   </head>
   <body>
     <div id="container">
       <div id ="background">
       <h1> multiplayer </h1>
-  	 <button class="myButton" onclick="host()"> host</button>
-     <button class="myButton" onclick="join()"> join</button>
+  	 <button class="myButton" onclick="host()" id="left"> host</button>
+     <button class="myButton" onclick="join()" id="right"> join</button>
      <br><br>
 
-      <a href="/start" button class="myButton" id ="back">back</a>
+       <button class="myButton" onclick="back()" id="back"> back</button>
     </div>
    </div>
   	
