@@ -44,6 +44,7 @@ h1 {
 	animation-timing-function: start linear;
 	-moz-animation: start 8s;
 	-moz-animation-delay: 0.5s;
+	-moz-animation-duration: 7s;
 	-moz-animation-timing-function: start linear;
 	-webkit-animation: start 8s;
 	-webkit-animation-delay: .5s;
@@ -99,7 +100,7 @@ h1 {
 	margin-top: -250px;
 }
 #prop {
-	content:url("club.png");
+	/*content:url("club.png");*/
 	position: relative;
 	top: 50%;
 	left: 50%;
@@ -161,8 +162,8 @@ h1 {
 	70% {-ms-transform: rotate(205deg);}
 	100%{-ms-transform: rotate(0deg);}
 }
-#g-ball  {
-	content:url("ball.png");
+.golfball  {
+	/*content:url("ball.png");*/
 	position: relative;
 	margin-top: 195px;
 	margin-left: 66px;
@@ -184,6 +185,7 @@ h1 {
 	-ms-animation-delay: 0.5s;
 	-ms-animation-timing-function: g-ball linear;
 }
+
 @keyframes g-ball  {
 	0%  {transform:scale(0.09,0.09);  opacity:1.0; visibility: visible;}
 	25% {transform:scale(0.09,0.09);}
@@ -269,6 +271,16 @@ h1 {
 80% {-webkit-transform:scale(2,2);opacity:1.0; visibility: visible;}
 100%{-webkit-transform:scale(2,2); font-size: 100px; opacity:0.0;}
 }
+
+@-moz-keyframes btext {
+0%  {-moz-transform:scale(0.0,0.0); font-size: 0px; visibility: visible;}
+1%  {-moz-transform:scale(0.0,0.0); font-size: 100px; visibility: visible;}
+37% {-moz-transform:scale(0.03,0.03); visibility: visible;}
+50% {-moz-transform:scale(2,2); visibility: visible;}
+80% {-moz-transform:scale(2,2);opacity:1.0; visibility: visible;}
+100%{-moz-transform:scale(2,2); font-size: 100px; opacity:0.0;}
+}
+
 @-o-keyframes btext {
 0%  {-o-transform:scale(0.0,0.0); font-size: 50px; visibility: visible;}
 37% {-o-transform:scale(0.03,0.03); visibility: visible;}

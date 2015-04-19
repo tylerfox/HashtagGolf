@@ -14,7 +14,7 @@
   <body>
     <div id="container">
       <div id ="background">
-      <h1> Choose a Player </h1>
+      <h1> choose a player </h1>
      <a href="/play" class="redPlayerButton" id = "start">red</a>
      <a href="/play" class="bluePlayerButton" id = "multiplayer">blue</a>
      <br><br>

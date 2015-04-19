@@ -47,3 +47,105 @@ p {
 	margin: 30px;
 	padding:10px;
 }
+
+.load-button.zoom-in,
+.load-button.zoom-in .spinner,
+.load-button.zoom-in .label,
+.load-button.zoom-out,
+.load-button.zoom-out .spinner,
+.load-button.zoom-out .label {
+	-webkit-transition: 0.3s ease all;
+	   -moz-transition: 0.3s ease all;
+	    -ms-transition: 0.3s ease all;
+	        transition: 0.3s ease all;
+}
+
+/*************************************
+ * ZOOM-IN
+ */
+
+.load-button.zoom-in {
+	overflow: hidden;
+}
+	.load-button.zoom-in .spinner {		
+		margin-left: -65px;
+
+		-webkit-transform: scale( 0.2 );
+		   -moz-transform: scale( 0.2 );
+		    -ms-transform: scale( 0.2 );
+		        transform: scale( 0.2 );
+	}
+	.load-button.zoom-in .label {
+		position: relative;
+		display: inline-block;
+	}
+
+.load-button.zoom-in[data-loading] .label {
+	opacity: 0;
+
+	-webkit-transform: scale( 2.2 );
+	   -moz-transform: scale( 2.2 );
+	    -ms-transform: scale( 2.2 );
+	        transform: scale( 2.2 );
+}
+.load-button.zoom-in[data-loading] .spinner {
+	animation: pulsate 1s ease-out;
+    animation-iteration-count: infinite;
+}
+
+/*************************************
+ * EASING
+ */
+
+.load-button,
+.load-button .spinner,
+.load-button .label {
+	-webkit-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	   -moz-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	    -ms-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	        transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+}
+
+.load-button.zoom-in,
+.load-button.zoom-in .spinner,
+.load-button.zoom-in .label,
+.load-button.zoom-out,
+.load-button.zoom-out .spinner,
+.load-button.zoom-out .label {
+	-webkit-transition: 0.3s ease all;
+	   -moz-transition: 0.3s ease all;
+	    -ms-transition: 0.3s ease all;
+	        transition: 0.3s ease all;
+}
+
+.load-button .label {
+	-webkit-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	   -moz-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	    -ms-transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+	        transition: 0.3s cubic-bezier(0.175, 0.885, 0.320, 1.275) all;
+}
+
+.load-button .spinner {
+	position: absolute;
+	width: 32px;
+	height: 32px;	
+	margin-top: 0px;	
+	opacity: 0;	
+    border: 5px solid #ffffff;
+    border-radius: 30px;
+    height: 32px;    
+}
+
+@keyframes pulsate {
+    0% {
+      transform: scale(.1);
+      opacity: 0.0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0;
+    }
+}

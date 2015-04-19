@@ -1,3 +1,4 @@
+<!-<!DOCTYPE html>
 <head>
 	<link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/html5bp.css">
@@ -7,8 +8,8 @@
 </head>
 <body>		
 	<div id="shot">
-		<div class="club">  <img  id="prop" alt="Golf Club" width="211" height="186"/></div>	
-		<img id="g-ball" alt="Golf Ball" width="400" height="400"/>
+		<div class="club">  <img  id="prop" src="css/club.png" alt="Golf Club" width="211" height="186"/></div>	
+		<img id="g-ball" src="css/ball.png" class="golfball" width="400" height="400"/>
 		<p id="text"> #golf </p>
 	</div><!--[if lte IE 7> <div id="ieroot"> <![endif]-->
 
@@ -27,3 +28,4 @@
     </div>
    </div>   
 </body>
+</html>

@@ -3,7 +3,6 @@ package edu.brown.gui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,13 +53,15 @@ public final class SparkServer {
     Spark.get("/start", new StartHandler(), freeMarker);
     Spark.get("/play", new PlayHandler(), new FreeMarkerEngine());
     Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/player_select", new PlayerSelectHandler(), new FreeMarkerEngine());
+    Spark.get("/player_select", new PlayerSelectHandler(),
+        new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
-    //Spark.get("/multiplay", new MultiPlayHandler(), new FreeMarkerEngine());
+    // Spark.get("/multiplay", new MultiPlayHandler(), new FreeMarkerEngine());
 
     Spark.get("/lobby/:room", new LobbyHandler(), new FreeMarkerEngine());
-    Spark.get("/hostlobby/:room", new HostLobbyHandler(), new FreeMarkerEngine());
+    Spark.get("/hostlobby/:room", new HostLobbyHandler(),
+        new FreeMarkerEngine());
 
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
@@ -69,11 +70,10 @@ public final class SparkServer {
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
-    
+
     Spark.post("/hoststart", new HostStartHandler());
     Spark.post("/ready", new PlayerReadyHandler());
   }
-
 
   /**
    * Displays front page of #golf. Sets cookie information.
@@ -96,7 +96,6 @@ public final class SparkServer {
       return new ModelAndView(variables, "multiplayer.ftl");
     }
   }
-
 
   /**
    * Displays menu page of #golf.
@@ -128,7 +127,7 @@ public final class SparkServer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
-      return new ModelAndView(variables, "play.ftl");
+      return new ModelAndView(variables, "play2.ftl");
     }
   }
 
@@ -193,20 +192,18 @@ public final class SparkServer {
           break;
         }
       }
-      
-      Map<String, Object> variables =
-          ImmutableMap.of("title", "#golf");
+
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "lobby.ftl");
     }
   }
-  
+
   private static class HostLobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       start = true;
 
-      Map<String, Object> variables =
-          ImmutableMap.of("title", "#golf");
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "hostlobby.ftl");
     }
   }
@@ -219,6 +216,7 @@ public final class SparkServer {
     public Object handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
+      // System.err.println(angle);
       String word = qm.value("word");
       boolean outofbounds = false;
       int count = ref.swing(myPlayer, word, angle);
@@ -226,16 +224,13 @@ public final class SparkServer {
       if (count == -4) {
         outofbounds = true;
       }
-      
-      final Map<String, Object> variables = new ImmutableMap
-          .Builder<String, Object>()
-          .put("myPlayer", myPlayer)
-          .put("outOfBounds", outofbounds)
+
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("myPlayer", myPlayer).put("outOfBounds", outofbounds)
           .put("gameOver", myPlayer.isGameOver()).build();
       return GSON.toJson(variables);
     }
   }
-
 
   private static class HostHandler implements Route {
     @Override
@@ -253,8 +248,7 @@ public final class SparkServer {
         playerList.add(new PlayerType1(playerName));
       }
 
-      final Map<String, Object> variables = new ImmutableMap
-          .Builder<String, Object>()
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", success).build();
       return GSON.toJson(variables);
     }
@@ -282,29 +276,25 @@ public final class SparkServer {
         }
       }
 
-      final Map<String, Object> variables = new ImmutableMap
-          .Builder<String, Object>()
-          .put("roomExists", roomExists)
-          .put("roomFull", roomFull)
-          .build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("roomExists", roomExists).put("roomFull", roomFull).build();
 
       return GSON.toJson(variables);
     }
   }
-  
 
   private static class HostStartHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
       String id = req.cookie("id");
       String room = req.cookie("room");
-      
+
       assert rooms.get(room) != null;
       List<Player> players = rooms.get(room);
       Player thisPlayer = players.get(Integer.parseInt(id));
       thisPlayer.setReady(true);
       boolean allPlayersReady = true;
-      
+
       // we can indicate which players are not ready if we want
       for (Player player : players) {
         allPlayersReady = allPlayersReady && player.isReady();
@@ -312,29 +302,27 @@ public final class SparkServer {
       if (!allPlayersReady) {
         thisPlayer.setReady(false);
       }
-      
-      final Map<String, Object> variables = new ImmutableMap
-          .Builder<String, Object>()
-          .put("startGame", allPlayersReady)
-          .build();
+
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("startGame", allPlayersReady).build();
 
       return GSON.toJson(variables);
     }
   }
-  
+
   private static class PlayerReadyHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
       String id = req.cookie("id");
       String room = req.cookie("room");
-      
+
       assert rooms.get(room) != null;
       List<Player> players = rooms.get(room);
       Player thisPlayer = players.get(Integer.parseInt(id));
       thisPlayer.setReady(true);
-      
+
       boolean allPlayersReady = false;
-      
+
       while (!allPlayersReady) {
         allPlayersReady = true;
         for (Player player : players) {
@@ -342,10 +330,8 @@ public final class SparkServer {
         }
       }
 
-      final Map<String, Object> variables = new ImmutableMap
-          .Builder<String, Object>()
-          .put("success", true)
-          .build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("success", true).build();
       return GSON.toJson(variables);
     }
   }

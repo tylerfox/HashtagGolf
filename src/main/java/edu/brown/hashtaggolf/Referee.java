@@ -10,7 +10,6 @@ import edu.brown.socialdata.TwitterQuery;
 
 /**
  * Referee Class for HashtagGolf.
- *
  */
 public class Referee {
   private final double SCALE_FACTOR = 3.5;
@@ -21,8 +20,8 @@ public class Referee {
   public static final int OUT = 4;
 
   /**
-   * Instantiates a Referee class; A referee class is
-   * created at the start of a new level.
+   * Instantiates a Referee class; A referee class is created at the start of a
+   * new level.
    * @param courseImage the file path for the current level
    * @throws IOException If TwitterQuery fails
    */
@@ -52,7 +51,8 @@ public class Referee {
   public int swing(Player player, String word, double angle) {
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
-      System.out.println("Network Error. Please swing again when you have a connection.");
+      System.out
+          .println("Network Error. Please swing again when you have a connection.");
       return -1;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
@@ -61,13 +61,15 @@ public class Referee {
       System.out.println("Problem fetching tweets. Please try again");
       return -3;
     }
-    
-    int newX = player.getX() + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
-    int newY = player.getY() - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
-    
+
+    int newX = player.getX()
+        + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+    int newY = player.getY()
+        - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+
     System.out.println("Ball hit to (" + newX + ", " + newY + ")");
     Terrain newTerrain = image.getTerrainAt(newX, newY);
-    
+
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
         player.outOfBounds();
@@ -78,7 +80,8 @@ public class Referee {
     }
 
     System.out.println(newTerrain);
-    System.out.println("You are now at (" + player.getX() + ", " + player.getY() + ")");
+    System.out.println("You are now at (" + player.getX() + ", "
+        + player.getY() + ")");
     return yards;
   }
 
@@ -94,7 +97,7 @@ public class Referee {
     int seconds;
     switch (t) {
       case BUNKER:
-        seconds = 20;
+        seconds = 45;
         break;
       case ROUGH:
         seconds = 50;

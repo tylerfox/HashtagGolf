@@ -24,6 +24,21 @@
 	top:1px;
 }
 
+.myButtonGrey {
+	background-color:#8f8f8f;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:"Comics";
+	font-size:30px;
+	padding:8px 36px;
+	text-decoration:none;
+}
+
 #lobbybutton:focus {
 	background-color: red;
 }
+
