@@ -19,8 +19,8 @@ edu/brown/hashtaggolf/PlayerType3.class
 edu/brown/imageprocessing/ScreenColor.class
 edu/brown/gui/SparkServer$SwingHandler.class
 edu/brown/hashtaggolf/PlayerType2.class
-edu/brown/gui/SparkServer$JoinHandler.class
 edu/brown/gui/SetupServer.class
+edu/brown/gui/SparkServer$JoinHandler.class
 edu/brown/gui/SparkServer$TempHandler.class
 edu/brown/hashtaggolf/Referee$1.class
 edu/brown/gui/ExceptionPrinter.class

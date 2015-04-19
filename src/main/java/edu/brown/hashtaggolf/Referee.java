@@ -49,6 +49,8 @@ public class Referee {
    * @param angle the angle at which the ball should go in the direction of
    */
   public int swing(Player player, String word, double angle) {
+    player.setOutOfBounds(false);
+
     int yards = applyEnvironment(player, word);
     if (yards == -1) {
       System.out
@@ -72,7 +74,8 @@ public class Referee {
 
     switch (newTerrain) {
       case OUT_OF_BOUNDS:
-        player.outOfBounds();
+        player.setOutOfBounds(true);
+        player.applyStrokePenalty();
         return OUT;
       default:
         player.moveBall(yards, angle);

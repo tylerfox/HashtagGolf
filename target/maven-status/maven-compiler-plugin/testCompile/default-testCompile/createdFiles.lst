@@ -1,6 +1,6 @@
 edu/brown/hashtaggolf/PlayerTest.class
 edu/brown/imageprocessing/FileColorTest.class
 edu/brown/imageprocessing/ScreenColorTest.class
-edu/brown/imageprocessing/TerrainTest.class
 edu/brown/hashtaggolf/RefereeTest.class
+edu/brown/imageprocessing/TerrainTest.class
 edu/brown/socialdata/TwitterQueryTest.class

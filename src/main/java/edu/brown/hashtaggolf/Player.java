@@ -11,7 +11,10 @@ public abstract class Player implements Serializable {
    * UID for networking.
    */
   private static final long serialVersionUID = -2317689451679552386L;
-  private final double SCALE_FACTOR = 3.5;
+  private static final int STROKE_PENALTY = 2;
+  private static final double SCALE_FACTOR = 3.5;
+  private static final int WIGGLE_ROOM = 10;
+
   private int distanceToHole;
   private String name;
   private int stroke;
@@ -21,6 +24,8 @@ public abstract class Player implements Serializable {
   private int hole_x;
   private int hole_y;
   private boolean ready = false;
+  private boolean isGameOver = false;
+  private boolean outOfBounds = false;
 
   /**
    * Instantiates a player.
@@ -29,20 +34,20 @@ public abstract class Player implements Serializable {
   public Player(String name) {
   	this.name = name;
   	this.terrain = Terrain.TEE;
-  	
+
   	// TODO: will need to figure out how to set this based on the level
   	this.stroke = 1;
-  	this.x = 380;
-  	this.y = 430;
-  	this.hole_x = 970;
+  	this.x = 310;
+  	this.y = 355;
+  	this.hole_x = 968;
   	this.hole_y = 350;
   	this.distanceToHole = calcDistanceToHole(); // yards
   }
-  
+
   public Player(String name, int startx, int starty, int holex, int holey) {
     this.name = name;
     this.terrain = Terrain.TEE;
-    
+
     // TODO: will need to figure out how to set this based on the level
     this.stroke = 1;
     this.x = startx;
@@ -52,7 +57,7 @@ public abstract class Player implements Serializable {
     this.distanceToHole = calcDistanceToHole(); // yards
   }
 
- 
+
   // Players with powerups will override
   // this method
   /**
@@ -78,15 +83,15 @@ public abstract class Player implements Serializable {
     if (distanceToHole - distance < 0) {
       System.out.println("Whoops! Overshot the hole.");
     }
-    
+
     //distanceToHole = Math.abs(distanceToHole - distance);
     x += (int) (distance * Math.cos(Math.toRadians(angle)) * SCALE_FACTOR);
     y -= (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
-    
+
     distanceToHole = calcDistanceToHole();
   	stroke++;
   }
-  
+
   /**
    * Returns the distance to the hole.
    * @return rounded to the closest yard, distance to hole
@@ -105,10 +110,18 @@ public abstract class Player implements Serializable {
 
   // if ball goes out of bounds, score increments by 3
   /**
-   * Performs whatever action necessary if the ball goes out of bounds.
+   * Applies a stroke penalty for when the ball goes out of bounds.
    */
-  public void outOfBounds() {
-  	stroke += 2;
+  public void applyStrokePenalty() {
+  	stroke += STROKE_PENALTY;
+  }
+
+  public void setOutOfBounds(boolean outOfBounds) {
+    this.outOfBounds = outOfBounds;
+  }
+
+  public boolean isOutOfBounds() {
+    return outOfBounds;
   }
 
   /**
@@ -125,14 +138,15 @@ public abstract class Player implements Serializable {
    * @return if the game is over or not.
    */
   public boolean isGameOver() {
-    return terrain == Terrain.HOLE || distanceToHole < 10;
+    isGameOver = (terrain == Terrain.HOLE || distanceToHole < WIGGLE_ROOM);
+    return isGameOver;
   }
 
   @Override
   public String toString() {
     return "Player Info:\nName: " + name + ", Stroke #: " + stroke + ", Distance to Hole: " + distanceToHole;
   }
-  
+
   public int getStroke() {
     return stroke;
   }
