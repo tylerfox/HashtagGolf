@@ -23,7 +23,7 @@
 
     </div>
     <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="Type a Word or Phrase"></input>
-    <input type="checkbox" id = "check" onclick="toggleable();"> always to hole </input> 
+    <input type="checkbox" id = "check" onclick="toggleable();"> aim at hole </input> 
     <button class="myButton" onclick="swing()"> swing!</button>
    </div>
     

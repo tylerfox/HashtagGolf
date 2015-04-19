@@ -17,6 +17,7 @@ var maxBounce = 2;
 var usedWords = {};
 var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
+var wastoggleable = false;
 
 var postParameters = {
   "startx": START_X,
@@ -104,10 +105,10 @@ function moveBall(ball, dest_X, dest_Y, terrain) {
           callback: function () { 
             var disttohole = Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2)));
             document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
-            enableSwingButton();   
+            enableSwingButton();
             if (outofbounds(ball, canvas)) {
-              ball.x = START_X;
-              ball.y = START_Y;              
+              ball.x = preX;
+              ball.y = preY;              
             }
             if (isgameover(ball)) {              
               rollIn(ball);
@@ -134,12 +135,20 @@ function enableSwingButton() {
   swingButton.className = "load-button myButton zoom-in";  
   swingButton.removeAttribute( 'data-loading'); 
   swingButton.disabled = false;
+  linetoggleable = wastoggleable;
+  if (linetoggleable) {
+    linemoveable = true;
+  } else {
+    toHole();
+  }
 }
 
 function disableSwingButton() {
   swingButton.className = "load-button myButtonGrey zoom-in";  
   swingButton.setAttribute( 'data-loading', '' ); 
   swingButton.disabled = true;
+  wastoggleable = linetoggleable;
+  linetoggleable = false;
 }
 
 function rollIn(ball) {
@@ -184,6 +193,13 @@ function linedraw(evt) {
   if(linemoveable){  
     var mouseX = canvas.mouse.x;
     var mouseY = canvas.mouse.y;
+    var oldcanvas = document.getElementById("myCanvas");
+    if (mouseX == 0) {
+      mouseX = evt.pageX - oldcanvas.offsetLeft;
+    }
+    if (mouseY == 0) {
+      mouseY = evt.pageY - oldcanvas.offsetTop;
+    }
     var slope = (mouseY - ball.y) / (mouseX - ball.x);
     var b = mouseY - slope * mouseX;
     var newX = 3000;
@@ -260,11 +276,12 @@ function isenter(evt) {
 
 function swing() {  
   var word = document.getElementById("tweetme").value;
-  disableSwingButton();
   if (!linetoggleable) {
     toHole();
   }  
+  disableSwingButton();
   postParameters={"word":word, "angle":angle};
+  curLine.remove();
   //cheats
   if(!isNaN(+word)) {
     var num = +word;    
@@ -281,7 +298,7 @@ function swing() {
         var responseObject = JSON.parse(responseJSON);
         var outOfBounds = responseObject.outOfBounds; 
         var myPlayer = responseObject.myPlayer;    
-        gameOver = responseObject.gameOver;        
+        gameOver = responseObject.gameOver;
         if (outOfBounds) {
           addStroke(2);
           moveBall(ball, (target_x - ball.x) * 5, (target_y - ball.y) * 5);
