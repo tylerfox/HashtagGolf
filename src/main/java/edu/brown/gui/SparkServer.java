@@ -28,7 +28,7 @@ import freemarker.template.Configuration;
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServer {
-  private static final int PORT = 4567;
+  private static final int PORT = 1234;
   private static final Gson GSON = new Gson();
   private static Player myPlayer;
   private static final int MAX_PLAYERS = 4;
@@ -142,8 +142,7 @@ public final class SparkServer {
       try {
         ref = new Referee("new_hole1.png", "key.png");
       } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        System.out.println("ERROR: Files could not be opened.");
       }
       myPlayer = new PlayerType1("Brandon", startx, starty, holex, holey);
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");

@@ -57,4 +57,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-/target/
+target/
+surefire-reports/

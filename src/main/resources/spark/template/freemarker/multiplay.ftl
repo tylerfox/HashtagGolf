@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>${title}</title>
@@ -22,14 +22,16 @@
       
 
     </div>
-    <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="Type a Word or Phrase"></input>
+    <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="type a word or phrase"></input>
     <input type="checkbox" id = "check" onclick="toggleable();"> always to hole </input> 
-    <button class="myButton" onclick="swing()"> swing!</button>
+    <!--<button class="myButton" onclick="swing()"> swing!</button>-->
+    <button id="swingButton" class="load-button myButton zoom-in" onclick="swing()"><span class="label">swing!</span> <span class="spinner"></span></button>  
    </div>
     
      <!-- Again, we're serving up the unminified source for clarity. -->
      <script src="js/jquery-2.1.1.js"></script>
-	 <script src="js/multiplay.js"></script>
+     <script src="js/ocanvas-2.7.3.js"></script>
+     <script src="js/play2.js"></script>     
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
        dealing with real world issues like old bowsers.  -->
