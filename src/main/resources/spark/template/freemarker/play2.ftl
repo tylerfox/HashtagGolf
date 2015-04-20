@@ -1,4 +1,4 @@
-<!-<!DOCTYPE html>
+<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>${title}</title>
@@ -17,10 +17,12 @@
       <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
       <p class="hud"> par#: 3</p>
       <p class="hud" id="strokehud"> stroke#: 1</p>
+      <br>
       <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
       <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
-      
-
+      <br>
+      <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee</div>
+      <br>
     </div>
     <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="type a word or phrase"></input>
     <input type="checkbox" id = "check" onclick="toggleable();"> always to hole </input> 

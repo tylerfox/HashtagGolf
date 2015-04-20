@@ -149,3 +149,61 @@ p {
       opacity: 0;
     }
 }
+
+
+/*Terrains */
+
+.terrain_tee {
+	background-color: #77C35F;
+	border: solid;
+	border-color: black;
+	float: left;
+	margin-left: 10%;
+	position: absolute;
+	font-size: 20pt;
+	z-index: 10;
+}
+
+.terrain_bunker {
+	background-color: #f0c3a2;
+	border: solid;
+	border-color: black;
+	float: left;
+	margin-left: 10%;
+	position: absolute;
+	font-size: 20pt;
+	z-index: 10;
+}
+
+.terrain_fairway {
+	background-color: #3AB54A;
+	border: solid;
+	border-color: black;
+	float: left;
+	margin-left: 10%;
+	position: absolute;
+	font-size: 20pt;
+	z-index: 10;
+}
+
+.terrain_rough {
+	background-color: #0B9444;
+	border: solid;
+	border-color: black;
+	float: left;
+	margin-left: 10%;
+	position: absolute;
+	font-size: 20pt;
+	z-index: 10;
+}
+
+.terrain_green{
+	background-color: #8FC965;
+	border: solid;
+	border-color: black;
+	float: left;
+	margin-left: 10%;
+	position: absolute;
+	font-size: 20pt;
+	z-index: 10;
+}

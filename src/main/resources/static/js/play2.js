@@ -18,6 +18,7 @@ var usedWords = {};
 var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
 var wastoggleable = false;
+var myPlayer;
 
 var postParameters = {
   "startx": START_X,
@@ -141,6 +142,25 @@ function enableSwingButton() {
   } else {
     toHole();
   }
+  //Terrain
+  var terrainpic = document.getElementById("terrainpic");
+  if (myPlayer.terrain == "BUNKER") {
+    terrainpic.setAttribute("class", "terrain_bunker");
+    terrainpic.innerHTML = "your ball is in<br> the bunker";
+  } else if (myPlayer.terrain == "FAIRWAY") {
+    terrainpic.setAttribute("class", "terrain_fairway");
+    terrainpic.innerHTML = "your ball is on<br> the fairway";
+  } else if (myPlayer.terrain == "ROUGH") {
+    terrainpic.setAttribute("class", "terrain_rough");
+    terrainpic.innerHTML = "your ball is in<br> the rough";
+  } else if (myPlayer.terrain == "GREEN") {
+    terrainpic.setAttribute("class", "terrain_green");
+    terrainpic.innerHTML = "your ball is on<br> the green";
+  } else if (myPlayer.terrain == "TEE") {
+    terrainpic.setAttribute("class", "terrain_tee");
+    terrainpic.innerHTML = "your ball is in<br> the teebox";
+  }
+  //end terrain
 }
 
 function disableSwingButton() {
@@ -297,7 +317,7 @@ function swing() {
       $.post("/swing", postParameters, function(responseJSON) {    
         var responseObject = JSON.parse(responseJSON);
         var outOfBounds = responseObject.outOfBounds; 
-        var myPlayer = responseObject.myPlayer;    
+        myPlayer = responseObject.myPlayer;    
         gameOver = responseObject.gameOver;
         if (outOfBounds) {
           addStroke(2);
