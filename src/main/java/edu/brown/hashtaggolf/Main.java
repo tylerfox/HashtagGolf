@@ -32,7 +32,7 @@ public class Main {
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
     SparkServer.run();
-    //play();
+    // play();
   }
 
   /**
@@ -53,11 +53,11 @@ public class Main {
       System.out.println(player);
       System.out.println("Enter your query to swing!");
       input = reader.readLine();
-      
+
       boolean prompt = true;
       int angle = 0;
       System.out.println("Enter the angle at which to swing.");
-      
+
       while (prompt) {
         try {
           angle = Integer.parseInt(reader.readLine());
@@ -66,10 +66,10 @@ public class Main {
           System.out.println("Please enter an integer for the swing angle.");
         }
       }
-      
-      //if (input != null && input.startsWith("#")) {
-      //  input = input.substring(1);
-      //}
+
+      // if (input != null && input.startsWith("#")) {
+      // input = input.substring(1);
+      // }
 
       while (!isGameOver && input != null) {
         // TODO: Add club choice (this may be an extra argument to the swing
@@ -86,13 +86,14 @@ public class Main {
 
           prompt = true;
           System.out.println("Enter the angle at which to swing.");
-          
+
           while (prompt) {
             try {
               angle = Integer.parseInt(reader.readLine());
               prompt = false;
             } catch (NumberFormatException e) {
-              System.out.println("Please enter an integer for the swing angle.");
+              System.out
+                  .println("Please enter an integer for the swing angle.");
             }
           }
         }

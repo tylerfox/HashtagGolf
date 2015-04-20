@@ -15,6 +15,10 @@ public class PlayerType1 extends Player implements Serializable {
     super(name);
   }
 
+  public PlayerType1(Player p) {
+    super(p);
+  }
+
   public PlayerType1(String name, int startx, int starty, int holex, int holey) {
     super(name, startx, starty, holex, holey);
   }

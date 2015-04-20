@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Class for players.
- *
  */
 public abstract class Player implements Serializable {
   /**
@@ -32,16 +31,16 @@ public abstract class Player implements Serializable {
    * @param name the name of the player
    */
   public Player(String name) {
-  	this.name = name;
-  	this.terrain = Terrain.TEE;
+    this.name = name;
+    this.terrain = Terrain.TEE;
 
-  	// TODO: will need to figure out how to set this based on the level
-  	this.stroke = 1;
-  	this.x = 310;
-  	this.y = 355;
-  	this.hole_x = 968;
-  	this.hole_y = 350;
-  	this.distanceToHole = calcDistanceToHole(); // yards
+    // TODO: will need to figure out how to set this based on the level
+    this.stroke = 1;
+    this.x = 310;
+    this.y = 355;
+    this.hole_x = 968;
+    this.hole_y = 350;
+    this.distanceToHole = calcDistanceToHole(); // yards
   }
 
   public Player(String name, int startx, int starty, int holex, int holey) {
@@ -57,6 +56,19 @@ public abstract class Player implements Serializable {
     this.distanceToHole = calcDistanceToHole(); // yards
   }
 
+  public Player(Player p) {
+    this.distanceToHole = p.distanceToHole;
+    this.name = p.name;
+    this.stroke = p.stroke;
+    this.x = p.x;
+    this.y = p.y;
+    this.terrain = p.terrain;
+    this.hole_x = p.hole_x;
+    this.hole_y = p.hole_y;
+    this.ready = p.ready;
+    this.isGameOver = p.isGameOver;
+    this.outOfBounds = p.outOfBounds;
+  }
 
   // Players with powerups will override
   // this method
@@ -68,7 +80,7 @@ public abstract class Player implements Serializable {
    */
   public int powerup(int distance) {
     // currently no powerup
-  	return distance;
+    return distance;
   }
 
   // updates the ball's location
@@ -84,12 +96,12 @@ public abstract class Player implements Serializable {
       System.out.println("Whoops! Overshot the hole.");
     }
 
-    //distanceToHole = Math.abs(distanceToHole - distance);
+    // distanceToHole = Math.abs(distanceToHole - distance);
     x += (int) (distance * Math.cos(Math.toRadians(angle)) * SCALE_FACTOR);
     y -= (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
 
     distanceToHole = calcDistanceToHole();
-  	stroke++;
+    stroke++;
   }
 
   /**
@@ -113,7 +125,7 @@ public abstract class Player implements Serializable {
    * Applies a stroke penalty for when the ball goes out of bounds.
    */
   public void applyStrokePenalty() {
-  	stroke += STROKE_PENALTY;
+    stroke += STROKE_PENALTY;
   }
 
   public void setOutOfBounds(boolean outOfBounds) {
@@ -133,8 +145,8 @@ public abstract class Player implements Serializable {
   }
 
   /**
-   * If the ball is in the same terrain as the hole,
-   * the game is over for that player.
+   * If the ball is in the same terrain as the hole, the game is over for that
+   * player.
    * @return if the game is over or not.
    */
   public boolean isGameOver() {
@@ -144,7 +156,8 @@ public abstract class Player implements Serializable {
 
   @Override
   public String toString() {
-    return "Player Info:\nName: " + name + ", Stroke #: " + stroke + ", Distance to Hole: " + distanceToHole;
+    return "Player Info:\nName: " + name + ", Stroke #: " + stroke
+        + ", Distance to Hole: " + distanceToHole;
   }
 
   public int getStroke() {

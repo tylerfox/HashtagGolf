@@ -22,13 +22,14 @@ import com.google.gson.Gson;
 import edu.brown.hashtaggolf.Player;
 import edu.brown.hashtaggolf.PlayerType1;
 import edu.brown.hashtaggolf.Referee;
+import edu.brown.hashtaggolf.Terrain;
 import freemarker.template.Configuration;
 
 /**
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServer {
-  private static final int PORT = 1234;
+  private static final int PORT = 4567;
   private static final Gson GSON = new Gson();
   private static Player myPlayer;
   private static final int MAX_PLAYERS = 4;
@@ -218,15 +219,20 @@ public final class SparkServer {
       // System.err.println(angle);
       String word = qm.value("word");
       boolean outofbounds = false;
+      int oldX = myPlayer.getX();
+      int oldY = myPlayer.getY();
       int count = ref.swing(myPlayer, word, angle);
-      System.out.println("me this far! " + count);
       if (count == -4) {
         outofbounds = true;
       }
-
+      final Player tempPlayer = new PlayerType1(myPlayer);
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("myPlayer", myPlayer).put("outOfBounds", outofbounds)
-          .put("gameOver", myPlayer.isGameOver()).build();
+          .put("myPlayer", tempPlayer).put("outOfBounds", outofbounds)
+          .put("gameOver", tempPlayer.isGameOver()).build();
+      if (myPlayer.getTerrain() == Terrain.WATER) {
+        myPlayer.setX(oldX);
+        myPlayer.setY(oldY);
+      }
       return GSON.toJson(variables);
     }
   }
