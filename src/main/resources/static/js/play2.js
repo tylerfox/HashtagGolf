@@ -19,7 +19,8 @@ var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
 var wastoggleable = false;
 var myPlayer;
-
+var ballcolor = "#fff";
+var ball;
 var postParameters = {
   "startx": START_X,
   "starty": START_Y,
@@ -29,6 +30,26 @@ var postParameters = {
 
 $.post("/playgame", postParameters, function(responseJSON){
     responseObject = JSON.parse(responseJSON);
+    switch(responseObject.color) {
+      case "white": ballcolor = "#fff";
+      break;
+      case "red" : ballcolor = "#f00";
+      break;
+      case "blue" : ballcolor = "#00f";
+      break;
+      case "green" : ballcolor = "#0f0";
+      break;
+      case "yellow" : ballcolor = "#ff0";
+      break;
+      default : console.log("default");
+    }
+    console.log("ballcolor: " + ballcolor); 
+    ball = canvas.display.ellipse({
+      x: START_X,
+      y: START_Y,
+      radius: 5,
+      fill: ballcolor
+    }).add();
     /*animate(ball, canvas, context, startTime, true, responseObject.x, responseObject.y);*/
   });
 
@@ -41,12 +62,12 @@ var image = canvas.display.image({
   image: "js/gui_hole1.png"
 }).add();
 
-var ball = canvas.display.ellipse({
+/*var ball = canvas.display.ellipse({
   x: START_X,
   y: START_Y,
   radius: 5,
-  fill: "#fff"
-}).add();
+  fill: ballcolor
+}).add();*/
 
 function magnitude(x, y) {
   return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))

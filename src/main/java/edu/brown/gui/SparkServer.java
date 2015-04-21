@@ -36,6 +36,7 @@ public final class SparkServer {
   private static Referee ref;
   private static Map<String, List<Player>> rooms;
   private static boolean start = false;
+  private static String color = "white";
 
   /**
    * Starts running the GUI for #golf
@@ -127,7 +128,12 @@ public final class SparkServer {
   private static class PlayHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      QueryParamsMap qm = req.queryMap();
+      String newcolor = qm.value("color");
+      if(newcolor != null) {
+        color = newcolor;
+      }
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return new ModelAndView(variables, "play2.ftl");
     }
   }
@@ -146,7 +152,7 @@ public final class SparkServer {
         System.out.println("ERROR: Files could not be opened.");
       }
       myPlayer = new PlayerType1("Brandon", startx, starty, holex, holey);
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return GSON.toJson(variables);
     }
   }
@@ -213,7 +219,7 @@ public final class SparkServer {
    */
   private static class SwingHandler implements Route {
     @Override
-    public Object handle(Request req, Response res) {
+    public Object handle(Request req, Response res) { 
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
       // System.err.println(angle);

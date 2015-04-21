@@ -15,20 +15,21 @@
     <div id="container">
       <div id ="background">
       <h1> choose a player </h1>
-     <a href="/play" class="redPlayerButton" id = "start">red</a>
-     <a href="/play" class="bluePlayerButton" id = "multiplayer">blue</a>
+     <a onclick = "choosecolor('red');" class="redPlayerButton" id = "start">red</a>
+     <a href= "/play" onclick = "choosecolor('blue');" class="bluePlayerButton" id = "multiplayer">blue</a>
      <br><br>
 
-      <a href="/play" class="greenPlayerButton" id ="settings">green</a>
-      <a href="/play" class="yellowPlayerButton" id ="create">yellow</a>
+      <a href= "/play" onclick = "choosecolor('green');" class="greenPlayerButton" id ="settings">green</a>
+      <a href= "/play" onclick = "choosecolor('yellow');" class="yellowPlayerButton" id ="create">yellow</a>
       
 
     </div>
    </div>
     
      <!-- Again, we're serving up the unminified source for clarity. -->
-     <script src="js/jx-2.1.1.js"></script>
+     <script src="js/jquery-2.1.1.js"></script>
      <script src="js/main.js"></script>
+     <script src="js/player_select.js"></script>
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
        dealing with real world issues like old browsers.  -->
