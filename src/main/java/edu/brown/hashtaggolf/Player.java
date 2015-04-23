@@ -1,18 +1,19 @@
 package edu.brown.hashtaggolf;
 
-import java.io.Serializable;
-
 /**
  * Class for players.
  */
-public abstract class Player implements Serializable {
-  /**
-   * UID for networking.
-   */
-  private static final long serialVersionUID = -2317689451679552386L;
+public abstract class Player {
+
   private static final int STROKE_PENALTY = 2;
   private static final double SCALE_FACTOR = 3.5;
   private static final int WIGGLE_ROOM = 10;
+
+  public static final int UNSET_COLOUR = 0;
+  public static final int RED_BALL = 1;
+  public static final int BLUE_BALL = 2;
+  public static final int YELLOW_BALL = 3;
+  public static final int GREEN_BALL = 4;
 
   private int distanceToHole;
   private String name;
@@ -22,9 +23,10 @@ public abstract class Player implements Serializable {
   private Terrain terrain;
   private int hole_x;
   private int hole_y;
-  private boolean ready = false;
-  private boolean isGameOver = false;
-  private boolean outOfBounds = false;
+  private int ballColour;
+  private boolean ready;
+  private boolean isGameOver;
+  private boolean outOfBounds;
 
   /**
    * Instantiates a player.
@@ -41,6 +43,10 @@ public abstract class Player implements Serializable {
     this.hole_x = 968;
     this.hole_y = 350;
     this.distanceToHole = calcDistanceToHole(); // yards
+    this.ballColour = UNSET_COLOUR;
+    this.ready = false;
+    this.isGameOver = false;
+    this.outOfBounds = false;
   }
 
   public Player(String name, int startx, int starty, int holex, int holey) {
@@ -218,5 +224,13 @@ public abstract class Player implements Serializable {
 
   public void setReady(boolean ready) {
     this.ready = ready;
+  }
+
+  public int getBallColour() {
+    return ballColour;
+  }
+
+  public void setBallColour(int ballColour) {
+    this.ballColour = ballColour;
   }
 }
