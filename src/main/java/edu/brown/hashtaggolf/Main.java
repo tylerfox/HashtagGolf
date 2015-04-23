@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import edu.brown.gui.SparkServer;
+import edu.brown.gui.SparkServerWithMultiplayer;
 
 /**
  * The main golf class that is used to invoke the program.
@@ -31,7 +31,8 @@ public class Main {
     // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
-    SparkServer.run();
+    //SparkServer.run();
+    SparkServerWithMultiplayer.run();
     // play();
   }
 

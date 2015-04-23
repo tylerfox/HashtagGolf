@@ -68,7 +68,7 @@ public final class SparkServer {
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-    Spark.post("/playgame", new PlayGameHandler());
+    Spark.post("/ballselect", new BallSelectHandler());
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
@@ -138,20 +138,15 @@ public final class SparkServer {
     }
   }
 
-  private static class PlayGameHandler implements Route {
+  private static class BallSelectHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      int startx = Integer.parseInt(qm.value("startx"));
-      int starty = Integer.parseInt(qm.value("starty"));
-      int holex = Integer.parseInt(qm.value("holex"));
-      int holey = Integer.parseInt(qm.value("holey"));
       try {
         ref = new Referee("new_hole1.png", "key.png");
       } catch (IOException e) {
         System.out.println("ERROR: Files could not be opened.");
       }
-      myPlayer = new PlayerType1("Brandon", startx, starty, holex, holey);
+      myPlayer = new PlayerType1("Brandon");
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return GSON.toJson(variables);
     }
@@ -219,7 +214,7 @@ public final class SparkServer {
    */
   private static class SwingHandler implements Route {
     @Override
-    public Object handle(Request req, Response res) { 
+    public Object handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
       // System.err.println(angle);

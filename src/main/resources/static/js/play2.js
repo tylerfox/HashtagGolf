@@ -18,17 +18,14 @@ var usedWords = {};
 var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
 var wastoggleable = false;
-var myPlayer;
 var ballcolor = "#fff";
+var balls = {}; // for multiplayer
+var players = {};
 var ball;
-var postParameters = {
-  "startx": START_X,
-  "starty": START_Y,
-  "holex": hole_x,
-  "holey": hole_y
-};
+var id;
 
-$.post("/playgame", postParameters, function(responseJSON){
+var postParameters = { };
+$.post("/ballselect", postParameters, function(responseJSON){
     responseObject = JSON.parse(responseJSON);
     switch(responseObject.color) {
       case "white": ballcolor = "#fff";
@@ -44,6 +41,7 @@ $.post("/playgame", postParameters, function(responseJSON){
       default : console.log("default");
     }
     console.log("ballcolor: " + ballcolor); 
+    id = responseObject.id;
     ball = canvas.display.ellipse({
       x: START_X,
       y: START_Y,
@@ -164,6 +162,7 @@ function enableSwingButton() {
     toHole();
   }
   //Terrain
+  var myPlayer = players[id];
   var terrainpic = document.getElementById("terrainpic");
   if (myPlayer.terrain == "BUNKER") {
     terrainpic.setAttribute("class", "terrain_bunker");
@@ -316,7 +315,7 @@ function isenter(evt) {
 }
 
 function swing() {  
-  var word = document.getElementById("tweetme").value;
+  var word = document.getElementById("tweetme").value.toLowerCase();
   if (!linetoggleable) {
     toHole();
   }  
@@ -335,20 +334,60 @@ function swing() {
       enableSwingButton();
     } else {
       usedWords[word]  = 1;
-      $.post("/swing", postParameters, function(responseJSON) {    
-        var responseObject = JSON.parse(responseJSON);
-        var outOfBounds = responseObject.outOfBounds; 
-        myPlayer = responseObject.myPlayer;    
-        gameOver = responseObject.gameOver;
-        if (outOfBounds) {
-          addStroke(2);
-          moveBall(ball, (target_x - ball.x) * 5, (target_y - ball.y) * 5);
-        } else if (gameOver) {
-          moveBall(ball, hole_x, hole_y);
-        } else {            
-          moveBall(ball, myPlayer.x, myPlayer.y, myPlayer.terrain);      
-        }
-      });
+      
+      // multiplayer: 
+      $.post("/swing", postParameters, function(responseJSON) {
+    	  var responseObject = JSON.parse(responseJSON);
+          var playerId = responseObject.playerId;
+          players = responseObject.players;
+          var myPlayer = players[playerId];
+          var outOfBounds = responseObject.outOfBounds;
+
+          // all other players go first
+         /* for (var i = 0; i < players.length(); i++) {
+            if(i != playerId) {
+              var otherPlayer = players[i];
+              if (otherPlayer.isGameOver) {
+            	  if ()
+                // check if they just won or if they won a long time ago (check ball position?)
+              } else {
+                // else check out of bounds
+                // else move normally
+              }
+            }
+          } 
+*/
+
+          // my player
+          if (outOfBounds) {
+            addStroke(2);
+            moveBall(ball, (target_x - ball.x) * 5, (target_y - ball.y) * 5);
+          } else if (myPlayer.isGameOver) {
+            moveBall(ball, hole_x, hole_y);
+          } else {            
+            moveBall(ball, myPlayer.x, myPlayer.y, myPlayer.terrain);      
+          }
+        });
+      
+      
+      //for single player:
+      
+//      $.post("/swing", postParameters, function(responseJSON) {    
+//        var responseObject = JSON.parse(responseJSON);
+//        var outOfBounds = responseObject.outOfBounds; 
+//        myPlayer = responseObject.myPlayer;    
+//        gameOver = responseObject.gameOver;
+//        if (outOfBounds) {
+//          addStroke(2);
+//          moveBall(ball, (target_x - ball.x) * 5, (target_y - ball.y) * 5);
+//        } else if (gameOver) {
+//          moveBall(ball, hole_x, hole_y);
+//        } else {            
+//          moveBall(ball, myPlayer.x, myPlayer.y, myPlayer.terrain);      
+//        }
+//      });
+        
+      
     }
   }
 }

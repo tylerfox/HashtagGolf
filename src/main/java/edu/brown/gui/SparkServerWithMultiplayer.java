@@ -34,6 +34,7 @@ public final class SparkServerWithMultiplayer {
   private static Referee ref;
   private static Map<String, List<Player>> rooms;
   private static boolean start = false;
+  private static String color = "white";
 
   /**
    * Starts running the GUI for #golf
@@ -52,7 +53,7 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/start", new StartHandler(), freeMarker);
     Spark.get("/play", new PlayHandler(), new FreeMarkerEngine());
     Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
-    Spark.get("/player_select", new PlayerSelectHandler(),
+    Spark.get("/single_player_select", new SinglePlayerSelectHandler(),
         new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
@@ -65,7 +66,7 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-    Spark.post("/playgame", new PlayGameHandler());
+    Spark.post("/ballselect", new BallSelectHandler());
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
@@ -110,10 +111,23 @@ public final class SparkServerWithMultiplayer {
   /**
    * Displays player select page of #golf.
    */
-  private static class PlayerSelectHandler implements TemplateViewRoute {
+  private static class SinglePlayerSelectHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      res.cookie("id", "0");
+      Player p = new PlayerType1("Player 1");
+      List<Player> players = new ArrayList<>();
+      players.add(p);
+
+      int hashKey = p.hashCode();
+      while (rooms.containsKey(hashKey)) {
+        hashKey++;
+      }
+
+      rooms.put(String.valueOf(hashKey), players);
+      res.cookie("room", String.valueOf(hashKey));
+
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
       return new ModelAndView(variables, "player_select.ftl");
     }
   }
@@ -124,21 +138,32 @@ public final class SparkServerWithMultiplayer {
   private static class PlayHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      QueryParamsMap qm = req.queryMap();
+      String newcolor = qm.value("color");
+      if(newcolor != null) {
+        color = newcolor;
+      }
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return new ModelAndView(variables, "play2.ftl");
     }
   }
 
-  private static class PlayGameHandler implements Route {
+  private static class BallSelectHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
-      String room = req.cookie("room");
-      List<Player> players = rooms.get(room);
+     String id = req.cookie("id");
+     String room = req.cookie("room");
+     List<Player> players = rooms.get(room);
+     assert players != null;
 
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("numPlayers", players.size())
-          .build();
+      try {
+        ref = new Referee("new_hole1.png", "key.png");
+      } catch (IOException e) {
+        System.out.println("ERROR: Files could not be opened.");
+      }
+
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color,
+          "id", id);
       return GSON.toJson(variables);
     }
   }
@@ -216,7 +241,6 @@ public final class SparkServerWithMultiplayer {
       List<Player> players = rooms.get(room);
       int id = Integer.parseInt(req.cookie("id"));
       Player myPlayer = players.get(id);
-
       int count = ref.swing(myPlayer, word, angle);
       if (count == Referee.OUT) {
         outofbounds = true;
@@ -224,7 +248,6 @@ public final class SparkServerWithMultiplayer {
 
       myPlayer.setReady(true);
       waitUntilAllPlayersReady(room);
-
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("myPlayer", myPlayer)
