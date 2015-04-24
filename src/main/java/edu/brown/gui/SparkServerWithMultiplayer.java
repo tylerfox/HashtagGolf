@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -33,8 +34,10 @@ public final class SparkServerWithMultiplayer {
   private static final int MAX_PLAYERS = 4;
   private static Referee ref;
   private static Map<String, List<Player>> rooms;
+  private static Map<String, AtomicInteger> roomReadiness;
   private static boolean start = false;
   private static String color = "white";
+
 
   /**
    * Starts running the GUI for #golf
@@ -46,6 +49,8 @@ public final class SparkServerWithMultiplayer {
 
     FreeMarkerEngine freeMarker = createEngine();
     rooms = new HashMap<>();
+    roomReadiness = new HashMap<>();
+
     // Setup Spark Routes
 
     // Pages
@@ -151,10 +156,10 @@ public final class SparkServerWithMultiplayer {
   private static class BallSelectHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
-     String id = req.cookie("id");
-     String room = req.cookie("room");
-     List<Player> players = rooms.get(room);
-     assert players != null;
+      String id = req.cookie("id");
+      String room = req.cookie("room");
+      List<Player> players = rooms.get(room);
+      assert players != null;
 
       try {
         ref = new Referee("new_hole1.png", "key.png");
@@ -247,7 +252,9 @@ public final class SparkServerWithMultiplayer {
       }
 
       myPlayer.setReady(true);
+
       waitUntilAllPlayersReady(room);
+
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("myPlayer", myPlayer)
@@ -270,10 +277,13 @@ public final class SparkServerWithMultiplayer {
 
       if (success) {
         List<Player> playerList = new ArrayList<>();
+        Player player = new PlayerType1(playerName);
+        playerList.add(player);
         rooms.put(roomName, playerList);
+        roomReadiness.put(roomName, new AtomicInteger(0));
+
         res.cookie("id", String.valueOf(0));
         res.cookie("room", roomName);
-        playerList.add(new PlayerType1(playerName));
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -298,7 +308,9 @@ public final class SparkServerWithMultiplayer {
         if (room.size() < MAX_PLAYERS) {
           res.cookie("id", String.valueOf(room.size()));
           res.cookie("room", roomName);
-          room.add(new PlayerType1(playerName));
+          Player player = new PlayerType1(playerName);
+          room.add(player);
+
         } else {
           roomFull = true;
         }
@@ -321,18 +333,24 @@ public final class SparkServerWithMultiplayer {
       List<Player> players = rooms.get(room);
       Player thisPlayer = players.get(Integer.parseInt(id));
       thisPlayer.setReady(true);
-      boolean allPlayersReady = true;
+      boolean allOtherPlayersReady = true;
 
       // we can indicate which players are not ready if we want
-      for (Player player : players) {
-        allPlayersReady = allPlayersReady && player.isReady();
+      for (int i = 0; i < players.size(); i++) {
+        Player player = players.get(i);
+        if (!player.equals(thisPlayer)) {
+          allOtherPlayersReady = allOtherPlayersReady && player.isReady();
+        }
       }
-      if (!allPlayersReady) {
+      if (!allOtherPlayersReady) {
         thisPlayer.setReady(false);
+      } else {
+        Integer x = roomReadiness.get(room).addAndGet(1);
+        System.out.println("atomic integer in host incremented to " + x);
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("startGame", allPlayersReady).build();
+          .put("startGame", allOtherPlayersReady).build();
 
       return GSON.toJson(variables);
     }
@@ -356,31 +374,95 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
+//  private static void waitForStart(String room) {
+//    List<Player> players = rooms.get(room);
+//    boolean allPlayersReady = false;
+//
+//    assert roomReadiness.get(room) != null;
+//    assert players != null;
+//
+//    while (!allPlayersReady) {
+//      allPlayersReady = true;
+//
+//      for (Player player : players) {
+//        if (!player.isReady()) {
+//          allPlayersReady = false;
+//        }
+//      }
+//    }
+//
+//    for (Player player : players) {
+//      player.setReady(false);
+//    }
+//  }
+
+
   /**
    * Holds a thread until all players in a particular room are ready.
    * @param room The room of players to wait on.
    */
   private static void waitUntilAllPlayersReady(String room) {
     List<Player> players = rooms.get(room);
-
     boolean allPlayersReady = false;
+
+    assert roomReadiness.get(room) != null;
+    assert players != null;
 
     while (!allPlayersReady) {
       allPlayersReady = true;
 
-      for (Player player : players) {
-        if (!player.isReady()) {
+      for (int i = 0; i < players.size(); i++) {
+        if (!players.get(i).isReady()) {
           allPlayersReady = false;
         }
       }
     }
 
-    for (Player player : players) {
-      if (player.isGameOver()) {
-        player.setReady(true);
-      } else {
-        player.setReady(false);
+    Integer playersDone = roomReadiness.get(room).addAndGet(1);
+    System.out.println("atomic integer in players waiting incremented to " + playersDone);
+    if (playersDone == getActivePlayerCount(players)) {
+      for (Player player : players) {
+        if (player.isGameOver()) {
+          player.setReady(true);
+        } else {
+          player.setReady(false);
+        }
       }
+      roomReadiness.get(room).set(0);
     }
   }
+
+  /**
+   * Returns number of players still playing.
+   * @return number of players playing
+   */
+  private static int getActivePlayerCount(List<Player> players) {
+    int count = 0;
+
+    for (Player player : players) {
+      if (!player.isGameOver()) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  //  private static void waitUntilAllPlayersReady(String room) {
+  //    List<Player> players = rooms.get(room);
+  //    boolean allPlayersReady = false;
+  //
+  //    while (!allPlayersReady) {
+  //      allPlayersReady = true;
+  //
+  //      for (Player player : players) {
+  //        List<Integer> rounds = playerReadiness.get(player);
+  //        int currRound = rounds.get(0);
+  //
+  //        if (rounds.get(currRound) > rounds.size()) {
+  //          allPlayersReady = false;
+  //        }
+  //      }
+  //    }
+  //  }
 }

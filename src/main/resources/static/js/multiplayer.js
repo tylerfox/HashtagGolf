@@ -29,6 +29,7 @@ function host() {
 }
 
 function join() {
+
   var room = prompt("Room name");
   if (room != null) {
     var player = prompt("Your name");
@@ -42,10 +43,10 @@ function join() {
       };
 
       $.post("/join", postParameters, function(responseJSON) {
-
         var roomExists = JSON.parse(responseJSON).roomExists;
         var roomFull = JSON.parse(responseJSON).roomFull;
         if (roomExists && !roomFull) {
+         //brings user to the lobby
           window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
         } else if (!roomExists) {
           alert("No room by this name exists. Please enter a new room name.");
@@ -76,6 +77,8 @@ function startGame() {
 function readyToPlay() {
   var postParameters = {};
   $.post("/ready", postParameters, function(responseJSON) {
+
+     //alert("redirecting page");
      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play"; //location.port + "/multiplay";
   });
 

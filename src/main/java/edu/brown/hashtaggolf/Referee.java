@@ -78,6 +78,7 @@ public class Referee {
         player.applyStrokePenalty();
         return OUT;
       default:
+        player.setOutOfBounds(false);
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
     }
