@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import edu.brown.hashtaggolf.Player;
 import edu.brown.hashtaggolf.PlayerType1;
 import edu.brown.hashtaggolf.Referee;
+import edu.brown.hashtaggolf.Terrain;
 import freemarker.template.Configuration;
 
 /**
@@ -129,8 +130,10 @@ public final class SparkServerWithMultiplayer {
         hashKey++;
       }
 
-      rooms.put(String.valueOf(hashKey), players);
+      String roomName = String.valueOf(hashKey);
+      rooms.put(roomName, players);
       res.cookie("room", String.valueOf(hashKey));
+      roomReadiness.put(roomName, new AtomicInteger(0));
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
       return new ModelAndView(variables, "player_select.ftl");
@@ -246,15 +249,21 @@ public final class SparkServerWithMultiplayer {
       List<Player> players = rooms.get(room);
       int id = Integer.parseInt(req.cookie("id"));
       Player myPlayer = players.get(id);
+      int oldX = myPlayer.getX();
+      int oldY = myPlayer.getY();
+
       int count = ref.swing(myPlayer, word, angle);
       if (count == Referee.OUT) {
         outofbounds = true;
       }
 
+      if (myPlayer.getTerrain() == Terrain.WATER) {
+        myPlayer.setX(oldX);
+        myPlayer.setY(oldY);
+      }
+
       myPlayer.setReady(true);
-
       waitUntilAllPlayersReady(room);
-
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("myPlayer", myPlayer)
@@ -345,8 +354,7 @@ public final class SparkServerWithMultiplayer {
       if (!allOtherPlayersReady) {
         thisPlayer.setReady(false);
       } else {
-        Integer x = roomReadiness.get(room).addAndGet(1);
-        System.out.println("atomic integer in host incremented to " + x);
+        roomReadiness.get(room).addAndGet(1);
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -419,7 +427,6 @@ public final class SparkServerWithMultiplayer {
     }
 
     Integer playersDone = roomReadiness.get(room).addAndGet(1);
-    System.out.println("atomic integer in players waiting incremented to " + playersDone);
     if (playersDone == getActivePlayerCount(players)) {
       for (Player player : players) {
         if (player.isGameOver()) {
