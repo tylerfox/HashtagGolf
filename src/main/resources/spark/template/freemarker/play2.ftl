@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/play.css">
   </head>
   <body>
+    <p id="mymessage">Message!</p>
     <div id="container">
       <div id ="background">
       <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>

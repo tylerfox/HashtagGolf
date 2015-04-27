@@ -21,6 +21,7 @@ var wastoggleable = false;
 var balls = {};
 var players = {}; // keys are string ids
 var id; // this is a string
+var distance = 0;
 
 var postParameters = { };
 $.post("/setup", postParameters, function(responseJSON){
@@ -163,6 +164,8 @@ function moveBall(ball, dest_X, dest_Y, terrain, playerId) {
 							}
 						});
 					}
+
+        messagepopup("ball went " + distance + " yards!");
 				}
 			});
 		}
@@ -338,10 +341,30 @@ function isgameover(ball) {
 }
 
 function isenter(evt) {
+  //TODO: CHANGE ME TO ACCOUNT FOR NOT ABLE TO SWING
 	if (evt.keyCode == 13) {
 		swing();
 	}
 }
+
+
+function messagepopup(message){
+  messagediv = document.getElementById("mymessage");
+  messagediv.innerHTML = message;
+  messagediv.style.visibility = "visible";
+  messagediv.style.opacity = 1;
+  setTimeout(function(){
+    messageinterval = setInterval(function(){ 
+      if (messagediv.style.opacity > 0) {
+        messagediv.style.opacity -= 0.01;
+      } else {
+        clearInterval(messageinterval);
+      }
+    }, 10);
+  },2000);
+
+}
+messagepopup("lets play!");
 
 function swing() {  
 	var word = document.getElementById("tweetme").value.toLowerCase();
@@ -369,7 +392,9 @@ function swing() {
 				var responseObject = JSON.parse(responseJSON);
 				var newPlayers = responseObject.players;
 				var myPlayer = newPlayers[parseInt(id)];
-
+        distance = responseObject.distance;
+        console.log("this1:"+ responseObject.distance);
+        //console.log("here:" + (myPlayer.x - balls.x));
 				// all other players go first
 				for (var i = 0; i < players.length; i++) {
 					if(i.toString() != id) {

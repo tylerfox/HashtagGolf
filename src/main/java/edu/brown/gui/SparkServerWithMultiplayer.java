@@ -253,8 +253,8 @@ public final class SparkServerWithMultiplayer {
       int oldY = myPlayer.getY();
       Terrain oldTerrain = myPlayer.getTerrain();
 
-      ref.swing(myPlayer, word, angle); //TODO: error handling
-
+      int count = ref.swing(myPlayer, word, angle); //TODO: error handling
+      System.out.println("me this far: " + count*3.5);
       myPlayer.setReady(true);
 
       System.out.println("atomic integer for " + id + " in swing handler before wait: " + roomReadiness.get(room).get());
@@ -270,6 +270,7 @@ public final class SparkServerWithMultiplayer {
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("players", tempList)
+          .put("distance", count*3.5) //scale factor
           .build();
 
       if (myPlayer.getTerrain() == Terrain.WATER) {

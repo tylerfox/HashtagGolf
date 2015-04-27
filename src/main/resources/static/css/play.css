@@ -207,3 +207,14 @@ p {
 	font-size: 20pt;
 	z-index: 10;
 }
+
+#mymessage{
+	font-size: 30pt;
+	background: transparent;
+	visibility: hidden;
+	text-align: center;
+	position: absolute;
+	width:100%;
+	top:50%;
+	z-index: 6;
+}
