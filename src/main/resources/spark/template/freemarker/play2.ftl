@@ -13,6 +13,7 @@
   </head>
   <body>
     <p id="mymessage">Message!</p>
+    <a href="/start" class= "myButton menubutton"> menu </a>
     <div id="container">
       <div id ="background">
       <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>

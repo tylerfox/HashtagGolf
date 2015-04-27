@@ -254,7 +254,7 @@ public final class SparkServerWithMultiplayer {
       Terrain oldTerrain = myPlayer.getTerrain();
 
       int count = ref.swing(myPlayer, word, angle); //TODO: error handling
-      System.out.println("me this far: " + count*3.5);
+      System.out.println("count: " + count);
       myPlayer.setReady(true);
 
       System.out.println("atomic integer for " + id + " in swing handler before wait: " + roomReadiness.get(room).get());

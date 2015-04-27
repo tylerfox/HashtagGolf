@@ -21,7 +21,20 @@
 }
 .myButton:active {
 	position:relative;
-	top:1px;
+	/*top:1px;*/
+}
+
+.backbutton {
+	position:absolute;
+	top:30px;
+	left:200px;
+}
+
+.menubutton {
+	z-index:7;
+	position:absolute;
+	top:30px;
+	left:30px;
 }
 
 .myButtonGrey {

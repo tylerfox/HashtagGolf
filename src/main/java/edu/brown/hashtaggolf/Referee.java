@@ -17,7 +17,7 @@ public class Referee {
   private int level;
   private int par;
   private SocialQuery tq;
-  public static final int OUT = 4;
+  public static final int OUT = -4;
 
   /**
    * Instantiates a Referee class; A referee class is created at the start of a

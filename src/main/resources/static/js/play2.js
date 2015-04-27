@@ -164,8 +164,11 @@ function moveBall(ball, dest_X, dest_Y, terrain, playerId) {
 							}
 						});
 					}
-
-        messagepopup("ball went " + distance + " yards!");
+        if (distance == -14) {
+          messagepopup("ball went too far!");
+        } else {
+          messagepopup("ball went " + distance + " yards!");
+        }
 				}
 			});
 		}
@@ -359,6 +362,7 @@ function messagepopup(message){
         messagediv.style.opacity -= 0.01;
       } else {
         clearInterval(messageinterval);
+        messagediv.style.visibility = "hidden";
       }
     }, 10);
   },2000);
@@ -382,7 +386,8 @@ function swing() {
 		moveBall(ball, hole_x, hole_y, id);
 	} else {
 		if (usedWords[word] == 1) {
-			alert("Word already used!");
+			//alert("Word already used!");
+      messagepopup("word already used!");
 			enableSwingButton();
 		} else {
 			usedWords[word]  = 1;
@@ -392,21 +397,19 @@ function swing() {
 				var responseObject = JSON.parse(responseJSON);
 				var newPlayers = responseObject.players;
 				var myPlayer = newPlayers[parseInt(id)];
-        distance = responseObject.distance;
-        console.log("this1:"+ responseObject.distance);
-        //console.log("here:" + (myPlayer.x - balls.x));
+        distance = Math.round(responseObject.distance);
+        console.log("dist: " + distance + " outofbounds? " + myPlayer.outofbounds);
 				// all other players go first
 				for (var i = 0; i < players.length; i++) {
 					if(i.toString() != id) {
 						var otherPlayerOld = players[i.toString()];
 						var otherPlayerNew = newPlayers[i];
-
 						if (!otherPlayerOld.isGameOver) {
 							//			setTimeout(function() {
 							if (otherPlayerNew.isGameOver) {
 								moveBall(balls[i], hole_x, hole_y, otherPlayerNew.id);
-							} else if (otherPlayerNew.outOfBounds) {
-								moveBall(balls[i], (target_x - balls[i].x) * 5, (target_y - balls[i].y) * 5, otherPlayerNew.id);
+							} else if (otherPlayerNew.outOfBounds || distance == -14) {
+								moveBall(balls[i], (balls[i].x + 1000*Math.cos(angle*Math.PI / 180)), balls[i].y + 1000*Math.sin(angle*Math.PI / 180), otherPlayerNew.id);
 							} else {
 								moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew.terrain, otherPlayerNew.id);  
 							}
@@ -420,7 +423,9 @@ function swing() {
 				// my player
 				//setTimeout(function() {
 				if (myPlayer.outOfBounds) {
-					moveBall(balls[id], (target_x - balls[id].x) * 5, (target_y - balls[id].y) * 5, id);
+
+          moveBall(balls[id], (balls[id].x + 1000*Math.cos(angle*Math.PI / 180)), balls[id].y - 1000*Math.sin(angle*Math.PI / 180), id);
+					/*moveBall(balls[id], (target_x - balls[id].x) * 5, (target_y - balls[id].y) * 5, id);*/
 					addStroke(2);
 				} else if (myPlayer.isGameOver) {
 					moveBall(balls[id], hole_x, hole_y, id);
