@@ -1,0 +1,24 @@
+TODO:
+	GRAPHICAL ASSETS
+	- Make more levels (including at least one where the optimal path is not simply a straight line path to the hole)
+	- Create level select screen
+
+	GENERAL CLEANUP/CURRENT BUGS TO FIX:
+	- Get rid of create & settings on start page
+	- Add back buttons to all pages, add quit button to actual game play screen
+	- Test (& fix since we know this is broken) how out of bounds & water display to other players in multiplayer. part of the problem is related to duplicating the list in SwingHandler
+	- In javascript swing function: players is an array with String keys, but newPlayers is an array with numerical keys (this needs to be fixed...)
+	- small matter: "Uncaught ReferenceError: linedraw is not defined"
+	- error handling in SwingHandler (for TwitterQueries) - how should we handle for the GUI? --> General connection lost, how we should deal with this
+	- Disposing of "windows"/clients/threads when they x out of the browser
+	- Test whether used words persist past the end of an individual game
+
+	"Extras"
+	- Display names to balls (ie: like terrain display)
+	- Display names in lobby
+	- Ensuring only one client from each IPAddress
+	- Multiplayer:
+		- users continue to watch the game after they have won and then a final popup will tell them the final results of the entire game (how many strokes each player before finishing)
+		- Allow players to select their ball color
+
+
