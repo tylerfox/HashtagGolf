@@ -18,38 +18,59 @@ var usedWords = {};
 var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
 var wastoggleable = false;
-var ballcolor = "#fff";
 var balls = {}; // for multiplayer
 var players = {};
-var ball;
-var id;
+//var ball;
+var id; // stored as a string
 
 var postParameters = { };
-$.post("/ballselect", postParameters, function(responseJSON){
+$.post("/setup", postParameters, function(responseJSON){
 	responseObject = JSON.parse(responseJSON);
-	switch(responseObject.color) {
+	id = responseObject.id;
+	players = responseObject.players;
+
+	if (players.length == 1) {
+		createBall(responseObject.color, id);
+	} else {
+		var colors = ["red", "blue", "green", "yellow"];
+		for (var i = 0; i < players.length; i++) {
+			createBall(colors[i], i.toString())
+		}
+	}
+	/*animate(ball, canvas, context, startTime, true, responseObject.x, responseObject.y);*/
+});
+
+function createBall(color, id) {
+	var ballcolor = "#fff";
+	switch(color) {
 	case "white": ballcolor = "#fff";
 	break;
+
 	case "red" : ballcolor = "#f00";
 	break;
+
 	case "blue" : ballcolor = "#00f";
 	break;
+
 	case "green" : ballcolor = "#0f0";
 	break;
+
 	case "yellow" : ballcolor = "#ff0";
 	break;
-	default : console.log("default");
+
+	default: ballcolor = "#fff";
 	}
-	console.log("ballcolor: " + ballcolor); 
-	id = responseObject.id;
-	ball = canvas.display.ellipse({
+
+	var newBall = canvas.display.ellipse({
 		x: START_X,
 		y: START_Y,
 		radius: 5,
 		fill: ballcolor
 	}).add();
-	/*animate(ball, canvas, context, startTime, true, responseObject.x, responseObject.y);*/
-});
+
+	//ball = newBall; // will get rid of this later
+	balls[id] = newBall;
+}
 
 var canvas = oCanvas.create({ canvas: "#myCanvas"});
 
@@ -60,12 +81,7 @@ var image = canvas.display.image({
 	image: "js/gui_hole1.png"
 }).add();
 
-/*var ball = canvas.display.ellipse({
-  x: START_X,
-  y: START_Y,
-  radius: 5,
-  fill: ballcolor
-}).add();*/
+
 
 function magnitude(x, y) {
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
@@ -123,7 +139,6 @@ function moveBall(ball, dest_X, dest_Y, terrain) {
 									duration: "normal",
 									easing: "linear",
 									callback: function () { 
-
 										enableSwingButton();
 										if (outofbounds(ball, canvas)) {
 											ball.x = preX;
@@ -135,7 +150,6 @@ function moveBall(ball, dest_X, dest_Y, terrain) {
 										if (isgameover(ball)) {              
 											rollIn(ball);
 										}
-										addStroke(1);
 
 									}
 								});
@@ -225,13 +239,13 @@ function sink(ball, x, y) {
 			ball.x = x;
 			ball.y = y;
 			ball.radius = 5;
-			addStroke(1);
 			enableSwingButton(); 
 		}
 	});
 }
 
 function linedraw(evt) {
+	var ball = balls[id];
 	if(linemoveable){  
 		var mouseX = canvas.mouse.x;
 		var mouseY = canvas.mouse.y;
@@ -276,7 +290,7 @@ function toggleline() {
 	}
 }
 
-function toHole() {
+function toHole(ball) {
 	if (curLine != null) {
 		curLine.remove();
 	} 
@@ -292,10 +306,11 @@ function toHole() {
 }
 
 function toggleable() {
+	var ball = balls[id];
 	if (linetoggleable) {
 		linetoggleable = false;
 		linemoveable = false;
-		toHole();
+		toHole(ball);
 	} else {
 		linetoggleable = true;
 	}
@@ -319,7 +334,7 @@ function isenter(evt) {
 function swing() {  
 	var word = document.getElementById("tweetme").value.toLowerCase();
 	if (!linetoggleable) {
-		toHole();
+		toHole(balls[id]);
 	}  
 	disableSwingButton();
 	postParameters={"word":word, "angle":angle};
@@ -340,34 +355,47 @@ function swing() {
 			// multiplayer: 
 			$.post("/swing", postParameters, function(responseJSON) {
 				var responseObject = JSON.parse(responseJSON);
-				var playerId = responseObject.playerId;
-				players = responseObject.players;
-				var myPlayer = players[playerId];
-				var outOfBounds = responseObject.outOfBounds;
+				var newPlayers = responseObject.players;
+				var myPlayer = newPlayers[parseInt(id)];
 
 				// all other players go first
-				/* for (var i = 0; i < players.length(); i++) {
-            if(i != playerId) {
-              var otherPlayer = players[i];
-              if (otherPlayer.isGameOver) {
-            	  if ()
-                // check if they just won or if they won a long time ago (check ball position?)
-              } else {
-                // else check out of bounds
-                // else move normally
-              }
-            }
-          } 
-				 */
+				for (var i = 0; i < players.length; i++) {
+					if(i.toString() != id) {
+						var otherPlayerOld = players[i.toString()];
+						var otherPlayerNew = newPlayers[i];
 
-				// my player
-				if (outOfBounds) {
-					addStroke(2);
-					moveBall(ball, (target_x - ball.x) * 5, (target_y - ball.y) * 5);
-				} else if (myPlayer.isGameOver) {
-					moveBall(ball, hole_x, hole_y);
-				} else {            
-					moveBall(ball, myPlayer.x, myPlayer.y, myPlayer.terrain);      
+						if (!otherPlayerOld.isGameOver) {
+				//			setTimeout(function() {
+								if (newPlayers[i].isGameOver) {
+									moveBall(balls[i], hole_x, hole_y);
+								} else if (newPlayers[i].outOfBounds) {
+									moveBall(balls[i], (target_x - balls[i].x) * 5, (target_y - balls[i].y) * 5);
+								} else {
+									moveBall(balls[i], newPlayers[i].x, newPlayers[i].y, newPlayers[i].terrain);  
+								}
+					//		}, 1000);
+						}
+					}
+					players = newPlayers;
+
+					// my player
+					//setTimeout(function() {
+						if (myPlayer.outOfBounds) {
+							console.log("got out of bounds");
+							moveBall(balls[id], (target_x - balls[id].x) * 5, (target_y - balls[id].y) * 5);
+							addStroke(2);
+						} else if (myPlayer.isGameOver) {
+							moveBall(balls[id], hole_x, hole_y);
+							addStroke(1);
+						} else {
+							console.log(myPlayer.x);
+							console.log(myPlayer.y);
+							console.log(myPlayer.terrain);
+							console.log(balls[id]);
+							moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer.terrain);      
+							addStroke(1);
+						}
+					//}, 2000);
 				}
 			});
 

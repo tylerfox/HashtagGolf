@@ -72,7 +72,7 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
-    Spark.post("/ballselect", new BallSelectHandler());
+    Spark.post("/setup", new SetupHandler());
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
@@ -156,7 +156,7 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
-  private static class BallSelectHandler implements Route {
+  private static class SetupHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
       String id = req.cookie("id");
@@ -170,7 +170,8 @@ public final class SparkServerWithMultiplayer {
         System.out.println("ERROR: Files could not be opened.");
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color,
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "color", color, "players", players,
           "id", id);
       return GSON.toJson(variables);
     }
@@ -243,7 +244,6 @@ public final class SparkServerWithMultiplayer {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
       String word = qm.value("word");
-      boolean outofbounds = false;
 
       String room = req.cookie("room");
       List<Player> players = rooms.get(room);
@@ -251,27 +251,29 @@ public final class SparkServerWithMultiplayer {
       Player myPlayer = players.get(id);
       int oldX = myPlayer.getX();
       int oldY = myPlayer.getY();
+      Terrain oldTerrain = myPlayer.getTerrain();
 
-      int count = ref.swing(myPlayer, word, angle);
-      if (count == Referee.OUT) {
-        outofbounds = true;
+      ref.swing(myPlayer, word, angle); //TODO: error handling
+
+      myPlayer.setReady(true);
+      waitUntilAllPlayersReady(room);
+
+      final List<Player> tempList = new ArrayList<>();
+      for (Player player : players) {
+        tempList.add(new PlayerType1(player));
       }
+
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .put("players", tempList)
+          .build();
 
       if (myPlayer.getTerrain() == Terrain.WATER) {
         myPlayer.setX(oldX);
         myPlayer.setY(oldY);
+        myPlayer.setTerrain(oldTerrain);
       }
 
-      myPlayer.setReady(true);
-      waitUntilAllPlayersReady(room);
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("myPlayer", myPlayer)
-          .put("outOfBounds", outofbounds)
-          .put("gameOver", myPlayer.isGameOver())
-          .put("players", players)
-          .put("playerId", id)
-          .build();
       return GSON.toJson(variables);
     }
   }
@@ -382,27 +384,27 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
-//  private static void waitForStart(String room) {
-//    List<Player> players = rooms.get(room);
-//    boolean allPlayersReady = false;
-//
-//    assert roomReadiness.get(room) != null;
-//    assert players != null;
-//
-//    while (!allPlayersReady) {
-//      allPlayersReady = true;
-//
-//      for (Player player : players) {
-//        if (!player.isReady()) {
-//          allPlayersReady = false;
-//        }
-//      }
-//    }
-//
-//    for (Player player : players) {
-//      player.setReady(false);
-//    }
-//  }
+  //  private static void waitForStart(String room) {
+  //    List<Player> players = rooms.get(room);
+  //    boolean allPlayersReady = false;
+  //
+  //    assert roomReadiness.get(room) != null;
+  //    assert players != null;
+  //
+  //    while (!allPlayersReady) {
+  //      allPlayersReady = true;
+  //
+  //      for (Player player : players) {
+  //        if (!player.isReady()) {
+  //          allPlayersReady = false;
+  //        }
+  //      }
+  //    }
+  //
+  //    for (Player player : players) {
+  //      player.setReady(false);
+  //    }
+  //  }
 
 
   /**

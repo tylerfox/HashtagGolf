@@ -28,6 +28,8 @@ public abstract class Player {
   private boolean isGameOver;
   private boolean outOfBounds;
 
+
+
   /**
    * Instantiates a player.
    * @param name the name of the player

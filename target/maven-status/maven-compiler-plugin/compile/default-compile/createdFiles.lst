@@ -56,7 +56,6 @@ edu/brown/imageprocessing/ScreenColor.class
 edu/brown/gui/SparkServer$SwingHandler.class
 edu/brown/gui/SparkServer$TempHandler.class
 edu/brown/gui/SparkServer$HostLobbyHandler.class
-edu/brown/gui/SparkServerWithMultiplayer$BallSelectHandler.class
 edu/brown/gui/SparkServerWithMultiplayerOld$JoinHandler.class
 edu/brown/gui/SparkServerWithMultiplayerOld.class
 edu/brown/gui/ExceptionPrinter.class
