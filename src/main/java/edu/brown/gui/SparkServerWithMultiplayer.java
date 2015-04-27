@@ -121,7 +121,7 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       res.cookie("id", "0");
-      Player p = new PlayerType1("Player 1");
+      Player p = new PlayerType1("Player 1", "0");
       List<Player> players = new ArrayList<>();
       players.add(p);
 
@@ -256,8 +256,12 @@ public final class SparkServerWithMultiplayer {
       ref.swing(myPlayer, word, angle); //TODO: error handling
 
       myPlayer.setReady(true);
-      waitUntilAllPlayersReady(room);
 
+      System.out.println("atomic integer for " + id + " in swing handler before wait: " + roomReadiness.get(room).get());
+      waitUntilAllPlayersReady(room, String.valueOf(id));
+      System.out.println("atomic integer for " + id + " in swing handler after wait: " + roomReadiness.get(room).get());
+
+      //TODO: not all players get the correct information - they all technically need the same 'templist'
       final List<Player> tempList = new ArrayList<>();
       for (Player player : players) {
         tempList.add(new PlayerType1(player));
@@ -288,7 +292,7 @@ public final class SparkServerWithMultiplayer {
 
       if (success) {
         List<Player> playerList = new ArrayList<>();
-        Player player = new PlayerType1(playerName);
+        Player player = new PlayerType1(playerName, "0");
         playerList.add(player);
         rooms.put(roomName, playerList);
         roomReadiness.put(roomName, new AtomicInteger(0));
@@ -319,7 +323,7 @@ public final class SparkServerWithMultiplayer {
         if (room.size() < MAX_PLAYERS) {
           res.cookie("id", String.valueOf(room.size()));
           res.cookie("room", roomName);
-          Player player = new PlayerType1(playerName);
+          Player player = new PlayerType1(playerName, String.valueOf(room.size()));
           room.add(player);
 
         } else {
@@ -376,7 +380,7 @@ public final class SparkServerWithMultiplayer {
       Player thisPlayer = players.get(Integer.parseInt(id));
       thisPlayer.setReady(true);
 
-      waitUntilAllPlayersReady(room);
+      waitUntilAllPlayersReady(room, id);
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", true).build();
@@ -411,7 +415,7 @@ public final class SparkServerWithMultiplayer {
    * Holds a thread until all players in a particular room are ready.
    * @param room The room of players to wait on.
    */
-  private static void waitUntilAllPlayersReady(String room) {
+  private static void waitUntilAllPlayersReady(String room, String id) { // TODO: get rid of giving String id - just used for testing
     List<Player> players = rooms.get(room);
     boolean allPlayersReady = false;
 
@@ -429,6 +433,8 @@ public final class SparkServerWithMultiplayer {
     }
 
     Integer playersDone = roomReadiness.get(room).addAndGet(1);
+    System.out.println("Players done var for id: " + id + " " + playersDone);
+    System.out.println(getActivePlayerCount(players)); // TODO: this may be wrong (check when someone wins)
     if (playersDone == getActivePlayerCount(players)) {
       for (Player player : players) {
         if (player.isGameOver()) {

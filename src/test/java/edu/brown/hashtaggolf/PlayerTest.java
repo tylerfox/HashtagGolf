@@ -1,6 +1,6 @@
 package edu.brown.hashtaggolf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -10,8 +10,8 @@ public class PlayerTest {
 
   @Test
   public void test() throws IOException {
-    Player player = new PlayerType1("name");
-    
+    Player player = new PlayerType1("name", "");
+
     int before = player.getDistanceToHole();
     player.moveBall(10, 0);
     int after = player.getDistanceToHole();

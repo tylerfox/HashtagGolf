@@ -6,11 +6,11 @@ package edu.brown.hashtaggolf;
  */
 public class PlayerType2 extends Player {
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 4779508648030821897L;
 
-  public PlayerType2(String name) {
-    super(name);
+  public PlayerType2(String name, String id) {
+    super(name, id);
   }
 }

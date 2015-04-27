@@ -4,7 +4,6 @@
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/PlayerType2.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/socialdata/package-info.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Terrain.java
-/gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/networking/Server.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/package-info.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/socialdata/FacebookQuery.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Main.java
@@ -12,13 +11,10 @@
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/gui/ExceptionPrinter.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/imageprocessing/package-info.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/socialdata/TwitterQuery.java
-/gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/networking/Client.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/PlayerType3.java
-/gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/networking/package-info.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Referee.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/imageprocessing/ScreenColor.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/Player.java
-/gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/gui/SparkServerWithMultiplayerOld.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/PlayerType1.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/hashtaggolf/PlayerType4.java
 /gpfs/main/home/btai/course/cs032/workspace/HashtagGolf/src/main/java/edu/brown/socialdata/SocialQuery.java

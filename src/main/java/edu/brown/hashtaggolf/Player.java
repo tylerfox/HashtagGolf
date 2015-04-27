@@ -27,15 +27,15 @@ public abstract class Player {
   private boolean ready;
   private boolean isGameOver;
   private boolean outOfBounds;
-
-
+  private String id;
 
   /**
    * Instantiates a player.
    * @param name the name of the player
    */
-  public Player(String name) {
+  public Player(String name, String id) {
     this.name = name;
+    this.id = id;
     this.terrain = Terrain.TEE;
 
     // TODO: will need to figure out how to set this based on the level
@@ -51,8 +51,9 @@ public abstract class Player {
     this.outOfBounds = false;
   }
 
-  public Player(String name, int startx, int starty, int holex, int holey) {
+  public Player(String name, String id, int startx, int starty, int holex, int holey) {
     this.name = name;
+    this.id = id;
     this.terrain = Terrain.TEE;
 
     // TODO: will need to figure out how to set this based on the level
@@ -76,6 +77,7 @@ public abstract class Player {
     this.ready = p.ready;
     this.isGameOver = p.isGameOver;
     this.outOfBounds = p.outOfBounds;
+    this.id = p.id;
   }
 
   // Players with powerups will override
@@ -234,5 +236,13 @@ public abstract class Player {
 
   public void setBallColour(int ballColour) {
     this.ballColour = ballColour;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getId() {
+    return id;
   }
 }

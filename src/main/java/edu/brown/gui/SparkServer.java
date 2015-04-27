@@ -146,7 +146,7 @@ public final class SparkServer {
       } catch (IOException e) {
         System.out.println("ERROR: Files could not be opened.");
       }
-      myPlayer = new PlayerType1("Brandon");
+      myPlayer = new PlayerType1("Brandon", "");
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return GSON.toJson(variables);
     }
@@ -251,7 +251,7 @@ public final class SparkServer {
         rooms.put(roomName, playerList);
         res.cookie("id", String.valueOf(0));
         res.cookie("room", roomName);
-        playerList.add(new PlayerType1(playerName));
+        playerList.add(new PlayerType1(playerName, ""));
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -276,7 +276,7 @@ public final class SparkServer {
         if (game.size() < MAX_PLAYERS) {
           res.cookie("id", String.valueOf(game.size()));
           res.cookie("room", roomName);
-          game.add(new PlayerType1(playerName));
+          game.add(new PlayerType1(playerName, ""));
         } else {
           roomFull = true;
         }

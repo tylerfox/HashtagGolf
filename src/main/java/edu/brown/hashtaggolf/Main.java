@@ -49,7 +49,7 @@ public class Main {
       if (input == null || input.equals("")) {
         input = "Player 1";
       }
-      Player player = new PlayerType1(input);
+      Player player = new PlayerType1(input, "");
       System.out.println("Hello " + input + "!  Let's play #golf.\n");
       System.out.println(player);
       System.out.println("Enter your query to swing!");

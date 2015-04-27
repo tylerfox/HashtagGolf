@@ -18,24 +18,32 @@ var usedWords = {};
 var swingButton = document.getElementById("swingButton");
 swingButton.disabled = false;
 var wastoggleable = false;
-var balls = {}; // for multiplayer
-var players = {};
-//var ball;
-var id; // stored as a string
+var balls = {};
+var players = {}; // keys are string ids
+var id; // this is a string
 
 var postParameters = { };
 $.post("/setup", postParameters, function(responseJSON){
 	responseObject = JSON.parse(responseJSON);
 	id = responseObject.id;
 	players = responseObject.players;
+	
+	console.log(players);
+	console.log(id);
+	console.log(players[id]);
 
 	if (players.length == 1) {
 		createBall(responseObject.color, id);
 	} else {
 		var colors = ["red", "blue", "green", "yellow"];
 		for (var i = 0; i < players.length; i++) {
-			createBall(colors[i], i.toString())
+			if (id != i.toString()) {
+				createBall(colors[i], i.toString());
+			}
 		}
+
+		// draws your ball on top of eveyone else's ball
+		createBall(colors[parseInt(id)], id);
 	}
 	/*animate(ball, canvas, context, startTime, true, responseObject.x, responseObject.y);*/
 });
@@ -68,7 +76,6 @@ function createBall(color, id) {
 		fill: ballcolor
 	}).add();
 
-	//ball = newBall; // will get rid of this later
 	balls[id] = newBall;
 }
 
@@ -87,7 +94,7 @@ function magnitude(x, y) {
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
 
-function moveBall(ball, dest_X, dest_Y, terrain) {
+function moveBall(ball, dest_X, dest_Y, terrain, playerId) {
 	var preX = ball.x;
 	var preY = ball.y;
 	var deltaX = dest_X - ball.x;
@@ -148,7 +155,7 @@ function moveBall(ball, dest_X, dest_Y, terrain) {
 											document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 										}
 										if (isgameover(ball)) {              
-											rollIn(ball);
+											rollIn(ball, playerId);
 										}
 
 									}
@@ -175,7 +182,7 @@ function enableSwingButton() {
 	if (linetoggleable) {
 		linemoveable = true;
 	} else {
-		toHole();
+		toHole(balls[id]);
 	}
 	//Terrain
 	var myPlayer = players[id];
@@ -207,7 +214,7 @@ function disableSwingButton() {
 	linetoggleable = false;
 }
 
-function rollIn(ball) {
+function rollIn(ball, playerId) {
 	ball.animate({
 		x: hole_x,
 		y: hole_y
@@ -220,9 +227,13 @@ function rollIn(ball) {
 			}, {
 				duration: "normal",
 				easing: "linear",
-				callback: function () {           
-					alert("Congratulations!  You've won in " + strokenum + " strokes!");
-					window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+				callback: function () {
+					if (playerId == id) {
+						alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
+						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+					} else {
+						alert(players[playerId].name + " finished in " + players[playerId].stroke + " strokes!");
+					}
 				}
 			});
 		}
@@ -246,7 +257,8 @@ function sink(ball, x, y) {
 
 function linedraw(evt) {
 	var ball = balls[id];
-	if(linemoveable){  
+
+	if (linemoveable && typeof ball != 'undefined') {  
 		var mouseX = canvas.mouse.x;
 		var mouseY = canvas.mouse.y;
 		var oldcanvas = document.getElementById("myCanvas");
@@ -260,8 +272,8 @@ function linedraw(evt) {
 		var b = mouseY - slope * mouseX;
 		var newX = 3000;
 		if (mouseX < ball.x) {
-			newX *= -1
-			;    }
+			newX *= -1;
+		}
 		var newY = newX*slope + b;    
 		if (curLine != null) {
 			curLine.remove();
@@ -342,9 +354,9 @@ function swing() {
 	//cheats
 	if(!isNaN(+word)) {
 		var num = +word;    
-		moveBall(ball, ball.x + num*Math.cos(angle*Math.PI / 180), ball.y - num*Math.sin(angle*Math.PI / 180));
+		moveBall(ball, ball.x + num*Math.cos(angle*Math.PI / 180), ball.y - num*Math.sin(angle*Math.PI / 180), id);
 	} else if (word == "hole!") {    
-		moveBall(ball, hole_x, hole_y);
+		moveBall(ball, hole_x, hole_y, id);
 	} else {
 		if (usedWords[word] == 1) {
 			alert("Word already used!");
@@ -365,38 +377,34 @@ function swing() {
 						var otherPlayerNew = newPlayers[i];
 
 						if (!otherPlayerOld.isGameOver) {
-				//			setTimeout(function() {
-								if (newPlayers[i].isGameOver) {
-									moveBall(balls[i], hole_x, hole_y);
-								} else if (newPlayers[i].outOfBounds) {
-									moveBall(balls[i], (target_x - balls[i].x) * 5, (target_y - balls[i].y) * 5);
-								} else {
-									moveBall(balls[i], newPlayers[i].x, newPlayers[i].y, newPlayers[i].terrain);  
-								}
-					//		}, 1000);
+							//			setTimeout(function() {
+							if (otherPlayerNew.isGameOver) {
+								moveBall(balls[i], hole_x, hole_y, otherPlayerNew.id);
+							} else if (otherPlayerNew.outOfBounds) {
+								moveBall(balls[i], (target_x - balls[i].x) * 5, (target_y - balls[i].y) * 5, otherPlayerNew.id);
+							} else {
+								moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew.terrain, otherPlayerNew.id);  
+							}
+							//		}, 1000);
 						}
 					}
+					//TODO: players keys = String, newPlayers keys = numerical
 					players = newPlayers;
-
-					// my player
-					//setTimeout(function() {
-						if (myPlayer.outOfBounds) {
-							console.log("got out of bounds");
-							moveBall(balls[id], (target_x - balls[id].x) * 5, (target_y - balls[id].y) * 5);
-							addStroke(2);
-						} else if (myPlayer.isGameOver) {
-							moveBall(balls[id], hole_x, hole_y);
-							addStroke(1);
-						} else {
-							console.log(myPlayer.x);
-							console.log(myPlayer.y);
-							console.log(myPlayer.terrain);
-							console.log(balls[id]);
-							moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer.terrain);      
-							addStroke(1);
-						}
-					//}, 2000);
 				}
+
+				// my player
+				//setTimeout(function() {
+				if (myPlayer.outOfBounds) {
+					moveBall(balls[id], (target_x - balls[id].x) * 5, (target_y - balls[id].y) * 5, id);
+					addStroke(2);
+				} else if (myPlayer.isGameOver) {
+					moveBall(balls[id], hole_x, hole_y, id);
+					addStroke(1);
+				} else {
+					moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer.terrain, id);      
+					addStroke(1);
+				}
+				//}, 2000);
 			});
 
 
