@@ -1,0 +1,98 @@
+
+body {
+	background-image: url(Tutorialbackground.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color: #00ADEF;
+}
+
+p{
+	/*margin-top:200px;*/
+	margin-left: 30px;
+	margin-right:30px;
+	text-align: center;
+	font-size: 40px;
+	font-family:"Comics";
+}
+
+#nextbtn {
+	position:absolute;
+	top:30px;
+	left: 200px;
+}
+
+#para1 {
+	position:absolute;
+	text-align: center;
+	left: 25%;
+	top:10%;
+}
+
+#para2 {
+	visibility: hidden;
+	position: absolute;
+	top:30%;
+	left: 13%;
+}
+
+#para3 {
+	visibility: hidden;
+	position: absolute;
+	top:72%;
+	left:19%;
+}
+
+#para4 {
+	visibility: hidden;
+	position:absolute;
+	top:70%;
+	left:55%;
+}
+
+#para5 {
+	visibility: hidden;
+	position:absolute;
+	top:70%;
+	left:39%;
+}
+
+#para6 {
+	visibility: hidden;
+	position: absolute;
+	top:58%;
+}
+
+#para7 {
+	visibility: hidden;
+	position: absolute;
+	top:6%;
+	left:63%;
+}
+
+#para8 {
+	visibility: hidden;
+	position: absolute;
+	top:6%;
+	left:54%;
+}
+
+#para9 {
+	visibility: hidden;
+	position: absolute;
+	top:6%;
+	left:63%;
+}
+
+#para10 {
+	visibility: hidden;
+	position: absolute;
+	top:6%;
+	left:81%;
+}
+
+#para11 {
+	visibility: hidden;
+	position: absolute;
+	top:20%;
+	left:23%;
+}

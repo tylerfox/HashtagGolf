@@ -19,8 +19,8 @@
      <a href="/multiplayer" class="myButton" id = "multiplayer">multiplayer</a>
      <br><br>
 
-      <a href="/settings" class="myButton" id ="settings">settings</a>
-      <a href="/create" class="myButton" id ="create">create</a>
+      <a href="/tutorial" class="myButton" id ="tutorial">tutorial</a>
+      <a href="/instructions" class="myButton" id ="instructions">instructions</a>
 
     </div>
    </div>

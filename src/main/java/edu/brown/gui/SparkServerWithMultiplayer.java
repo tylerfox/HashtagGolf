@@ -58,7 +58,8 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/", new FrontPageHandler(), freeMarker);
     Spark.get("/start", new StartHandler(), freeMarker);
     Spark.get("/play", new PlayHandler(), new FreeMarkerEngine());
-    Spark.get("/create", new TempHandler(), new FreeMarkerEngine());
+    Spark.get("/instructions", new InstructionsHandler(), new FreeMarkerEngine());
+    Spark.get("/tutorial", new TutorialHandler(), new FreeMarkerEngine());
     Spark.get("/single_player_select", new SinglePlayerSelectHandler(),
         new FreeMarkerEngine());
     Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
@@ -69,7 +70,6 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/hostlobby/:room", new HostLobbyHandler(),
         new FreeMarkerEngine());
 
-    Spark.get("/settings", new TempHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
     Spark.post("/setup", new SetupHandler());
@@ -102,6 +102,16 @@ public final class SparkServerWithMultiplayer {
       return new ModelAndView(variables, "multiplayer.ftl");
     }
   }
+  /**
+   * Displays front page of #golf.
+   */
+  private static class InstructionsHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "instructions.ftl");
+    }
+  }
 
   /**
    * Displays menu page of #golf.
@@ -111,6 +121,17 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "start.ftl");
+    }
+  }
+  
+  /**
+   * Displays menu page of #golf.
+   */
+  private static class TutorialHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "tutorial.ftl");
     }
   }
 
