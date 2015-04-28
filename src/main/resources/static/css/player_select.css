@@ -36,7 +36,7 @@ h1 {
 
 #container {
 	margin: auto;
-	width: 600px;
+	width: 1200px;
 	height: 800px;
 }
 
@@ -122,4 +122,27 @@ h1 {
 .yellowPlayerButton:active {
 	position:relative;
 	top:1px;
+}
+
+#playerimage {
+	display:inline-block;
+	vertical-align: top;
+	font-size:30pt;
+	background-image: url(BlackPlayer.png);
+	background-repeat: no-repeat;
+	background-size: 400px 500px;
+	margin-left: 150px;
+	width:400px;
+	height:500px;
+}
+
+#left {
+	display:inline-block;
+}
+
+#playbutton {
+	display:block;
+	margin:0 auto;
+	/*position: relative;*/
+	/*left:50%;*/
 }
