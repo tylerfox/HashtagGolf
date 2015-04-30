@@ -12,8 +12,7 @@
          <link rel="stylesheet" href="css/player_select.css">
        </head>
        <body>
-        <button onclick="back()" class="myButton backbutton"> back </button>
-        <a href="/start" class= "myButton menubutton"> menu </a>
+        <button onclick="start()" class= "myButton menubutton"> menu </button>
         <div id="container">
           <div id ="background">
             <h1> choose a player </h1>
@@ -25,7 +24,7 @@
              <a onclick = "choosecolor('green');" class="greenPlayerButton" id ="settings">green</a>
              <a onclick = "choosecolor('yellow');" class="yellowPlayerButton" id ="create">yellow</a>
              <br> <br>
-             <button onclick= "play();" id = "playbutton" class="myButton"> Play </button>
+             <button onclick= "play();" id = "playbutton" class="myButton"> play </button>
            </div>
            <div id="playerimage"></div>
 
