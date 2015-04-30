@@ -29,7 +29,7 @@ public final class SparkServerWithMultiplayer {
   private static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
   private static Map<String, Game> rooms;
-  private static boolean start = false;
+//  private static boolean start = false;
   private static String color = "white";
 
 
@@ -209,11 +209,11 @@ public final class SparkServerWithMultiplayer {
   private static class LobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      while (!start) {
-        if (start) {
-          break;
-        }
-      }
+//      while (!start) {
+//        if (start) {
+//          break;
+//        }
+//      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "lobby.ftl");
@@ -223,7 +223,7 @@ public final class SparkServerWithMultiplayer {
   private static class HostLobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      start = true;
+//      start = true;
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "hostlobby.ftl");
     }
@@ -345,7 +345,6 @@ public final class SparkServerWithMultiplayer {
 
       Game game = rooms.get(room);
       game.playerReady(id);
-
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", true).build();
       return GSON.toJson(variables);

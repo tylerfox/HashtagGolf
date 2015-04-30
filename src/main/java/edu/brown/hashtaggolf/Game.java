@@ -91,7 +91,7 @@ public class Game {
    * Sets all the readiness of all activePlayers to false.
    */
   public void resetReadinessAndState() {
-
+    System.out.println("Resetting readiness and state.");
     for (Player player : players) {
       if (player.isGameOver()) {
         player.setReady(true);
@@ -163,6 +163,7 @@ public class Game {
     myPlayer.setReady(true);
 
     waitUntilAllPlayersReady();
+    System.out.println("Done waiting for all players.");
   }
 
   public int getActivePlayerCount() {
