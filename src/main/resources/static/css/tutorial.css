@@ -11,7 +11,7 @@ p{
 	margin-left: 30px;
 	margin-right:30px;
 	text-align: center;
-	font-size: 40px;
+	font-size: 20pt;
 	font-family:"Comics";
 }
 
@@ -45,49 +45,49 @@ p{
 #para4 {
 	visibility: hidden;
 	position:absolute;
-	top:70%;
+	top:65%;
 	left:55%;
 }
 
 #para5 {
 	visibility: hidden;
 	position:absolute;
-	top:70%;
+	top:65%;
 	left:39%;
 }
 
 #para6 {
 	visibility: hidden;
 	position: absolute;
-	top:58%;
+	top:53%;
 }
 
 #para7 {
 	visibility: hidden;
 	position: absolute;
 	top:6%;
-	left:63%;
+	left:46%;
 }
 
 #para8 {
 	visibility: hidden;
 	position: absolute;
 	top:6%;
-	left:54%;
+	left:37%;
 }
 
 #para9 {
 	visibility: hidden;
 	position: absolute;
 	top:6%;
-	left:63%;
+	left:50%;
 }
 
 #para10 {
 	visibility: hidden;
 	position: absolute;
 	top:6%;
-	left:81%;
+	left:70%;
 }
 
 #para11 {

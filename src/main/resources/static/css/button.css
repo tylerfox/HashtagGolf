@@ -20,7 +20,7 @@
 	background-color:#ff692e;
 }
 .myButton:active {
-	position:relative;
+	/*position:relative;*/
 	/*top:1px;*/
 }
 

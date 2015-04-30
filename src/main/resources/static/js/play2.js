@@ -129,6 +129,7 @@ function moveBall(ball, dest_X, dest_Y, terrain, playerId) {
 				callback: function () {        
 					if (terrain === "WATER") {
 						sink(ball, preX, preY);
+            messagepopup("your ball is sleeping with the fishes!");
 					} else {
 						ball.animate({
 							x: ball.x + deltaX * .05,
@@ -149,7 +150,8 @@ function moveBall(ball, dest_X, dest_Y, terrain, playerId) {
 										enableSwingButton();
 										if (outofbounds(ball, canvas)) {
 											ball.x = preX;
-											ball.y = preY;              
+											ball.y = preY;
+                      messagepopup("that went way too far!"); 
 										} else {
 											disttohole = calcDistToHole(ball);
 											document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
@@ -196,21 +198,73 @@ function enableSwingButton() {
 	//Terrain
 	var myPlayer = players[id];
 	var terrainpic = document.getElementById("terrainpic");
+  var oldterrain = terrainpic.className;
+  random = Math.floor((Math.random() * 3) + 1);
 	if (myPlayer.terrain == "BUNKER") {
 		terrainpic.setAttribute("class", "terrain_bunker");
 		terrainpic.innerHTML = "your ball is in<br> the bunker";
+    if (oldterrain != "terrain_bunker") {
+      switch (random) {
+        case 1: messagepopup("fun in the sand");
+        break;
+        case 2: messagepopup("bunker down for some chipping");
+        break;
+        case 3: messagepopup("not where you want to be");
+        break;
+      }
+    }
 	} else if (myPlayer.terrain == "FAIRWAY") {
 		terrainpic.setAttribute("class", "terrain_fairway");
 		terrainpic.innerHTML = "your ball is on<br> the fairway";
+    if (oldterrain != "terrain_fairway") {
+      switch (random) {
+        case 1: messagepopup("nice shot!");
+        break;
+        case 2: messagepopup("nice one!");
+        break;
+        case 3: messagepopup("great shot!");
+        break;
+      }
+    }
 	} else if (myPlayer.terrain == "ROUGH") {
 		terrainpic.setAttribute("class", "terrain_rough");
 		terrainpic.innerHTML = "your ball is in<br> the rough";
+    if (oldterrain != "terrain_rough") {
+      switch (random) {
+        case 1: messagepopup("you're going to have a rough time");
+        break;
+        case 2: messagepopup("this shot's going to be tricky");
+        break;
+        case 3: messagepopup("not your best shot");
+        break;
+      }
+    }
 	} else if (myPlayer.terrain == "GREEN") {
 		terrainpic.setAttribute("class", "terrain_green");
 		terrainpic.innerHTML = "your ball is on<br> the green";
+    if (oldterrain != "terrain_green") {
+      switch (random) {
+        case 1: messagepopup("it's all putting from here!");
+        break;
+        case 2: messagepopup("nice setup!");
+        break;
+        case 3: messagepopup("just tap it in happy");
+        break;
+      }
+    }
 	} else if (myPlayer.terrain == "TEE") {
 		terrainpic.setAttribute("class", "terrain_tee");
 		terrainpic.innerHTML = "your ball is in<br> the teebox";
+    if (oldterrain != "terrain_tee") {
+      switch (random) {
+        case 1: messagepopup("how'd you get back here?");
+        break;
+        case 2: messagepopup("did you not hit it very far?");
+        break;
+        case 3: messagepopup("a little closer to the hole next time");
+        break;
+      }
+    }
 	}
 	//end terrain
 }

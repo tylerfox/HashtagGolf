@@ -25,7 +25,7 @@
              <a onclick = "choosecolor('green');" class="greenPlayerButton" id ="settings">green</a>
              <a onclick = "choosecolor('yellow');" class="yellowPlayerButton" id ="create">yellow</a>
              <br> <br>
-             <button onclick= "play();" id = "playbutton" class="myButton"> Play </button>
+             <button onclick= "play();" id = "playbutton" class="myButton"> play </button>
            </div>
            <div id="playerimage"></div>
 

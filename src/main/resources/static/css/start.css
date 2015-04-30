@@ -26,6 +26,7 @@
 body {
 	background-image: url(tempbackground.png);
 	background-size: cover;
+	overflow: hidden;
 }
 
 h1 {
