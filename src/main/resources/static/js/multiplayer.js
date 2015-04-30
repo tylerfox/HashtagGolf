@@ -65,8 +65,9 @@ function startGame() {
 
 	$.post("/hoststart", postParameters, function(responseJSON) {
     var startGame = JSON.parse(responseJSON).startGame;
+    console.log(startGame);
     if (startGame){
-      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play"; //location.port + "/multiplay";
+      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
     } else {
       alert("Not all players are ready yet. Please tell all players to click the ready button.");
     }

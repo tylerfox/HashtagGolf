@@ -11,7 +11,7 @@ public class RefereeTest {
   @Test
   public void test() throws IOException {
     Referee ref = new Referee("new_hole1.png", "key.png");
-    Player player = new PlayerType1("name", "");
+    Player player = new Player("name", "");
     assertTrue(ref.applyEnvironment(player, "word") >= 0);
 
     int before = player.getDistanceToHole();

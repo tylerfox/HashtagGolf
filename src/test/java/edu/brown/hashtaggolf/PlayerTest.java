@@ -10,7 +10,7 @@ public class PlayerTest {
 
   @Test
   public void test() throws IOException {
-    Player player = new PlayerType1("name", "");
+    Player player = new Player("name", "");
 
     int before = player.getDistanceToHole();
     player.moveBall(10, 0);

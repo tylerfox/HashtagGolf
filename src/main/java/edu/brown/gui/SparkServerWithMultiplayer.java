@@ -2,11 +2,9 @@ package edu.brown.gui;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -20,22 +18,17 @@ import spark.template.freemarker.FreeMarkerEngine;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
+import edu.brown.hashtaggolf.Game;
 import edu.brown.hashtaggolf.Player;
-import edu.brown.hashtaggolf.PlayerType1;
-import edu.brown.hashtaggolf.Referee;
-import edu.brown.hashtaggolf.Terrain;
 import freemarker.template.Configuration;
 
 /**
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServerWithMultiplayer {
-  private static final int PORT = 4567;
+  private static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
-  private static final int MAX_PLAYERS = 4;
-  private static Referee ref;
-  private static Map<String, List<Player>> rooms;
-  private static Map<String, AtomicInteger> roomReadiness;
+  private static Map<String, Game> rooms;
   private static boolean start = false;
   private static String color = "white";
 
@@ -49,10 +42,9 @@ public final class SparkServerWithMultiplayer {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
+    //allRooms = new HashMap<>();
     rooms = new HashMap<>();
-    roomReadiness = new HashMap<>();
-
-    // Setup Spark Routes
+    //roomReadiness = new HashMap<>();
 
     // Pages
     Spark.get("/", new FrontPageHandler(), freeMarker);
@@ -62,9 +54,8 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/tutorial", new TutorialHandler(), new FreeMarkerEngine());
     Spark.get("/single_player_select", new SinglePlayerSelectHandler(),
         new FreeMarkerEngine());
-    Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
+    // Spark.get("/level_select", new TempHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
-    // Spark.get("/multiplay", new MultiPlayHandler(), new FreeMarkerEngine());
 
     Spark.get("/lobby/:room", new LobbyHandler(), new FreeMarkerEngine());
     Spark.get("/hostlobby/:room", new HostLobbyHandler(),
@@ -123,7 +114,7 @@ public final class SparkServerWithMultiplayer {
       return new ModelAndView(variables, "start.ftl");
     }
   }
-  
+
   /**
    * Displays menu page of #golf.
    */
@@ -142,20 +133,22 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       res.cookie("id", "0");
-      Player p = new PlayerType1("Player 1", "0");
-      List<Player> players = new ArrayList<>();
-      players.add(p);
+      Game game;
+      try {
+        game = new Game("new_hole1.png", "key.png");
+        game.addPlayer("Player 1");
 
-      int hashKey = p.hashCode();
-      while (rooms.containsKey(hashKey)) {
-        hashKey++;
+        int hashKey = game.hashCode();
+        while (rooms.containsKey(hashKey)) {
+          hashKey++;
+        }
+        String roomName = String.valueOf(hashKey);
+        rooms.put(roomName, game);
+        res.cookie("room", String.valueOf(hashKey));
+
+      } catch (IOException e) {
+        System.out.println("ERROR: Issue with loading level.");
       }
-
-      String roomName = String.valueOf(hashKey);
-      rooms.put(roomName, players);
-      res.cookie("room", String.valueOf(hashKey));
-      roomReadiness.put(roomName, new AtomicInteger(0));
-
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
       return new ModelAndView(variables, "player_select.ftl");
     }
@@ -182,32 +175,14 @@ public final class SparkServerWithMultiplayer {
     public Object handle(Request req, Response res) {
       String id = req.cookie("id");
       String room = req.cookie("room");
-      List<Player> players = rooms.get(room);
-      assert players != null;
 
-      try {
-        ref = new Referee("new_hole1.png", "key.png");
-      } catch (IOException e) {
-        System.out.println("ERROR: Files could not be opened.");
-      }
+      assert rooms.get(room) != null;
+      List<Player> players = rooms.get(room).getPlayers();
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players,
           "id", id);
       return GSON.toJson(variables);
-    }
-  }
-
-  /**
-   * Temporary Handler for unimplemented buttons.
-   * @author Beverly
-   */
-  private static class TempHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
-      return new ModelAndView(variables, "temp.ftl");
     }
   }
 
@@ -249,7 +224,6 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       start = true;
-
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "hostlobby.ftl");
     }
@@ -264,42 +238,18 @@ public final class SparkServerWithMultiplayer {
     public Object handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
+      int id = Integer.parseInt(req.cookie("id"));
       String word = qm.value("word");
 
       String room = req.cookie("room");
-      List<Player> players = rooms.get(room);
-      int id = Integer.parseInt(req.cookie("id"));
-      Player myPlayer = players.get(id);
-      int oldX = myPlayer.getX();
-      int oldY = myPlayer.getY();
-      Terrain oldTerrain = myPlayer.getTerrain();
-
-      int count = ref.swing(myPlayer, word, angle); //TODO: error handling
-      System.out.println("count: " + count);
-      myPlayer.setReady(true);
-
-      System.out.println("atomic integer for " + id + " in swing handler before wait: " + roomReadiness.get(room).get());
-      waitUntilAllPlayersReady(room, String.valueOf(id));
-      System.out.println("atomic integer for " + id + " in swing handler after wait: " + roomReadiness.get(room).get());
-
-      //TODO: not all players get the correct information - they all technically need the same 'templist'
-      final List<Player> tempList = new ArrayList<>();
-      for (Player player : players) {
-        tempList.add(new PlayerType1(player));
-      }
+      Game game = rooms.get(room);
+      List<Player> players = game.swing(id, word, angle);
 
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
-          .put("players", tempList)
-          .put("distance", count*3.5) //scale factor
+          .put("players", players)
           .build();
-
-      if (myPlayer.getTerrain() == Terrain.WATER) {
-        myPlayer.setX(oldX);
-        myPlayer.setY(oldY);
-        myPlayer.setTerrain(oldTerrain);
-      }
-
+      game.checkResetState();
       return GSON.toJson(variables);
     }
   }
@@ -310,23 +260,28 @@ public final class SparkServerWithMultiplayer {
       QueryParamsMap qm = req.queryMap();
       String roomName = qm.value("room");
       String playerName = qm.value("player");
-      boolean success = !rooms.containsKey(roomName);
+      boolean success;
 
-      if (success) {
-        List<Player> playerList = new ArrayList<>();
-        Player player = new PlayerType1(playerName, "0");
-        playerList.add(player);
-        rooms.put(roomName, playerList);
-        roomReadiness.put(roomName, new AtomicInteger(0));
+      try {
+        success = !rooms.containsKey(roomName);
+        if (success) {
+          Game game = new Game("new_hole1.png", "key.png");
+          game.addPlayer(playerName);
+          rooms.put(roomName, game);
 
-        res.cookie("id", String.valueOf(0));
-        res.cookie("room", roomName);
+          res.cookie("id", String.valueOf(0));
+          res.cookie("room", roomName);
+        }
+      } catch (IOException e) {
+        success = false;
+        System.out.println("ERORR: Issue loading level.");
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", success).build();
       return GSON.toJson(variables);
     }
+
   }
 
   private static class JoinHandler implements Route {
@@ -340,14 +295,12 @@ public final class SparkServerWithMultiplayer {
       boolean roomFull = false;
 
       if (roomExists) {
-        List<Player> room = rooms.get(roomName);
+        Game game = rooms.get(roomName);
 
-        if (room.size() < MAX_PLAYERS) {
-          res.cookie("id", String.valueOf(room.size()));
+        String id = game.addPlayer(playerName);
+        if (id != null) {
+          res.cookie("id", id);
           res.cookie("room", roomName);
-          Player player = new PlayerType1(playerName, String.valueOf(room.size()));
-          room.add(player);
-
         } else {
           roomFull = true;
         }
@@ -367,26 +320,18 @@ public final class SparkServerWithMultiplayer {
       String room = req.cookie("room");
 
       assert rooms.get(room) != null;
-      List<Player> players = rooms.get(room);
-      Player thisPlayer = players.get(Integer.parseInt(id));
-      thisPlayer.setReady(true);
-      boolean allOtherPlayersReady = true;
+      Game game = rooms.get(room);
 
-      // we can indicate which players are not ready if we want
-      for (int i = 0; i < players.size(); i++) {
-        Player player = players.get(i);
-        if (!player.equals(thisPlayer)) {
-          allOtherPlayersReady = allOtherPlayersReady && player.isReady();
-        }
-      }
-      if (!allOtherPlayersReady) {
-        thisPlayer.setReady(false);
-      } else {
-        roomReadiness.get(room).addAndGet(1);
+      boolean allOtherPlayersReady = false;
+      List<Player> unreadyPlayers = game.hostStart(id);
+      if (unreadyPlayers.isEmpty()) {
+        allOtherPlayersReady = true;
       }
 
+      game.resetReadinessAndState();
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("startGame", allOtherPlayersReady).build();
+          .put("startGame", allOtherPlayersReady)
+          .put("unreadyPlayers", unreadyPlayers).build();
 
       return GSON.toJson(variables);
     }
@@ -398,11 +343,8 @@ public final class SparkServerWithMultiplayer {
       String id = req.cookie("id");
       String room = req.cookie("room");
 
-      List<Player> players = rooms.get(room);
-      Player thisPlayer = players.get(Integer.parseInt(id));
-      thisPlayer.setReady(true);
-
-      waitUntilAllPlayersReady(room, id);
+      Game game = rooms.get(room);
+      game.playerReady(id);
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", true).build();
@@ -410,96 +352,4 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
-  //  private static void waitForStart(String room) {
-  //    List<Player> players = rooms.get(room);
-  //    boolean allPlayersReady = false;
-  //
-  //    assert roomReadiness.get(room) != null;
-  //    assert players != null;
-  //
-  //    while (!allPlayersReady) {
-  //      allPlayersReady = true;
-  //
-  //      for (Player player : players) {
-  //        if (!player.isReady()) {
-  //          allPlayersReady = false;
-  //        }
-  //      }
-  //    }
-  //
-  //    for (Player player : players) {
-  //      player.setReady(false);
-  //    }
-  //  }
-
-
-  /**
-   * Holds a thread until all players in a particular room are ready.
-   * @param room The room of players to wait on.
-   */
-  private static void waitUntilAllPlayersReady(String room, String id) { // TODO: get rid of giving String id - just used for testing
-    List<Player> players = rooms.get(room);
-    boolean allPlayersReady = false;
-
-    assert roomReadiness.get(room) != null;
-    assert players != null;
-
-    while (!allPlayersReady) {
-      allPlayersReady = true;
-
-      for (int i = 0; i < players.size(); i++) {
-        if (!players.get(i).isReady()) {
-          allPlayersReady = false;
-        }
-      }
-    }
-
-    Integer playersDone = roomReadiness.get(room).addAndGet(1);
-    System.out.println("Players done var for id: " + id + " " + playersDone);
-    System.out.println(getActivePlayerCount(players)); // TODO: this may be wrong (check when someone wins)
-    if (playersDone == getActivePlayerCount(players)) {
-      for (Player player : players) {
-        if (player.isGameOver()) {
-          player.setReady(true);
-        } else {
-          player.setReady(false);
-        }
-      }
-      roomReadiness.get(room).set(0);
-    }
-  }
-
-  /**
-   * Returns number of players still playing.
-   * @return number of players playing
-   */
-  private static int getActivePlayerCount(List<Player> players) {
-    int count = 0;
-
-    for (Player player : players) {
-      if (!player.isGameOver()) {
-        count++;
-      }
-    }
-
-    return count;
-  }
-
-  //  private static void waitUntilAllPlayersReady(String room) {
-  //    List<Player> players = rooms.get(room);
-  //    boolean allPlayersReady = false;
-  //
-  //    while (!allPlayersReady) {
-  //      allPlayersReady = true;
-  //
-  //      for (Player player : players) {
-  //        List<Integer> rounds = playerReadiness.get(player);
-  //        int currRound = rounds.get(0);
-  //
-  //        if (rounds.get(currRound) > rounds.size()) {
-  //          allPlayersReady = false;
-  //        }
-  //      }
-  //    }
-  //  }
 }

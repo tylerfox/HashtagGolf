@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.hashtaggolf.Player;
-import edu.brown.hashtaggolf.PlayerType1;
+import edu.brown.hashtaggolf.Player;
 import edu.brown.hashtaggolf.Referee;
 import edu.brown.hashtaggolf.Terrain;
 import freemarker.template.Configuration;
@@ -146,7 +146,7 @@ public final class SparkServer {
       } catch (IOException e) {
         System.out.println("ERROR: Files could not be opened.");
       }
-      myPlayer = new PlayerType1("Brandon", "");
+      myPlayer = new Player("Brandon", "");
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return GSON.toJson(variables);
     }
@@ -226,7 +226,7 @@ public final class SparkServer {
       if (count == -4) {
         outofbounds = true;
       }
-      final Player tempPlayer = new PlayerType1(myPlayer);
+      final Player tempPlayer = new Player(myPlayer);
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("myPlayer", tempPlayer).put("outOfBounds", outofbounds)
           .put("gameOver", tempPlayer.isGameOver()).build();
@@ -251,7 +251,7 @@ public final class SparkServer {
         rooms.put(roomName, playerList);
         res.cookie("id", String.valueOf(0));
         res.cookie("room", roomName);
-        playerList.add(new PlayerType1(playerName, ""));
+        playerList.add(new Player(playerName, ""));
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
@@ -276,7 +276,7 @@ public final class SparkServer {
         if (game.size() < MAX_PLAYERS) {
           res.cookie("id", String.valueOf(game.size()));
           res.cookie("room", roomName);
-          game.add(new PlayerType1(playerName, ""));
+          game.add(new Player(playerName, ""));
         } else {
           roomFull = true;
         }
