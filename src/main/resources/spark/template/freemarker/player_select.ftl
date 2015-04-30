@@ -12,8 +12,7 @@
          <link rel="stylesheet" href="css/player_select.css">
        </head>
        <body>
-        <button onclick="back()" class="myButton backbutton"> back </button>
-        <a href="/start" class= "myButton menubutton"> menu </a>
+        <button onclick="start()" class= "myButton menubutton"> menu </button>
         <div id="container">
           <div id ="background">
             <h1> choose a player </h1>

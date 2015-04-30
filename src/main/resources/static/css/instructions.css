@@ -13,6 +13,14 @@ p{
 	font-family:"Comics";
 }
 
+div {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 600px;
+	background-color: rgba(255,255,255,.9);
+	
+}
+
 #firstpara {
 	margin-top:100px;
 }
