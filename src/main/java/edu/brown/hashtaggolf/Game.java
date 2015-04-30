@@ -58,9 +58,13 @@ public class Game {
 
     // makes copies of all players
     List<Player> tempList = new ArrayList<>();
+    System.out.println("Temp List for id: " + id);
     for (int i = 0; i < players.size(); i++) {
+      System.out.println("id:" + i + " " + players.get(i).getX() + " " + players.get(i).getY());
       tempList.add(new Player(players.get(i)));
     }
+
+    roomReadiness.addAndGet(1);
     return tempList;
   }
 
@@ -76,14 +80,18 @@ public class Game {
         }
       }
     }
-
-    roomReadiness.addAndGet(1);
   }
 
   public void checkResetState() {
-    if (roomReadiness.get() == getActivePlayerCount(players)) {
+    int activePlayers = getActivePlayerCount(players);
+    if (roomReadiness.get() >= activePlayers) {
       resetReadinessAndState();
-      System.out.println("resetting readiness and state");
+      System.out.println("Resetting readiness and state.");
+      if(activePlayers < roomReadiness.get()) {
+        System.err.println("ROOMREADINESS GREATER THAN NUM PLAYERS?");
+      }
+    } else {
+      System.out.println("NOT resetting readiness and state");
     }
   }
 
@@ -91,7 +99,6 @@ public class Game {
    * Sets all the readiness of all activePlayers to false.
    */
   public void resetReadinessAndState() {
-    System.out.println("Resetting readiness and state.");
     for (Player player : players) {
       if (player.isGameOver()) {
         player.setReady(true);
@@ -111,9 +118,8 @@ public class Game {
         player.setY(oldPlayer.getY());
         player.setTerrain(oldPlayer.getTerrain());
       }
-      savedState = new Player[numPlayers];
     }
-
+    savedState = new Player[numPlayers];
   }
 
 
@@ -163,6 +169,7 @@ public class Game {
     myPlayer.setReady(true);
 
     waitUntilAllPlayersReady();
+    roomReadiness.addAndGet(1);
     System.out.println("Done waiting for all players.");
   }
 

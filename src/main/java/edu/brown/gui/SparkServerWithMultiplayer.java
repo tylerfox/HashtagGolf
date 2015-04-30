@@ -136,7 +136,7 @@ public final class SparkServerWithMultiplayer {
       Game game;
       try {
         game = new Game("new_hole1.png", "key.png");
-        game.addPlayer("Player 1");
+        game.addPlayer("Tiger");
 
         int hashKey = game.hashCode();
         while (rooms.containsKey(hashKey)) {
@@ -236,6 +236,7 @@ public final class SparkServerWithMultiplayer {
 
     @Override
     public Object handle(Request req, Response res) {
+      try {
       QueryParamsMap qm = req.queryMap();
       double angle = Double.parseDouble(qm.value("angle"));
       int id = Integer.parseInt(req.cookie("id"));
@@ -249,8 +250,14 @@ public final class SparkServerWithMultiplayer {
           new ImmutableMap.Builder<String, Object>()
           .put("players", players)
           .build();
+
       game.checkResetState();
+
       return GSON.toJson(variables);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return null;
     }
   }
 
@@ -328,11 +335,11 @@ public final class SparkServerWithMultiplayer {
         allOtherPlayersReady = true;
       }
 
-      game.resetReadinessAndState();
+      game.checkResetState();
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("startGame", allOtherPlayersReady)
           .put("unreadyPlayers", unreadyPlayers).build();
-
+      System.out.println("Host ready!");
       return GSON.toJson(variables);
     }
   }
@@ -347,6 +354,8 @@ public final class SparkServerWithMultiplayer {
       game.playerReady(id);
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", true).build();
+      System.out.println("PlayerReady!!");
+      game.checkResetState();
       return GSON.toJson(variables);
     }
   }

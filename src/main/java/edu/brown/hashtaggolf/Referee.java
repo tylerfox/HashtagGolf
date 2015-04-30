@@ -69,7 +69,7 @@ public class Referee {
     int newY = player.getY()
         - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
 
-    System.out.println("Ball hit to (" + newX + ", " + newY + ")");
+    //System.out.println("Ball hit to (" + newX + ", " + newY + ")");
     Terrain newTerrain = image.getTerrainAt(newX, newY);
 
     switch (newTerrain) {
@@ -83,9 +83,10 @@ public class Referee {
         player.setTerrain(newTerrain);
     }
 
-    System.out.println(newTerrain);
+    //System.out.println(newTerrain);
     System.out.println("You are now at (" + player.getX() + ", "
         + player.getY() + ")");
+    player.isGameOver();
     return yards;
   }
 
@@ -101,20 +102,23 @@ public class Referee {
     int seconds;
     switch (t) {
       case BUNKER:
-        seconds = 45;
+        seconds = 30;
         break;
       case ROUGH:
-        seconds = 50;
+        seconds = 45;
         break;
       case WATER:
-        seconds = 45;
+        seconds = 35;
         break;
       default:
         seconds = 60;
     }
     try {
-      return player.powerup(tq.getCount(word, seconds));
+      int count = tq.getCount(word, seconds);
+      System.out.println(count);
+      return player.powerup(count);
     } catch (TwitterException e) {
+      e.printStackTrace();
       if (e.isCausedByNetworkIssue()) {
         return -1;
       } else if (e.getStatusCode() == 403) {
