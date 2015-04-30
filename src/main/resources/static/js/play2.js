@@ -242,7 +242,8 @@ function enableSwingButton() {
 	} else if (myPlayer.terrain == "GREEN") {
 		terrainpic.setAttribute("class", "terrain_green");
 		terrainpic.innerHTML = "your ball is on<br> the green";
-    if (oldterrain != "terrain_green") {
+    console.log(disttohole);
+    if (oldterrain != "terrain_green" && disttohole > 10) {
       switch (random) {
         case 1: messagepopup("it's all putting from here!");
         break;

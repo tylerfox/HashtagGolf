@@ -16,9 +16,10 @@ p{
 }
 
 #nextbtn {
-	position:absolute;
-	top:30px;
-	left: 200px;
+	position:relative;
+	margin:20px;
+	/*top:30px;
+	/*left: 200px;*/
 }
 
 #para1 {
