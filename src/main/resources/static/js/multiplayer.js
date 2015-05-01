@@ -83,6 +83,14 @@ function readyToPlay() {
 
 }
 
+function exit() {
+	var postParameters = {};
+	$.post("/exit", postParameters, function(responseJSON){
+		 window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+	});
+	
+}
+
 
 
 

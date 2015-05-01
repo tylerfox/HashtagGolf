@@ -58,9 +58,7 @@ public class Game {
 
     // makes copies of all players
     List<Player> tempList = new ArrayList<>();
-    System.out.println("Temp List for id: " + id);
     for (int i = 0; i < players.size(); i++) {
-      System.out.println("id:" + i + " " + players.get(i).getX() + " " + players.get(i).getY());
       tempList.add(new Player(players.get(i)));
     }
 
@@ -79,6 +77,13 @@ public class Game {
           allPlayersReady = false;
         }
       }
+
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        System.out.println("ERROR: issue sleeping"
+            + " thread in wait until all players ready.");
+      }
     }
   }
 
@@ -86,12 +91,6 @@ public class Game {
     int activePlayers = getActivePlayerCount(players);
     if (roomReadiness.get() >= activePlayers) {
       resetReadinessAndState();
-      System.out.println("Resetting readiness and state.");
-      if(activePlayers < roomReadiness.get()) {
-        System.err.println("ROOMREADINESS GREATER THAN NUM PLAYERS?");
-      }
-    } else {
-      System.out.println("NOT resetting readiness and state");
     }
   }
 

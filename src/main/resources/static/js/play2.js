@@ -24,6 +24,21 @@ var id; // this is a string
 var distance = 0;
 var disttohole;
 var playerId;
+var gameover = false;
+
+window.onbeforeunload = function (e) {
+	var e = e || window.event;
+	console.log(e);
+	
+	//IE & Firefox
+	if (e && !gameover) {
+		var postParameters = {};
+		$.post("/exit", postParameters, function(responseJSON){
+			
+		});
+	}
+};
+
 
 var postParameters = { };
 $.post("/setup", postParameters, function(responseJSON){

@@ -29,7 +29,6 @@ public final class SparkServerWithMultiplayer {
   private static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
   private static Map<String, Game> rooms;
-//  private static boolean start = false;
   private static String color = "white";
 
 
@@ -42,9 +41,7 @@ public final class SparkServerWithMultiplayer {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-    //allRooms = new HashMap<>();
     rooms = new HashMap<>();
-    //roomReadiness = new HashMap<>();
 
     // Pages
     Spark.get("/", new FrontPageHandler(), freeMarker);
@@ -63,10 +60,12 @@ public final class SparkServerWithMultiplayer {
 
 
     // Front End Requesting Information
+
     Spark.post("/setup", new SetupHandler());
     Spark.post("/swing", new SwingHandler());
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
+    Spark.post("/exit", new ExitHandler());
 
     Spark.post("/hoststart", new HostStartHandler());
     Spark.post("/ready", new PlayerReadyHandler());
@@ -186,6 +185,23 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
+  private static class ExitHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      System.out.println("Exit handler");
+      String id = req.cookie("id");
+      String room = req.cookie("room");
+
+      assert rooms.get(room) != null;
+      List<Player> players = rooms.get(room).getPlayers();
+
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "color", color, "players", players,
+          "id", id);
+      return GSON.toJson(variables);
+    }
+  }
+
   /**
    * Uses template for FrontHandler.
    * @return FreeMarkerEngine to use for FrontHandler
@@ -209,12 +225,6 @@ public final class SparkServerWithMultiplayer {
   private static class LobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-//      while (!start) {
-//        if (start) {
-//          break;
-//        }
-//      }
-
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "lobby.ftl");
     }
@@ -223,7 +233,6 @@ public final class SparkServerWithMultiplayer {
   private static class HostLobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-//      start = true;
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "hostlobby.ftl");
     }
@@ -339,7 +348,6 @@ public final class SparkServerWithMultiplayer {
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("startGame", allOtherPlayersReady)
           .put("unreadyPlayers", unreadyPlayers).build();
-      System.out.println("Host ready!");
       return GSON.toJson(variables);
     }
   }
@@ -354,7 +362,6 @@ public final class SparkServerWithMultiplayer {
       game.playerReady(id);
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", true).build();
-      System.out.println("PlayerReady!!");
       game.checkResetState();
       return GSON.toJson(variables);
     }
