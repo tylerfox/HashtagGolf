@@ -1,3 +1,5 @@
+document.getElementById("playbutton").disabled = true;
+
 function chooselevel(lvl) {
 	postParameters={"level":lvl};
 	levelimg = document.getElementById("levelimage");
@@ -14,11 +16,11 @@ function chooselevel(lvl) {
 		leveldescrip.innerHTML = "level 2: par: 5 distance to hole: 824 yards";
 		playbtn.disabled = false;
 		break;
-		case "3": levelimg.style.background = "white";
+		case "3": levelimg.style.background = "none";
 		leveldescrip.innerHTML = "level not yet made";
 		playbtn.disabled = true;
 		break;
-		case "4": levelimg.style.background = "white";
+		case "4": levelimg.style.background = "none";
 		leveldescrip.innerHTML = "level not yet made";
 		playbtn.disabled = true;
 		break;
