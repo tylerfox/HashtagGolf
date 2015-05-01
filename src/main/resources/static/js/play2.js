@@ -24,7 +24,9 @@ var id; // this is a string
 var distance = 0;
 var disttohole;
 var playerId;
-var gameover = false;
+var endPlayers = {};
+var par = 3;
+var entireGameOver = false;
 
 window.onbeforeunload = function (e) {
 	var e = e || window.event;
@@ -34,37 +36,45 @@ window.onbeforeunload = function (e) {
 	if (e && !gameover) {
 		var postParameters = {};
 		$.post("/exit", postParameters, function(responseJSON){
-			
 		});
 	}
 };
 
+function displayScorecard() {
+	$('#basic-modal-content').modal();
+	var playerInfo = "<h3>par: " + par + "</h3><br>";
+	for (var i = 0; i < players.length; i++) {
+		var name = endPlayers[i].name.toLowerCase();
+		playerInfo = playerInfo + name + ": " + endPlayers[i].stroke + "<br>";
+	}
+	document.getElementById("info").innerHTML = playerInfo;
+}
 
-var postParameters = { };
+var postParameters = {};
 $.post("/setup", postParameters, function(responseJSON){
 	responseObject = JSON.parse(responseJSON);
 	id = responseObject.id;
 	players = responseObject.players;
 
 	if (players.length == 1) {
-		createBall(responseObject.color, id);
+		createBall(responseObject.color, id, 2);
 	} else {
 		var colors = ["red", "blue", "green", "yellow"];
 		for (var i = 0; i < players.length; i++) {
 			console.log("drawing player " + i + "'s ball!");
 			if (id != i.toString()) {
-				createBall(colors[i], i.toString());
+				createBall(colors[i], i.toString(), 2);
 			}
 		}
 
 		// draws your ball on top of everyone else's ball
-		createBall(colors[parseInt(id)], id);
+		createBall(colors[parseInt(id)], id, "front");
 	}
 	disttohole = calcDistToHole(balls[id]);
 	document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 });
 
-function createBall(color, id) {
+function createBall(color, id, z) {
 	var ballcolor = "#fff";
 	switch(color) {
 	case "white": ballcolor = "#fff";
@@ -89,7 +99,8 @@ function createBall(color, id) {
 		x: START_X,
 		y: START_Y,
 		radius: 5,
-		fill: ballcolor
+		fill: ballcolor,
+		zIndex: z
 	}).add();
 
 	balls[id] = newBall;
@@ -313,14 +324,20 @@ function rollIn(ball, playerId) {
 				duration: "normal",
 				easing: "linear",
 				callback: function () {
-					console.log(playerId);
-					console.log(id);
+
 					if (playerId == id) {
+						endPlayers[parseInt(playerId)] = players[playerId];
 						alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
-						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+						//window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 					} else {
+						endPlayers[parseInt(playerId)] = players[playerId];
 						alert(players[playerId].name + " finished in " + players[playerId].stroke + " strokes!");
 					}
+					
+					if (entireGameOver) {
+						displayScorecard();
+					}
+					
 				}
 			});
 		}
@@ -451,7 +468,7 @@ function messagepopup(message){
 }
 messagepopup("let's play!");
 
-function swing() { 
+function swing() {
 	var word = document.getElementById("tweetme").value.toLowerCase();
 
 	if (!linetoggleable) {
@@ -479,15 +496,14 @@ function swing() {
 
 			// multiplayer: 
 			$.post("/swing", postParameters, function(responseJSON) {
-
 				var responseObject = JSON.parse(responseJSON);
 				var newPlayers = responseObject.players;
 				var myPlayer = newPlayers[parseInt(id)];
+				entireGameOver = responseObject.entireGameOver;
 
 				// my player
 				//setTimeout(function() {
-				if (myPlayer.isGameOver) {
-					console.log("Yay!  your game is over.");
+				/*if (myPlayer.isGameOver) {
 					moveBall(balls[id], hole_x, hole_y, myPlayer);
 				} else if (myPlayer.outOfBounds) {
 					moveBall(balls[id],
@@ -501,19 +517,18 @@ function swing() {
 					moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer);      
 					addStroke(1);
 				}
-				//}, 2000);
+				//}, 2000);*/
 
-				// all other players go after
-				for (var i = 0; i < players.length; i++) {
-					animateOthers(i);
-				}
+				// all players go
+				//for (var i = 0; i < players.length; i++) {
+				animateBalls(0);
+				//}
 				//note: players keys = String, newPlayers keys = numerical
 				players = newPlayers;
 
-				function animateOthers(i) {
-					if(i.toString() != id) {
-						console.log("i: " + i);
-						console.log("id: " + id);
+				function animateBalls(i) {
+					//if(i.toString() != id) {
+					if (i != players.length) {
 						var otherPlayerOld = players[i.toString()];
 						var otherPlayerNew = newPlayers[i];
 						if (!otherPlayerOld.isGameOver) {
@@ -530,6 +545,7 @@ function swing() {
 									console.log(balls[i]);
 									moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
 								}
+								animateBalls(i + 1);
 							}, 4000);
 						}
 					}
