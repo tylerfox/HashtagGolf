@@ -547,10 +547,8 @@ function postSwing(postParameters) {
 		entireGameOver = responseObject.entireGameOver;
 		var oldPlayers = players;
 		
-		console.log(players.length);
-		console.log("before animate balls");
+		console.log(balls[id]);
 		animateBalls(0);
-		console.log("after animate balls");
 
 		function animateBalls(i) {
 			var timeDelay = 1;
@@ -570,8 +568,11 @@ function postSwing(postParameters) {
 							if (otherPlayerNew.id == id) {
 								addStroke(2);
 							}
-							moveBall(balls[i], (balls[i].x + 1000*Math.cos(angle*Math.PI / 180)), 
-									balls[i].y + 1000*Math.sin(angle*Math.PI / 180),
+							console.log(balls[i].x + 1000*Math.cos(angle*Math.PI / 180));
+							console.log(balls[i].y + 1000*Math.sin(angle*Math.PI / 180));
+							console.log(angle);
+							moveBall(balls[i], balls[i].x + 1000*Math.cos(angle*Math.PI / 180), 
+									balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
 									otherPlayerNew);
 						} else {
 							if (otherPlayerNew.id == id) {

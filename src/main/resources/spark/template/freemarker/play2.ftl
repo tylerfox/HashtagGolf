@@ -22,7 +22,7 @@
         
           <p id="mymessage">Message!</p>
         <div id="container1">
-          <button class="myButton" onclick="start()"> menu </button>
+          <button class="myButton menubutton" onclick="start()"> menu </button>
 
           <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
           <p class="hud" id= "parhud"> par#: 3</p>
