@@ -260,12 +260,13 @@ public final class SparkServerWithMultiplayer {
       Game game = rooms.get(room);
       List<Player> players = game.swing(id, word, angle);
 
+      game.checkResetState();
+      
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("players", players)
+          .put("entireGameOver", game.isGameOver())
           .build();
-
-      game.checkResetState();
 
       return GSON.toJson(variables);
       } catch (Exception e) {

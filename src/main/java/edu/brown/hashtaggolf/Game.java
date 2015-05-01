@@ -26,6 +26,10 @@ public class Game {
   public AtomicInteger getNumPlayers() {
     return numPlayers;
   }
+  
+  public boolean isGameOver() {
+    return getActivePlayerCount() == 0;
+  }
 
   /**
    * Adds a player to the player list.
