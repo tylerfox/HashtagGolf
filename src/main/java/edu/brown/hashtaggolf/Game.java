@@ -24,7 +24,7 @@ public class Game {
   }
   
   public void setLevel(String level, String key) throws IOException {
-    ref = new Referee(level,key);
+    ref = new Referee(level, key);
   }
 
   public AtomicInteger getNumPlayers() {
@@ -63,8 +63,9 @@ public class Game {
     ref.swing(myPlayer, word, angle);
     myPlayer.setReady(true);
 
+    System.out.println("Waiting for all players..." + id);
     waitUntilAllPlayersReady();
-
+    System.out.println("Done waiting!");
     // makes copies of all players
     List<Player> tempList = new ArrayList<>();
     for (int i = 0; i < players.size(); i++) {
@@ -78,6 +79,7 @@ public class Game {
     }
 
     roomReadiness.addAndGet(1);
+    System.out.println(id + " room readiness: " + roomReadiness.get());
     return tempList;
   }
 
