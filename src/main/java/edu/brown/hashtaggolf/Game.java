@@ -22,6 +22,10 @@ public class Game {
     activePlayerCount = 0;
     ref = new Referee(level, key);
   }
+  
+  public void setLevel(String level, String key) throws IOException {
+    ref = new Referee(level,key);
+  }
 
   public int getNumPlayers() {
     return numPlayers;

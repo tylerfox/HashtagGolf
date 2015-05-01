@@ -16,6 +16,6 @@ function choosecolor(col) {
     })
 }
 
-function play() {
-	document.location.href = "/play";
+function tolevel() {
+	document.location.href = "/level_select";
 }

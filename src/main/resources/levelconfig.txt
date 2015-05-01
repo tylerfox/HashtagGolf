@@ -1,0 +1,2 @@
+gui_hole1.png,key.png,310,355,971,350,3
+gui_hole2.png,key.png,0,0,0,0,1

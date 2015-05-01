@@ -16,7 +16,7 @@
         <div id="container1">
         <button onclick="start()" class= "myButton menubutton"> menu </button>
           <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
-          <p class="hud"> par#: 3</p>
+          <p class="hud" id= "parhud"> par#: 3</p>
           <p class="hud" id="strokehud"> stroke#: 1</p>
         </div>
         <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
