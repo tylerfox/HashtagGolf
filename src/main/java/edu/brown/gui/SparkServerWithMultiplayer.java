@@ -41,6 +41,7 @@ public final class SparkServerWithMultiplayer {
   private static int startx = 0;
   private static int starty = 0;
   private static int par = 0;
+  private static String guihole = "gui_hole1.png";
 
 
   /**
@@ -161,6 +162,7 @@ public final class SparkServerWithMultiplayer {
           starty = Integer.parseInt(readarr[3]);
           holex = Integer.parseInt(readarr[4]);
           holey = Integer.parseInt(readarr[5]);
+          guihole = readarr[6];
         } catch (IOException e1) {
           System.out.println("failed");
         }
@@ -234,6 +236,7 @@ public final class SparkServerWithMultiplayer {
           .put("startx", startx)
           .put("starty", starty)
           .put("par", par)
+          .put("guihole",guihole)
           .build();
       return GSON.toJson(variables);
     }

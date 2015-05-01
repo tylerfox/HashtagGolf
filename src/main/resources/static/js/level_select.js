@@ -9,9 +9,10 @@ function chooselevel(lvl) {
 		leveldescrip.innerHTML = "level 1: par: 3 distance to hole: 661 yards";
 		playbtn.disabled = false;
 		break;
-		case "2": levelimg.style.background = "white";
-		leveldescrip.innerHTML = "level not yet made";
-		playbtn.disabled = true;
+		case "2": levelimg.style.backgroundImage = "url(css/gui_hole2.png)";
+		levelimg.style.backgroundSize = "512px 288px";
+		leveldescrip.innerHTML = "level 2: par: 5 distance to hole: 808 yards";
+		playbtn.disabled = false;
 		break;
 		case "3": levelimg.style.background = "white";
 		leveldescrip.innerHTML = "level not yet made";

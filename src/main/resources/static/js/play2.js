@@ -61,6 +61,7 @@ $.post("/setup", postParameters, function(responseJSON){
 	START_Y = responseObject.starty;
 	hole_x = responseObject.holex;
 	hole_y = responseObject.holey;
+	document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;
 	document.getElementById("parhud").innerHTML = "par#: " + responseObject.par;
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
