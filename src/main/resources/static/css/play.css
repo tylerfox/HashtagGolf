@@ -13,6 +13,7 @@
 	height: 40px;
 	margin :50px;
 	padding:8px 36px;
+	vertical-align: middle;
 }
 
 body {
@@ -31,8 +32,9 @@ body {
 
 #container1 {
 	position: relative;
-	width: 100%;
+	width: 1280px;
 	text-align: center;
+	/*right:100px;*/
 }
 
 #container2 {
@@ -46,7 +48,8 @@ body {
 	position:absolute;
 	left: 0px;
 	top:0px;
-	overflow-y: hidden;
+	/*overflow-y: hidden;*/
+	vertical-align: middle;
 	margin:0;
 	z-index:-1;
 }
@@ -59,19 +62,17 @@ body {
 	text-align: center;*/
 	width: 30px;
 	height: 30px;
+	vertical-align: middle;
 }
 
-/*label{
-	position: absolute;
-	left:52%;
-	top:540px;
-	z-index: 30;
-	text-align: center;
-}*/
+label{
+	margin-right:30px;
+}
 
 p {
 	font-size:20pt;
 	float: right;
+	margin-right: 200px;
 	background-color: white;
 	/*height: 50px;*/
 	margin: 30px;
@@ -96,6 +97,8 @@ p {
 
 .load-button.zoom-in {
 	overflow: hidden;
+	vertical-align: middle;
+	margin-right:30px;
 }
 	.load-button.zoom-in .spinner {		
 		margin-left: -65px;
