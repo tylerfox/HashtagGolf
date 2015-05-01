@@ -132,9 +132,9 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       res.cookie("id", "0");
-      Game game;
+      
       try {
-        game = new Game("new_hole1.png", "key.png");
+        Game game = new Game("new_hole1.png", "key.png");
         game.addPlayer("Tiger");
 
         int hashKey = game.hashCode();
@@ -148,6 +148,7 @@ public final class SparkServerWithMultiplayer {
       } catch (IOException e) {
         System.out.println("ERROR: Issue with loading level.");
       }
+      
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
       return new ModelAndView(variables, "player_select.ftl");
     }
@@ -189,11 +190,15 @@ public final class SparkServerWithMultiplayer {
     @Override
     public Object handle(Request req, Response res) {
       System.out.println("Exit handler");
-      String id = req.cookie("id");
+      int id = Integer.parseInt(req.cookie("id"));
       String room = req.cookie("room");
-
-      assert rooms.get(room) != null;
-      List<Player> players = rooms.get(room).getPlayers();
+      
+      Game game = rooms.get(room);
+      assert game != null;
+      
+      List<Player> players = game.getPlayers();
+      players.set(id, null);
+      game.decrementNumPlayers();
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players,
@@ -290,14 +295,13 @@ public final class SparkServerWithMultiplayer {
         }
       } catch (IOException e) {
         success = false;
-        System.out.println("ERORR: Issue loading level.");
+        System.out.println("ERROR: Issue loading level.");
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("success", success).build();
       return GSON.toJson(variables);
     }
-
   }
 
   private static class JoinHandler implements Route {
@@ -366,5 +370,4 @@ public final class SparkServerWithMultiplayer {
       return GSON.toJson(variables);
     }
   }
-
 }

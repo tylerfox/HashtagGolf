@@ -19,7 +19,7 @@
           <p class="hud"> par#: 3</p>
           <p class="hud" id="strokehud"> stroke#: 1</p>
         </div>
-        <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
+        <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
         <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
         <div id="container2">
           <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee</div>

@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 
 import edu.brown.hashtaggolf.Player;
-import edu.brown.hashtaggolf.Player;
 import edu.brown.hashtaggolf.Referee;
 import edu.brown.hashtaggolf.Terrain;
 import freemarker.template.Configuration;
