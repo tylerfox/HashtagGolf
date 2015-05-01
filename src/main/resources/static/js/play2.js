@@ -28,7 +28,7 @@ var endPlayers = {};
 var par = 3;
 var entireGameOver = false;
 
-window.onbeforeunload = function (e) {
+window.onbeforeunload = function(e) {
 	var e = e || window.event;
 	console.log(e);
 	
@@ -70,6 +70,7 @@ $.post("/setup", postParameters, function(responseJSON){
 		// draws your ball on top of everyone else's ball
 		createBall(colors[parseInt(id)], id, "front");
 	}
+	
 	disttohole = calcDistToHole(balls[id]);
 	document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 });
@@ -275,16 +276,16 @@ function enableSwingButton() {
 	} else if (myPlayer.terrain == "GREEN") {
 		terrainpic.setAttribute("class", "terrain_green");
 		terrainpic.innerHTML = "your ball is on<br> the green";
-		if (oldterrain != "terrain_green") {
-			switch (random) {
-			case 1: messagepopup("it's all putting from here!");
-			break;
-			case 2: messagepopup("nice setup!");
-			break;
-			case 3: messagepopup("just tap it in happy");
-			break;
-			}
-		}
+    if (oldterrain != "terrain_green" && disttohole > 10) {
+      switch (random) {
+        case 1: messagepopup("it's all putting from here!");
+        break;
+        case 2: messagepopup("nice setup!");
+        break;
+        case 3: messagepopup("just tap it in happy");
+        break;
+      }
+    }
 	} else if (myPlayer.terrain == "TEE") {
 		terrainpic.setAttribute("class", "terrain_tee");
 		terrainpic.innerHTML = "your ball is in<br> the teebox";
@@ -463,9 +464,9 @@ function messagepopup(message){
 				messagediv.style.visibility = "hidden";
 			}
 		}, 10);
-	},2000);
-
+	}, 2000);
 }
+
 messagepopup("let's play!");
 
 function swing() {
@@ -526,6 +527,7 @@ function swing() {
 				//note: players keys = String, newPlayers keys = numerical
 				players = newPlayers;
 
+<<<<<<< HEAD
 				function animateBalls(i) {
 					//if(i.toString() != id) {
 					if (i != players.length) {
@@ -547,10 +549,37 @@ function swing() {
 								}
 								animateBalls(i + 1);
 							}, 4000);
+=======
+				function animateOthers(i) {
+					if (i.toString() != id) {
+						console.log("i: " + i);
+						console.log("id: " + id);
+						
+						if (newPlayers[i] == null) {
+							balls[i].remove();
+						} else {
+							var otherPlayerOld = players[i.toString()];
+							var otherPlayerNew = newPlayers[i];
+							if (!otherPlayerOld.isGameOver) {
+								setTimeout(function() {
+									if (otherPlayerNew.isGameOver) {
+										console.log("other player wins! " + otherPlayerNew.name + " " + i);
+										moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
+									} else if (otherPlayerNew.outOfBounds || distance == -14) {
+										moveBall(balls[i], (balls[i].x + 1000 * Math.cos(angle * Math.PI / 180)), 
+												balls[i].y + 1000 * Math.sin(angle * Math.PI / 180),
+												otherPlayerNew);
+									} else {
+										console.log("ball id: " + i);
+										console.log(balls[i]);
+										moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
+									}
+								}, 4000);
+							}
+>>>>>>> origin/master
 						}
 					}
 				}
-
 			});
 		}
 	}

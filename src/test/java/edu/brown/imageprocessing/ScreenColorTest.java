@@ -35,6 +35,7 @@ public class ScreenColorTest {
   public void eclipseWindow() {
     try {
       ScreenColor screen = new ScreenColor();
+      assertTrue(screen != null);
       //assertTrue(screen.getColorAt(1595, 895).equals("Red: 31, Green: 42, Blue: 48"));
       //actually gives Red: 0, Green: 0, Blue: 0
       //assertTrue(screen.getColorAt(100, 500).equals("Red: 255, Green: 255, Blue: 255"));

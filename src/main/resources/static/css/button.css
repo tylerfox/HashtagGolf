@@ -24,9 +24,14 @@
 	/*top:1px;*/
 }
 
+.backbutton {
+	margin:20px;
+}
+
 .menubutton {
 	z-index:7;
 	margin: 20px;
+	float:left;
 }
 
 .myButtonGrey {

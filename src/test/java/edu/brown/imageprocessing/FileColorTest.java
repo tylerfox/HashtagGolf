@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import edu.brown.hashtaggolf.Terrain;
 import edu.brown.imageprocessing.FileColor;
 
 public class FileColorTest {
@@ -71,6 +70,7 @@ public class FileColorTest {
   public void whiteTerrain() {
     try {
       FileColor frenchFlag = new FileColor("French_flag_design.jpg");
+      assertTrue(frenchFlag != null);
       //assertTrue(frenchFlag.getTerrainAt(100, 50) == Terrain.TEE);
     } catch (IOException e) {
       assertTrue(false);
