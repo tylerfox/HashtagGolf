@@ -29,8 +29,8 @@ function host() {
 }
 
 function join() {
-
   var room = prompt("Room name");
+  
   if (room != null) {
     var player = prompt("Your name");
 
@@ -45,7 +45,9 @@ function join() {
       $.post("/join", postParameters, function(responseJSON) {
         var roomExists = JSON.parse(responseJSON).roomExists;
         var roomFull = JSON.parse(responseJSON).roomFull;
-        if (roomExists && !roomFull) {
+        var duplicateIp = JSON.parse(responseJSON).duplicateIp;
+        
+        if (roomExists && !roomFull && !duplicateIp) {
          //brings user to the lobby
           window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
         } else if (!roomExists) {
@@ -54,6 +56,8 @@ function join() {
         } else if (roomFull) {
           alert("This room is full. Please enter a new room name.");
           join();
+        } else if (duplicateIp) {
+          alert("You are already participating in this game in another window.");
         }
       });
     }
@@ -64,14 +68,13 @@ function startGame() {
 	var postParameters = {};
 
 	$.post("/hoststart", postParameters, function(responseJSON) {
-    var startGame = JSON.parse(responseJSON).startGame;
-    console.log(startGame);
-    if (startGame){
-      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
-    } else {
-      alert("Not all players are ready yet. Please tell all players to click the ready button.");
-    }
-		
+	    var startGame = JSON.parse(responseJSON).startGame;
+	    console.log(startGame);
+	    if (startGame){
+	      window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+	    } else {
+	      alert("Not all players are ready yet. Please tell all players to click the ready button.");
+	    }
 	});
 }
 
@@ -88,7 +91,6 @@ function exit() {
 	$.post("/exit", postParameters, function(responseJSON){
 		 window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 	});
-	
 }
 
 

@@ -7,7 +7,7 @@ public class Player {
 
   private static final int STROKE_PENALTY = 2;
   private static final double SCALE_FACTOR = 3.5;
-  private static final int WIGGLE_ROOM = 10;
+  private static final int WIGGLE_ROOM = 15;
 
   public static final int UNSET_COLOUR = 0;
   public static final int RED_BALL = 1;
