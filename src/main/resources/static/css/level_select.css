@@ -52,7 +52,7 @@ p {
 	display:inline-block;
 	vertical-align: top;
 	font-size:30pt;
-	background-image: url(gui_hole1.png);
+	/*background: white;*/
 	background-repeat: no-repeat;
 	background-size: 512px 288px;
 	position: absolute;

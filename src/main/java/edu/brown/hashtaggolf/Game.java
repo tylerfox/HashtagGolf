@@ -23,8 +23,15 @@ public class Game {
     ref = new Referee(level, key);
   }
   
-  public void setLevel(String level, String key) throws IOException {
+  public void setLevel(String level, String key, int startX, int startY, int holeX, int holeY) throws IOException {
     ref = new Referee(level,key);
+    for (Player p : players) {
+      p.setX(startX);
+      p.setY(startY);
+      p.setHoleX(holeX);
+      p.setHoleY(holeY);
+      p.setDistanceToHole(p.calcDistanceToHole());
+    }
   }
 
   public AtomicInteger getNumPlayers() {

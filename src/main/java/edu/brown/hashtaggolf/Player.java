@@ -40,10 +40,10 @@ public class Player {
 
     // TODO: will need to figure out how to set this based on the level
     this.stroke = 0;
-    this.x = 310;
-    this.y = 355;
-    this.hole_x = 968;
-    this.hole_y = 350;
+    this.x = 0;
+    this.y = 0;
+    this.hole_x = 0;
+    this.hole_y = 0;
     this.distanceToHole = calcDistanceToHole(); // yards
     this.ballColour = UNSET_COLOUR;
     this.ready = false;
@@ -212,6 +212,22 @@ public class Player {
    */
   public int getY() {
     return y;
+  }
+  
+  /**
+   * Sets the hole_x coordinate.
+   * @param hole_x the new value to set the hole_x coordinate to
+   */
+  public void setHoleX(int hole_x) {
+    this.hole_x = hole_x;
+  }
+
+  /**
+   * Sets the hole_y coordinate.
+   * @param hole_y the new value to set the hole_y coordinate to
+   */
+  public void setHoleY(int hole_y) {
+    this.hole_y = hole_y;
   }
 
   /**

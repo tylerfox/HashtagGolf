@@ -28,7 +28,7 @@
            </div>
            <div id="levelimage"></div>
            <br>
-           <p id ="leveldescript">level 1: par: 3 distance to hole: 661 yards</p>
+           <p id ="leveldescript">select a level</p>
 
          </div>
        </div>
