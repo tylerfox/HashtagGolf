@@ -55,7 +55,7 @@ function displayScorecard() {
 	var playerInfo = "<h3>par: " + par + "</h3><br>";
 	for (var i = 0; i < players.length; i++) {
 		var name = endPlayers[i].name.toLowerCase();
-		playerInfo = playerInfo + name + ": " + endPlayers[i].stroke + "<br>";
+		playerInfo = playerInfo + name + ": " + (endPlayers[i].stroke - 1) + "<br>";
 	}
 	document.getElementById("info").innerHTML = playerInfo;
 }
@@ -180,7 +180,9 @@ function moveBall(ball, dest_X, dest_Y, player) {
 				callback: function () {        
 					if (terrain === "WATER") {
 						sink(ball, preX, preY);
-						messagepopup("your ball is sleeping with the fishes!");
+						if (player.id == id) {
+							messagepopup("your ball is sleeping with the fishes!");
+						}
 					} else {
 						ball.animate({
 							x: ball.x + deltaX * .05,
@@ -243,7 +245,7 @@ function addStroke(num) {
 }
 
 function enableSwingButton() {
-	//if (players[id] != null && !players[id].isGameOver) {
+	if (players[id] != null && !players[id].isGameOver) {
 	swingButton.className = "load-button myButton zoom-in";  
 	swingButton.removeAttribute( 'data-loading'); 
 	swingButton.disabled = false;
@@ -324,7 +326,7 @@ function enableSwingButton() {
 			}
 		}
 	}
-//}
+	}
 	//end terrain
 }
 

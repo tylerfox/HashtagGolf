@@ -158,17 +158,18 @@ public final class SparkServerWithMultiplayer {
             read = reader.readLine();
             System.out.println(read);
           }
+          System.out.println(read);
 
           String[] readarr = read.split(",");
           System.out.println(readarr);
           String roomName = req.cookie("room");
           Game game = rooms.get(roomName);
-
-          game.setLevel(readarr[0], readarr[1]);
+         
           startx = Integer.parseInt(readarr[2]);
           starty = Integer.parseInt(readarr[3]);
           holex = Integer.parseInt(readarr[4]);
           holey = Integer.parseInt(readarr[5]);
+          game.setLevel(readarr[0], readarr[1], startx, starty, holex, holey);
           par = Integer.parseInt(readarr[6]);
           guihole = readarr[7];
           System.out.println(guihole);
@@ -192,25 +193,31 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String newlevel = qm.value("level");
-      if (newlevel!=null){
+      if (newlevel != null){
         levelnum = Integer.parseInt(newlevel);
+        
         try {
-          @SuppressWarnings("resource")
           BufferedReader reader = new BufferedReader(new FileReader(
               new File("src/main/resources/levelconfig.txt")));
           String read = "";
-          for (int i=0; i < levelnum; i++) {
+
+          for (int i = 0; i < levelnum; i++) {
             read = reader.readLine();
+            System.out.println(read);
           }
+          System.out.println(read);
+
           String[] readarr = read.split(",");
-          String roomName = req.cookie("room");
-          Game game = rooms.get(roomName);
-          game.setLevel(readarr[0], readarr[1]);
+
           startx = Integer.parseInt(readarr[2]);
           starty = Integer.parseInt(readarr[3]);
           holex = Integer.parseInt(readarr[4]);
           holey = Integer.parseInt(readarr[5]);
           par = Integer.parseInt(readarr[6]);
+          guihole = readarr[7];
+
+          reader.close();
+
         } catch (IOException e1) {
           System.out.println("failed");
         }
@@ -469,11 +476,13 @@ public final class SparkServerWithMultiplayer {
       if (unreadyPlayers.isEmpty()) {
         allOtherPlayersReady = true;
       }
-
-      game.checkResetState();
+      
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("startGame", allOtherPlayersReady)
           .put("unreadyPlayers", unreadyPlayers).build();
+      System.out.println("Host Readiness: " + game.getPlayers().get(Integer.parseInt(id)));
+      game.checkResetState();
+      System.out.println("Host Readiness: " + game.getPlayers().get(Integer.parseInt(id)));
       return GSON.toJson(variables);
     }
   }
