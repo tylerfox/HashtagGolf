@@ -225,6 +225,10 @@ public final class SparkServerWithMultiplayer {
   private static class LobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "lobby.ftl");
     }
