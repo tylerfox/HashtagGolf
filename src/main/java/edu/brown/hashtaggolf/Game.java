@@ -12,7 +12,7 @@ public class Game {
   private Player[] savedState;
   private List<Player> players;
   private AtomicInteger numPlayers;
- // private int activePlayerCount;
+  // private int activePlayerCount;
   private Referee ref;
   private int startX = 0;
   private int startY = 0;
@@ -23,10 +23,9 @@ public class Game {
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
-  //  activePlayerCount = 0;
     ref = new Referee(level, key);
   }
-  
+
   public void setLevel(String level,
       String key, int startX, int startY, 
       int holeX, int holeY) throws IOException {
@@ -35,7 +34,7 @@ public class Game {
     this.startY = startY;
     this.holeX = holeX;
     this.holeY = holeY;
-    
+
     for (Player p : players) {
       p.setX(startX);
       p.setY(startY);
@@ -48,7 +47,7 @@ public class Game {
   public AtomicInteger getNumPlayers() {
     return numPlayers;
   }
-  
+
   public boolean isGameOver() {
     return getActivePlayerCount() == 0;
   }
@@ -115,7 +114,7 @@ public class Game {
         }
       }
 
-     /* try {
+      /* try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
         System.out.println("ERROR: Issue sleeping"
