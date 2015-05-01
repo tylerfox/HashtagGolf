@@ -12,14 +12,23 @@
          <link rel="stylesheet" href="css/play.css">
        </head>
        <body>
+       
+          <!-- modal content -->
+          <div id="basic-modal-content">
+            <h1>score card</h1>
+            <h2 id="info"> congrats on completing this course! </h2>
+            <button class="myButton" onclick="start()"> menu </button>
+          </div>
+        
           <p id="mymessage">Message!</p>
         <div id="container1">
-        <button onclick="start()" class= "myButton menubutton"> menu </button>
+          <button class="myButton" onclick="start()"> menu </button>
+
           <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
           <p class="hud" id= "parhud"> par#: 3</p>
           <p class="hud" id="strokehud"> stroke#: 1</p>
         </div>
-        <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
+        <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
         <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
         <div id="container2">
           <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee</div>
@@ -30,10 +39,14 @@
         </div>
 
         <!-- Again, we're serving up the unminified source for clarity. -->
+
+        <script src='js/jquery.js'></script>   
         <script src="js/jquery-2.1.1.js"></script>
+        <script src='js/jquery.simplemodal.js'></script>    
         <script src="js/ocanvas-2.7.3.js"></script>
-        <script src="js/play2.js"></script>     
-        <script src="js/main.js"></script>   
+        <script src="js/play2.js"></script> 
+        <script src="js/main.js"></script>
+
       </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
   dealing with real world issues like old bowsers.  -->

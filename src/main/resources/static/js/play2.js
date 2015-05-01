@@ -25,8 +25,12 @@ var distance = 0;
 var disttohole;
 var playerId;
 var gameover = false;
+var displayPlayerDeparture = [true, true, true, true];
+var endPlayers = {};
+var par = 3;
+var entireGameOver = false;
 
-window.onbeforeunload = function (e) {
+window.onbeforeunload = function(e) {
 	var e = e || window.event;
 	console.log(e);
 	
@@ -34,13 +38,21 @@ window.onbeforeunload = function (e) {
 	if (e && !gameover) {
 		var postParameters = {};
 		$.post("/exit", postParameters, function(responseJSON){
-			
 		});
 	}
 };
 
+function displayScorecard() {
+	$('#basic-modal-content').modal();
+	var playerInfo = "<h3>par: " + par + "</h3><br>";
+	for (var i = 0; i < players.length; i++) {
+		var name = endPlayers[i].name.toLowerCase();
+		playerInfo = playerInfo + name + ": " + endPlayers[i].stroke + "<br>";
+	}
+	document.getElementById("info").innerHTML = playerInfo;
+}
 
-var postParameters = { };
+var postParameters = {};
 $.post("/setup", postParameters, function(responseJSON){
 	responseObject = JSON.parse(responseJSON);
 	id = responseObject.id;
@@ -51,24 +63,25 @@ $.post("/setup", postParameters, function(responseJSON){
 	hole_y = responseObject.holey;
 	document.getElementById("parhud").innerHTML = "par#: " + responseObject.par;
 	if (players.length == 1) {
-		createBall(responseObject.color, id);
+		createBall(responseObject.color, id, 2);
 	} else {
 		var colors = ["red", "blue", "green", "yellow"];
 		for (var i = 0; i < players.length; i++) {
 			console.log("drawing player " + i + "'s ball!");
 			if (id != i.toString()) {
-				createBall(colors[i], i.toString());
+				createBall(colors[i], i.toString(), 2);
 			}
 		}
 
 		// draws your ball on top of everyone else's ball
-		createBall(colors[parseInt(id)], id);
+		createBall(colors[parseInt(id)], id, "front");
 	}
+	
 	disttohole = calcDistToHole(balls[id]);
 	document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 });
 
-function createBall(color, id) {
+function createBall(color, id, z) {
 	var ballcolor = "#fff";
 	switch(color) {
 	case "white": ballcolor = "#fff";
@@ -93,7 +106,8 @@ function createBall(color, id) {
 		x: START_X,
 		y: START_Y,
 		radius: 5,
-		fill: ballcolor
+		fill: ballcolor,
+		zIndex: z
 	}).add();
 
 	balls[id] = newBall;
@@ -102,8 +116,8 @@ function createBall(color, id) {
 var canvas = oCanvas.create({ canvas: "#myCanvas"});
 
 var image = canvas.display.image({
-	x: canvas.width/2,
-	y: canvas.height/2,
+	x: canvas.width / 2,
+	y: canvas.height / 2,
 	origin: { x: "center", y: "center" },
 	image: "js/gui_hole1.png"
 }).add();
@@ -192,6 +206,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 							}
 						});
 					}
+					
 					if (distance == -14) {
 						messagepopup("ball went too far!");
 					} //else if (disttohole != 0) {
@@ -206,6 +221,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 function calcDistToHole(ball) {
 	return Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2)));
 }
+
 function addStroke(num) {
 	strokenum += num;
 	document.getElementById("strokehud").innerHTML = "stroke#: " + strokenum;
@@ -316,14 +332,25 @@ function rollIn(ball, playerId) {
 			}, {
 				duration: "normal",
 				easing: "linear",
-				callback: function () {
-					console.log(playerId);
-					console.log(id);
+				callback: function() {
+					endPlayers[parseInt(playerId)] = players[playerId];
+
 					if (playerId == id) {
-						alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
-						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+						if (strokenum == 1) {
+							alert("Congratulations, " + players[id].name + "! You got a hole-in-one!");
+						} else {
+							alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
+						}
 					} else {
-						alert(players[playerId].name + " finished in " + players[playerId].stroke + " strokes!");
+						if (players[playerId].stroke == 1) {
+							alert(players[playerId].name + " got a hole-in-one!");
+						} else {
+							alert(players[playerId].name + " finished in " + players[playerId].stroke + " strokes!");
+						}
+					}
+					
+					if (entireGameOver) {
+						displayScorecard();
 					}
 				}
 			});
@@ -450,12 +477,12 @@ function messagepopup(message){
 				messagediv.style.visibility = "hidden";
 			}
 		}, 10);
-	},2000);
-
+	}, 2000);
 }
+
 messagepopup("let's play!");
 
-function swing() { 
+function swing() {
 	var word = document.getElementById("tweetme").value.toLowerCase();
 
 	if (!linetoggleable) {
@@ -469,8 +496,8 @@ function swing() {
 	if(!isNaN(+word)) {
 		var num = +word;    
 		moveBall(balls[id], 
-				balls[id].x + num*Math.cos(angle*Math.PI / 180), 
-				balls[id].y - num*Math.sin(angle*Math.PI / 180),
+				balls[id].x + num * Math.cos(angle * Math.PI / 180), 
+				balls[id].y - num * Math.sin(angle * Math.PI / 180),
 				players[id]);
 	} else if (word == "hole!") {    
 		moveBall(balls[id], hole_x, hole_y, players[id]);
@@ -483,20 +510,19 @@ function swing() {
 
 			// multiplayer: 
 			$.post("/swing", postParameters, function(responseJSON) {
-
 				var responseObject = JSON.parse(responseJSON);
 				var newPlayers = responseObject.players;
 				var myPlayer = newPlayers[parseInt(id)];
+				entireGameOver = responseObject.entireGameOver;
 
 				// my player
 				//setTimeout(function() {
-				if (myPlayer.isGameOver) {
-					console.log("Yay!  your game is over.");
+				/*if (myPlayer.isGameOver) {
 					moveBall(balls[id], hole_x, hole_y, myPlayer);
 				} else if (myPlayer.outOfBounds) {
 					moveBall(balls[id],
-							(balls[id].x + 1000*Math.cos(angle*Math.PI / 180)),
-							balls[id].y - 1000*Math.sin(angle*Math.PI / 180),
+							(balls[id].x + 1000 * Math.cos(angle * Math.PI / 180)),
+							balls[id].y - 1000 * Math.sin(angle * Math.PI / 180),
 							myPlayer);
 					addStroke(2);
 				} else {
@@ -505,19 +531,23 @@ function swing() {
 					moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer);      
 					addStroke(1);
 				}
-				//}, 2000);
+				//}, 2000);*/
 
-				// all other players go after
-				for (var i = 0; i < players.length; i++) {
-					animateOthers(i);
-				}
+				// all players go
+				//for (var i = 0; i < players.length; i++) {
+				animateBalls(0);
+				//}
 				//note: players keys = String, newPlayers keys = numerical
 				players = newPlayers;
 
-				function animateOthers(i) {
-					if(i.toString() != id) {
-						console.log("i: " + i);
-						console.log("id: " + id);
+				function animateBalls(i) {
+					var timeDelay = 1;
+					
+					if (i > 0) {
+						timeDelay = 4000;
+					}
+					
+					if (i != players.length) {
 						var otherPlayerOld = players[i.toString()];
 						var otherPlayerNew = newPlayers[i];
 						if (!otherPlayerOld.isGameOver) {
@@ -534,11 +564,12 @@ function swing() {
 									console.log(balls[i]);
 									moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
 								}
-							}, 4000);
+								
+								animateBalls(i + 1);
+							}, timeDelay);
 						}
 					}
 				}
-
 			});
 		}
 	}
