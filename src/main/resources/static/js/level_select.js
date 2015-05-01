@@ -1,10 +1,11 @@
-document.getElementById("playbutton").disabled = true;
 
+document.getElementById("playbutton").disabled = true;
 function chooselevel(lvl) {
 	postParameters={"level":lvl};
 	levelimg = document.getElementById("levelimage");
 	leveldescrip = document.getElementById("leveldescript");
 	playbtn = document.getElementById("playbutton");
+
 	switch(lvl) {
 		case "1": levelimg.style.backgroundImage = "url(css/gui_hole1.png)";
 		levelimg.style.backgroundSize = "512px 288px";
@@ -32,4 +33,8 @@ function chooselevel(lvl) {
 
 function play() {
 	document.location.href = "/play";
+}
+
+function hostlobby() {
+	document.location.href = "/hostlobby";
 }

@@ -25,7 +25,7 @@ public class Player {
   private int hole_y;
   private int ballColour;
   private boolean ready;
-  private boolean isGameOver;
+  private boolean isGameOver = false;
   private boolean outOfBounds;
   private String id;
 
@@ -44,7 +44,7 @@ public class Player {
     this.y = 0;
     this.hole_x = 0;
     this.hole_y = 0;
-    this.distanceToHole = calcDistanceToHole(); // yards
+    this.distanceToHole = 5000;//calcDistanceToHole(); // yards
     this.ballColour = UNSET_COLOUR;
     this.ready = false;
     this.isGameOver = false;

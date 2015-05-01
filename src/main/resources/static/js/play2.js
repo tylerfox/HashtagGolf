@@ -1,10 +1,10 @@
-var START_X = 310;
-var START_Y = 355;
-var target_x = 0;
-var target_y = 0;
+var START_X;
+var START_Y;
+var target_x;
+var target_y;
 var strokenum = 1;
-var hole_x = 971;
-var hole_y = 350;
+var hole_x;
+var hole_y;
 var dest_X = hole_x;
 var dest_Y = hole_y;
 var linetoggleable = true;
@@ -32,6 +32,7 @@ var entireGameOver = false;
 var myguihole = "";
 var canvas;
 var image;
+
 window.onbeforeunload = function(e) {
 	var e = e || window.event;
 	console.log(e);
@@ -46,10 +47,8 @@ window.onbeforeunload = function(e) {
 
 function waitForOthers() {
 	disableSwingButton();
-	var postParameters = {};
-	//$.post("/watch", postParameters, function(responseJSON) {
-
-	//});
+	//var postParameters={"word":"!doneplaying!", "angle":0};
+	//postSwing(postParameters);
 }
 
 function displayScorecard() {
@@ -57,7 +56,7 @@ function displayScorecard() {
 	var playerInfo = "<h3>par: " + par + "</h3><br>";
 	for (var i = 0; i < players.length; i++) {
 		var name = endPlayers[i].name.toLowerCase();
-		playerInfo = playerInfo + name + ": " + endPlayers[i].stroke + "<br>";
+		playerInfo = playerInfo + name + ": " + (endPlayers[i].stroke - 1) + "<br>";
 	}
 	document.getElementById("info").innerHTML = playerInfo;
 }
@@ -71,12 +70,13 @@ $.post("/setup", postParameters, function(responseJSON){
 	START_Y = responseObject.starty;
 	hole_x = responseObject.holex;
 	hole_y = responseObject.holey;
+	par = responseObject.par;
 	/*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
 	/*document.getElementById("myCanvas").style.background = "white";*/
 	myguihole = "js/" + responseObject.guihole;
 	loadcanvas();
 	console.log(myguihole);
-	document.getElementById("parhud").innerHTML = "par#: " + responseObject.par;
+	document.getElementById("parhud").innerHTML = "par#: " + par;
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
 	} else {
@@ -182,7 +182,9 @@ function moveBall(ball, dest_X, dest_Y, player) {
 				callback: function () {        
 					if (terrain === "WATER") {
 						sink(ball, preX, preY);
-						messagepopup("your ball is sleeping with the fishes!");
+						if (player.id == id) {
+							messagepopup("your ball is sleeping with the fishes!");
+						}
 					} else {
 						ball.animate({
 							x: ball.x + deltaX * .05,
@@ -245,6 +247,7 @@ function addStroke(num) {
 }
 
 function enableSwingButton() {
+	if (players[id] != null && !players[id].isGameOver) {
 	swingButton.className = "load-button myButton zoom-in";  
 	swingButton.removeAttribute( 'data-loading'); 
 	swingButton.disabled = false;
@@ -325,6 +328,7 @@ function enableSwingButton() {
 			}
 		}
 	}
+	}
 	//end terrain
 }
 
@@ -359,8 +363,11 @@ function rollIn(ball, playerId) {
 							alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
 						}
 
-						if (!entireGameOver) {
-							waitForOthers();
+						if (entireGameOver) {
+							displayScorecard();
+						} else {
+							// takes out to different window - change this
+							window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 						}
 					} else {
 						if (players[playerId].stroke == 1) {
@@ -370,9 +377,7 @@ function rollIn(ball, playerId) {
 						}
 					}
 					
-					if (entireGameOver) {
-						displayScorecard();
-					}
+					
 				}
 			});
 		}
@@ -528,70 +533,62 @@ function swing() {
 			enableSwingButton();
 		} else {
 			usedWords[word]  = 1;
-
-			// multiplayer: 
-			$.post("/swing", postParameters, function(responseJSON) {
-				var responseObject = JSON.parse(responseJSON);
-				var newPlayers = responseObject.players;
-				var myPlayer = newPlayers[parseInt(id)];
-				entireGameOver = responseObject.entireGameOver;
-
-				// my player
-				//setTimeout(function() {
-				/*if (myPlayer.isGameOver) {
-					moveBall(balls[id], hole_x, hole_y, myPlayer);
-				} else if (myPlayer.outOfBounds) {
-					moveBall(balls[id],
-							(balls[id].x + 1000 * Math.cos(angle * Math.PI / 180)),
-							balls[id].y - 1000 * Math.sin(angle * Math.PI / 180),
-							myPlayer);
-					addStroke(2);
-				} else {
-					console.log(id);
-					console.log(balls[id]);
-					moveBall(balls[id], myPlayer.x, myPlayer.y, myPlayer);      
-					addStroke(1);
-				}
-				//}, 2000);*/
-
-				// all players go
-				//for (var i = 0; i < players.length; i++) {
-				animateBalls(0);
-				//}
-				//note: players keys = String, newPlayers keys = numerical
-				players = newPlayers;
-
-				function animateBalls(i) {
-					var timeDelay = 1;
-					
-					if (i > 0) {
-						timeDelay = 4000;
-					}
-					
-					if (i != players.length) {
-						var otherPlayerOld = players[i.toString()];
-						var otherPlayerNew = newPlayers[i];
-						if (!otherPlayerOld.isGameOver) {
-							setTimeout(function() {
-								if (otherPlayerNew.isGameOver) {
-									console.log("other player wins! " + otherPlayerNew.name + " " + i);
-									moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
-								} else if (otherPlayerNew.outOfBounds || distance == -14) {
-									moveBall(balls[i], (balls[i].x + 1000*Math.cos(angle*Math.PI / 180)), 
-											balls[i].y + 1000*Math.sin(angle*Math.PI / 180),
-											otherPlayerNew);
-								} else {
-									console.log("ball id: " + i);
-									console.log(balls[i]);
-									moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
-								}
-								
-								animateBalls(i + 1);
-							}, timeDelay);
-						}
-					}
-				}
-			});
+			postSwing(postParameters);
 		}
 	}
+}
+
+
+function postSwing(postParameters) {
+	$.post("/swing", postParameters, function(responseJSON) {
+		var responseObject = JSON.parse(responseJSON);
+		var newPlayers = responseObject.players;
+		var myPlayer = newPlayers[parseInt(id)];
+		entireGameOver = responseObject.entireGameOver;
+		var oldPlayers = players;
+		
+		console.log(players.length);
+		console.log("before animate balls");
+		animateBalls(0);
+		console.log("after animate balls");
+
+		function animateBalls(i) {
+			var timeDelay = 1;
+			if (i > 0) {
+				timeDelay = 4000;
+			}
+			if (i < players.length) {
+				var otherPlayerOld = oldPlayers[i.toString()];
+				var otherPlayerNew = newPlayers[i];
+				if (otherPlayerOld != null && !otherPlayerOld.isGameOver
+					&& otherPlayerNew != null) {
+					setTimeout(function() {
+						if (otherPlayerNew.isGameOver) {
+							console.log("other player wins! " + otherPlayerNew.name + " " + i);
+							moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
+						} else if (otherPlayerNew.outOfBounds || distance == -14) {
+							if (otherPlayerNew.id == id) {
+								addStroke(2);
+							}
+							moveBall(balls[i], (balls[i].x + 1000*Math.cos(angle*Math.PI / 180)), 
+									balls[i].y + 1000*Math.sin(angle*Math.PI / 180),
+									otherPlayerNew);
+						} else {
+							if (otherPlayerNew.id == id) {
+								addStroke(1);
+							}
+							moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
+						}
+						players[i] = newPlayers[i];
+						animateBalls(i + 1);
+					}, timeDelay);
+				} else {
+					players[i] = newPlayers[i];
+					animateBalls(i + 1);
+				}
+			} //else if (!entireGameOver && myPlayer != null && myPlayer.isGameOver) {
+			//	waitForOthers();
+			//}
+		}
+	});
 }

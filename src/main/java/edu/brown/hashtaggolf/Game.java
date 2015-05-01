@@ -12,19 +12,29 @@ public class Game {
   private Player[] savedState;
   private List<Player> players;
   private AtomicInteger numPlayers;
-  private int activePlayerCount;
+  // private int activePlayerCount;
   private Referee ref;
+  private int startX = 0;
+  private int startY = 0;
+  private int holeX = 0;
+  private int holeY= 0;
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
-    activePlayerCount = 0;
     ref = new Referee(level, key);
   }
-  
-  public void setLevel(String level, String key, int startX, int startY, int holeX, int holeY) throws IOException {
+
+  public void setLevel(String level,
+      String key, int startX, int startY, 
+      int holeX, int holeY) throws IOException {
     ref = new Referee(level,key);
+    this.startX = startX;
+    this.startY = startY;
+    this.holeX = holeX;
+    this.holeY = holeY;
+
     for (Player p : players) {
       p.setX(startX);
       p.setY(startY);
@@ -37,7 +47,7 @@ public class Game {
   public AtomicInteger getNumPlayers() {
     return numPlayers;
   }
-  
+
   public boolean isGameOver() {
     return getActivePlayerCount() == 0;
   }
@@ -47,10 +57,10 @@ public class Game {
    * @param player to add to the game
    * @return id of player else null
    */
-  public String addPlayer(String name) {
+  public synchronized String addPlayer(String name) {
     if (numPlayers.get() < MAX_PLAYERS) {
       String id = String.valueOf(numPlayers);
-      Player myPlayer = new Player(name, id);
+      Player myPlayer = new Player(name, id, startX, startY, holeX, holeY);
       players.add(myPlayer);
       numPlayers.getAndIncrement();
       savedState = new Player[MAX_PLAYERS];
@@ -70,8 +80,9 @@ public class Game {
     ref.swing(myPlayer, word, angle);
     myPlayer.setReady(true);
 
+    System.out.println("Waiting for all players..." + id);
     waitUntilAllPlayersReady();
-
+    System.out.println("Done waiting!");
     // makes copies of all players
     List<Player> tempList = new ArrayList<>();
     for (int i = 0; i < players.size(); i++) {
@@ -85,10 +96,11 @@ public class Game {
     }
 
     roomReadiness.addAndGet(1);
+    System.out.println(id + " room readiness: " + roomReadiness.get());
     return tempList;
   }
 
-  private void waitUntilAllPlayersReady() {
+  private synchronized void waitUntilAllPlayersReady() {
     boolean allPlayersReady = false;
 
     while (!allPlayersReady) {
@@ -102,17 +114,18 @@ public class Game {
         }
       }
 
-      try {
+      /* try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
         System.out.println("ERROR: Issue sleeping"
             + " thread in wait until all players ready.");
-      }
+      }*/
     }
   }
 
-  public void checkResetState() {
-    int activePlayers = getActivePlayerCount(players);
+  public synchronized void checkResetState() {
+    int activePlayers = getActivePlayerCount();
+    System.out.println("Number of Active Players: " + activePlayers);
     if (roomReadiness.get() >= activePlayers) {
       resetReadinessAndState();
     }
@@ -122,6 +135,7 @@ public class Game {
    * Sets all the readiness of all activePlayers to false.
    */
   public void resetReadinessAndState() {
+    System.out.println("resetting readiness and state!!");
     for (Player player : players) {
       if (player != null) {
         if (player.isGameOver()) {
@@ -154,7 +168,7 @@ public class Game {
    * Updates and returns number of players still playing.
    * @return number of players playing
    */
-  private int getActivePlayerCount(List<Player> players) {
+  private int getActivePlayerCount() {
     int count = 0;
 
     for (Player player : players) {
@@ -163,7 +177,6 @@ public class Game {
       }
     }
 
-    activePlayerCount = count;
     return count;
   }
 
@@ -188,10 +201,14 @@ public class Game {
 
     if (!allOtherPlayersReady) {
       myPlayer.setReady(false);
-    } else {
+    } else { 
       roomReadiness.addAndGet(1);
     }
-
+    /*try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      System.err.println("ERROR: Issue sleeping thread.");
+    } */
     return unreadyPlayers;
   }
 
@@ -206,10 +223,6 @@ public class Game {
     waitUntilAllPlayersReady();
     roomReadiness.addAndGet(1);
     System.out.println("Done waiting for all players.");
-  }
-
-  public int getActivePlayerCount() {
-    return activePlayerCount;
   }
 
   public void decrementNumPlayers() {
