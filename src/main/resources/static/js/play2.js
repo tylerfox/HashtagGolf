@@ -527,7 +527,6 @@ function swing() {
 				//note: players keys = String, newPlayers keys = numerical
 				players = newPlayers;
 
-<<<<<<< HEAD
 				function animateBalls(i) {
 					//if(i.toString() != id) {
 					if (i != players.length) {
@@ -549,34 +548,6 @@ function swing() {
 								}
 								animateBalls(i + 1);
 							}, 4000);
-=======
-				function animateOthers(i) {
-					if (i.toString() != id) {
-						console.log("i: " + i);
-						console.log("id: " + id);
-						
-						if (newPlayers[i] == null) {
-							balls[i].remove();
-						} else {
-							var otherPlayerOld = players[i.toString()];
-							var otherPlayerNew = newPlayers[i];
-							if (!otherPlayerOld.isGameOver) {
-								setTimeout(function() {
-									if (otherPlayerNew.isGameOver) {
-										console.log("other player wins! " + otherPlayerNew.name + " " + i);
-										moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
-									} else if (otherPlayerNew.outOfBounds || distance == -14) {
-										moveBall(balls[i], (balls[i].x + 1000 * Math.cos(angle * Math.PI / 180)), 
-												balls[i].y + 1000 * Math.sin(angle * Math.PI / 180),
-												otherPlayerNew);
-									} else {
-										console.log("ball id: " + i);
-										console.log(balls[i]);
-										moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);  
-									}
-								}, 4000);
-							}
->>>>>>> origin/master
 						}
 					}
 				}
