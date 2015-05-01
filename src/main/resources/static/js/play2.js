@@ -42,6 +42,14 @@ window.onbeforeunload = function(e) {
 	}
 };
 
+function waitForOthers() {
+	disableSwingButton();
+	var postParameters = {};
+	//$.post("/watch", postParameters, function(responseJSON) {
+
+	//});
+}
+
 function displayScorecard() {
 	$('#basic-modal-content').modal();
 	var playerInfo = "<h3>par: " + par + "</h3><br>";
@@ -341,6 +349,10 @@ function rollIn(ball, playerId) {
 							alert("Congratulations, " + players[id].name + "! You got a hole-in-one!");
 						} else {
 							alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
+						}
+
+						if (!entireGameOver) {
+							waitForOthers();
 						}
 					} else {
 						if (players[playerId].stroke == 1) {

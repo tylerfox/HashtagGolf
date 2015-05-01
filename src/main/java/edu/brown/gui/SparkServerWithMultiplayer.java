@@ -2,14 +2,12 @@ package edu.brown.gui;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -34,6 +32,7 @@ public final class SparkServerWithMultiplayer {
   private static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
   private static Map<String, Game> rooms;
+  private static Map<Game, List<String>> ipAddresses;
   private static String color = "white";
   private static int levelnum = 0;
   private static int holex = 0;
@@ -42,7 +41,6 @@ public final class SparkServerWithMultiplayer {
   private static int starty = 0;
   private static int par = 0;
   private static String guihole = "gui_hole1.png";
-
 
   /**
    * Starts running the GUI for #golf
@@ -53,7 +51,8 @@ public final class SparkServerWithMultiplayer {
     Spark.exception(Exception.class, new ExceptionPrinter());
 
     FreeMarkerEngine freeMarker = createEngine();
-    rooms = new HashMap<>();
+    rooms = new ConcurrentHashMap<>();
+    ipAddresses = new ConcurrentHashMap<>();
 
     // Pages
     Spark.get("/", new FrontPageHandler(), freeMarker);
@@ -145,28 +144,35 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String newlevel = qm.value("level");
-      if (newlevel!=null){
+
+      if (newlevel != null){
         levelnum = Integer.parseInt(newlevel);
+        
         try {
-          BufferedReader reader = new BufferedReader(new FileReader(
-              new File("src/main/resources/levelconfig.txt")));
+          BufferedReader reader =
+              new BufferedReader(new FileReader(new File("src/main/resources/levelconfig.txt")));
           String read = "";
-          for (int i=0; i<levelnum; i++) {
+
+          for (int i = 0; i < levelnum; i++) {
             read = reader.readLine();
           }
+
           String[] readarr = read.split(",");
           String roomName = req.cookie("room");
           Game game = rooms.get(roomName);
+
           game.setLevel(readarr[0], readarr[1]);
           startx = Integer.parseInt(readarr[2]);
           starty = Integer.parseInt(readarr[3]);
           holex = Integer.parseInt(readarr[4]);
           holey = Integer.parseInt(readarr[5]);
           guihole = readarr[6];
+          reader.close();
         } catch (IOException e1) {
           System.out.println("failed");
         }
       }
+      
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "level_select.ftl");
     }
@@ -179,7 +185,7 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       res.cookie("id", "0");
-      
+
       try {
         Game game = new Game("new_hole1.png", "key.png");
         game.addPlayer("Tiger");
@@ -195,7 +201,7 @@ public final class SparkServerWithMultiplayer {
       } catch (IOException e) {
         System.out.println("ERROR: Issue with loading level.");
       }
-      
+
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
       return new ModelAndView(variables, "player_select.ftl");
     }
@@ -238,6 +244,7 @@ public final class SparkServerWithMultiplayer {
           .put("par", par)
           .put("guihole",guihole)
           .build();
+      
       return GSON.toJson(variables);
     }
   }
@@ -248,10 +255,10 @@ public final class SparkServerWithMultiplayer {
       System.out.println("Exit handler");
       int id = Integer.parseInt(req.cookie("id"));
       String room = req.cookie("room");
-      
+
       Game game = rooms.get(room);
       assert game != null;
-      
+
       List<Player> players = game.getPlayers();
       players.set(id, null);
       game.decrementNumPlayers();
@@ -316,15 +323,15 @@ public final class SparkServerWithMultiplayer {
         Game game = rooms.get(room);
         List<Player> players = game.swing(id, word, angle);
 
-      game.checkResetState();
-      
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("players", players)
-          .put("entireGameOver", game.isGameOver())
-          .build();
+        game.checkResetState();
 
-      return GSON.toJson(variables);
+        final Map<String, Object> variables =
+            new ImmutableMap.Builder<String, Object>()
+            .put("players", players)
+            .put("entireGameOver", game.isGameOver())
+            .build();
+
+        return GSON.toJson(variables);
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -344,6 +351,9 @@ public final class SparkServerWithMultiplayer {
         success = !rooms.containsKey(roomName);
         if (success) {
           Game game = new Game("new_hole1.png", "key.png");
+          List<String> ipAddressList = new ArrayList<String>();
+          ipAddressList.add(req.ip());
+          ipAddresses.put(game, ipAddressList);
           game.addPlayer(playerName);
           rooms.put(roomName, game);
 
@@ -370,21 +380,35 @@ public final class SparkServerWithMultiplayer {
 
       boolean roomExists = rooms.containsKey(roomName);
       boolean roomFull = false;
+      boolean duplicateIp = false;
 
       if (roomExists) {
         Game game = rooms.get(roomName);
-
-        String id = game.addPlayer(playerName);
-        if (id != null) {
-          res.cookie("id", id);
-          res.cookie("room", roomName);
+        List<String> ipAddressList = ipAddresses.get(game);
+        
+        if (ipAddressList.contains(req.ip())) {
+          duplicateIp = true;
         } else {
-          roomFull = true;
+          ipAddressList.add(req.ip());
+          ipAddresses.put(game, ipAddressList);
+          
+          String id = game.addPlayer(playerName);
+          
+          if (id != null) {
+            res.cookie("id", id);
+            res.cookie("room", roomName);
+          } else {
+            roomFull = true;
+          }
         }
       }
 
-      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("roomExists", roomExists).put("roomFull", roomFull).build();
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .put("roomExists", roomExists)
+          .put("roomFull", roomFull)
+          .put("duplicateIp", duplicateIp)
+          .build();
 
       return GSON.toJson(variables);
     }
