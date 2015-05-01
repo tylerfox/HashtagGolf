@@ -25,7 +25,7 @@
 
 body {
 	background-image: url(tempbackground.png);
-	background-size: cover;
+	background-size: 125%;
 }
 
 h1 {
