@@ -45,7 +45,7 @@ body {
 }
 
 #myCanvas {
-	background-image: url("gui_hole1.png");
+	/*background-image: url("gui_hole2.png");*/
 	position:absolute;
 	left: 0px;
 	top:0px;

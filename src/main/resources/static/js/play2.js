@@ -29,7 +29,9 @@ var displayPlayerDeparture = [true, true, true, true];
 var endPlayers = {};
 var par = 3;
 var entireGameOver = false;
-
+var myguihole = "";
+var canvas;
+var image;
 window.onbeforeunload = function(e) {
 	var e = e || window.event;
 	console.log(e);
@@ -69,7 +71,11 @@ $.post("/setup", postParameters, function(responseJSON){
 	START_Y = responseObject.starty;
 	hole_x = responseObject.holex;
 	hole_y = responseObject.holey;
-	document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;
+	/*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
+	/*document.getElementById("myCanvas").style.background = "white";*/
+	myguihole = "js/" + responseObject.guihole;
+	loadcanvas();
+	console.log(myguihole);
 	document.getElementById("parhud").innerHTML = "par#: " + responseObject.par;
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
@@ -121,16 +127,18 @@ function createBall(color, id, z) {
 
 	balls[id] = newBall;
 }
+function loadcanvas() {
+	canvas = oCanvas.create({ canvas: "#myCanvas"});
 
-var canvas = oCanvas.create({ canvas: "#myCanvas"});
+	image = canvas.display.image({
+		x: canvas.width / 2,
+		y: canvas.height / 2,
+		origin: { x: "center", y: "center" },
+		image: /*"js/"+*/myguihole
+	}).add();
 
-var image = canvas.display.image({
-	x: canvas.width / 2,
-	y: canvas.height / 2,
-	origin: { x: "center", y: "center" },
-	image: "js/gui_hole1.png"
-}).add();
-
+	console.log("here:"+myguihole+":here");
+}
 
 
 function magnitude(x, y) {

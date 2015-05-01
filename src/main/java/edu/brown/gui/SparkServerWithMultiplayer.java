@@ -166,7 +166,9 @@ public final class SparkServerWithMultiplayer {
           starty = Integer.parseInt(readarr[3]);
           holex = Integer.parseInt(readarr[4]);
           holey = Integer.parseInt(readarr[5]);
-          guihole = readarr[6];
+          par = Integer.parseInt(readarr[6]);
+          guihole = readarr[7];
+          System.out.println(guihole);
           reader.close();
         } catch (IOException e1) {
           System.out.println("failed");
