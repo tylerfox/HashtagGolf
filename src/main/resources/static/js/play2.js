@@ -564,7 +564,7 @@ function swing() {
 				function animateBalls(i) {
 					var timeDelay = 1;
 					
-					if (i > 0) {
+					if (i.toString() == id) {
 						timeDelay = 4000;
 					}
 					
