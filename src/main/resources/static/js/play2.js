@@ -344,20 +344,15 @@ function rollIn(ball, playerId) {
 					endPlayers[parseInt(playerId)] = players[playerId];
 
 					if (playerId == id) {
-<<<<<<< Updated upstream
 						if (strokenum == 1) {
 							alert("Congratulations, " + players[id].name + "! You got a hole-in-one!");
 						} else {
 							alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
 						}
-=======
-						endPlayers[parseInt(playerId)] = players[playerId];
-						alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
+
 						if (!entireGameOver) {
 							waitForOthers();
-						} 
-						//window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
->>>>>>> Stashed changes
+						}
 					} else {
 						if (players[playerId].stroke == 1) {
 							alert(players[playerId].name + " got a hole-in-one!");
