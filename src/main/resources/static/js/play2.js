@@ -1,10 +1,10 @@
-var START_X = 310;
-var START_Y = 355;
-var target_x = 0;
-var target_y = 0;
+var START_X;
+var START_Y;
+var target_x;
+var target_y;
 var strokenum = 1;
-var hole_x = 971;
-var hole_y = 350;
+var hole_x;
+var hole_y;
 var dest_X = hole_x;
 var dest_Y = hole_y;
 var linetoggleable = true;
@@ -32,6 +32,7 @@ var entireGameOver = false;
 var myguihole = "";
 var canvas;
 var image;
+
 window.onbeforeunload = function(e) {
 	var e = e || window.event;
 	console.log(e);
@@ -69,12 +70,13 @@ $.post("/setup", postParameters, function(responseJSON){
 	START_Y = responseObject.starty;
 	hole_x = responseObject.holex;
 	hole_y = responseObject.holey;
+	par = responseObject.par;
 	/*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
 	/*document.getElementById("myCanvas").style.background = "white";*/
 	myguihole = "js/" + responseObject.guihole;
 	loadcanvas();
 	console.log(myguihole);
-	document.getElementById("parhud").innerHTML = "par#: " + responseObject.par;
+	document.getElementById("parhud").innerHTML = "par#: " + par;
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
 	} else {
