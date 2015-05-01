@@ -63,10 +63,11 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/single_player_select", new SinglePlayerSelectHandler(),
         new FreeMarkerEngine());
     Spark.get("/level_select", new LevelHandler(), new FreeMarkerEngine());
+    Spark.get("/multi_levelselect", new MultiLevelHandler(), new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
 
     Spark.get("/lobby/:room", new LobbyHandler(), new FreeMarkerEngine());
-    Spark.get("/hostlobby/:room", new HostLobbyHandler(),
+    Spark.get("/hostlobby", new HostLobbyHandler(),
         new FreeMarkerEngine());
 
 
@@ -149,15 +150,17 @@ public final class SparkServerWithMultiplayer {
         levelnum = Integer.parseInt(newlevel);
         
         try {
-          BufferedReader reader =
-              new BufferedReader(new FileReader(new File("src/main/resources/levelconfig.txt")));
+          BufferedReader reader = new BufferedReader(new FileReader(
+              new File("src/main/resources/levelconfig.txt")));
           String read = "";
 
           for (int i = 0; i < levelnum; i++) {
             read = reader.readLine();
+            System.out.println(read);
           }
 
           String[] readarr = read.split(",");
+          System.out.println(readarr);
           String roomName = req.cookie("room");
           Game game = rooms.get(roomName);
 
@@ -170,6 +173,7 @@ public final class SparkServerWithMultiplayer {
           guihole = readarr[7];
           System.out.println(guihole);
           reader.close();
+
         } catch (IOException e1) {
           System.out.println("failed");
         }
@@ -177,6 +181,42 @@ public final class SparkServerWithMultiplayer {
       
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "level_select.ftl");
+    }
+  }
+  
+  /**
+   * Displays levelselect page of #golf.
+   */
+  private static class MultiLevelHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String newlevel = qm.value("level");
+      if (newlevel!=null){
+        levelnum = Integer.parseInt(newlevel);
+        try {
+          @SuppressWarnings("resource")
+          BufferedReader reader = new BufferedReader(new FileReader(
+              new File("src/main/resources/levelconfig.txt")));
+          String read = "";
+          for (int i=0; i < levelnum; i++) {
+            read = reader.readLine();
+          }
+          String[] readarr = read.split(",");
+          String roomName = req.cookie("room");
+          Game game = rooms.get(roomName);
+          game.setLevel(readarr[0], readarr[1]);
+          startx = Integer.parseInt(readarr[2]);
+          starty = Integer.parseInt(readarr[3]);
+          holex = Integer.parseInt(readarr[4]);
+          holey = Integer.parseInt(readarr[5]);
+          par = Integer.parseInt(readarr[6]);
+        } catch (IOException e1) {
+          System.out.println("failed");
+        }
+      }
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      return new ModelAndView(variables, "multi_level_select.ftl");
     }
   }
 
@@ -254,7 +294,6 @@ public final class SparkServerWithMultiplayer {
   private static class ExitHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
-      System.out.println("Exit handler");
       int id = Integer.parseInt(req.cookie("id"));
       String room = req.cookie("room");
 
@@ -324,7 +363,7 @@ public final class SparkServerWithMultiplayer {
         String room = req.cookie("room");
         Game game = rooms.get(room);
         List<Player> players = game.swing(id, word, angle);
-
+        
         game.checkResetState();
 
         final Map<String, Object> variables =

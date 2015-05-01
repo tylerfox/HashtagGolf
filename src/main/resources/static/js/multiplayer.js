@@ -19,7 +19,8 @@ function host() {
       var valid = JSON.parse(responseJSON).success;
 
       if (valid) {
-        window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
+        window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
+        //window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
       } else {
         alert("Room name has already been taken. Please enter a new room name.");
         host();

@@ -31,3 +31,7 @@ function chooselevel(lvl) {
 function play() {
 	document.location.href = "/play";
 }
+
+function hostlobby() {
+	document.location.href = "/hostlobby";
+}
