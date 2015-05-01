@@ -39,7 +39,7 @@ public class Player {
     this.terrain = Terrain.TEE;
 
     // TODO: will need to figure out how to set this based on the level
-    this.stroke = 1;
+    this.stroke = 0;
     this.x = 310;
     this.y = 355;
     this.hole_x = 968;
@@ -101,9 +101,9 @@ public class Player {
    * @param angle the angle at which the ball moves
    */
   public void moveBall(int distance, double angle) {
-    System.out.println("Ball went " + distance + " yards!");
+    //System.out.println("Ball went " + distance + " yards!");
     if (distanceToHole - distance < 0) {
-      System.out.println("Whoops! Overshot the hole.");
+     // System.out.println("Whoops! Overshot the hole.");
     }
 
     // distanceToHole = Math.abs(distanceToHole - distance);

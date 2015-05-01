@@ -18,7 +18,7 @@
 body {
 	/*background-image: url(tempbackground.png);
 	background-size: cover;*/
-	background-color: #00ADEF;
+	background-color: #000000; /*#00ADEF;*/
 	font-family:"Comics";
 	overflow: hidden;
 	/*background-image: url("gui_hole1.png");*/
@@ -37,7 +37,7 @@ body {
 
 #container2 {
 	position: absolute;
-	top:80%;
+	top:600px;
 	left:250px;
 }
 
@@ -242,9 +242,10 @@ p {
 	font-size: 30pt;
 	background: transparent;
 	visibility: hidden;
-	text-align: center;
+	text-align: left;
 	position: absolute;
 	width:100%;
-	top:50%;
+	left: 550px;
+	top:280px;
 	z-index: 30;
 }

@@ -78,11 +78,17 @@ function startGame() {
 function readyToPlay() {
   var postParameters = {};
   $.post("/ready", postParameters, function(responseJSON) {
-
-     //alert("redirecting page");
-     window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play"; //location.port + "/multiplay";
+     window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
   });
 
+}
+
+function exit() {
+	var postParameters = {};
+	$.post("/exit", postParameters, function(responseJSON){
+		 window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
+	});
+	
 }
 
 

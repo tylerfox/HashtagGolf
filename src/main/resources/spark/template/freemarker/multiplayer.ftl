@@ -17,15 +17,16 @@
       <h1> multiplayer </h1>
   	 <button class="myButton" onclick="host()" id="left"> host</button>
      <button class="myButton" onclick="join()" id="right"> join</button>
+     
+     <button onclick="start()" class= "myButton" id ="left"> menu </button>
      <br><br>
-
-       <button class="myButton" onclick="back()" id="back"> back</button>
     </div>
    </div>
   	
      <!-- Again, we're serving up the unminified source for clarity. -->
      <script src="js/jquery-2.1.1.js"></script>
      <script src="js/multiplayer.js"></script>
+     <script src="js/main.js"></script>
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
        dealing with real world issues like old browsers.  -->
