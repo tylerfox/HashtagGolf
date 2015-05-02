@@ -163,12 +163,12 @@ $("#myCanvas").qtip({
 			console.log(players[1]);
 			if (players[1] == null) {
 				//messagepopup("your ball");				
-				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + calcDistToHole(someball));
+				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + disttohole);
 				$(this).qtip('show'); // Show the qTip
 				qtipHidden = false;				
 			} else {
 				//messagepopup(players[i].name + "'s ball")
-				$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + calcDistToHole(someball));
+				$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + disttohole);
 				$(this).qtip('show'); // Show the qTip
 				qtipHidden = false;
 			}
@@ -281,7 +281,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 }
 
 function calcDistToHole(ball) {
-	return Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2)));
+	return Math.round(Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2))) / 3.5);
 }
 
 function addStroke(num) {
@@ -599,8 +599,7 @@ function postSwing(postParameters) {
 		var myPlayer = newPlayers[parseInt(id)];
 		entireGameOver = responseObject.entireGameOver;
 		var oldPlayers = players;
-		
-		console.log(balls[id]);
+		console.log(myPlayer);
 		animateBalls(0);
 
 		function animateBalls(i) {
