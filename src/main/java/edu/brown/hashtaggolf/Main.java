@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import joptsimple.OptionException;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import edu.brown.gui.SparkServerWithMultiplayer;
 
 /**
@@ -17,7 +20,7 @@ public class Main {
    * @param args command line args
    */
   public static void main(String[] args) {
-    new Main().run();
+    new Main().run(args);
   }
 
   public Main() {
@@ -26,13 +29,25 @@ public class Main {
   /**
    * Runs the program.
    */
-  public void run() {
+  public void run(String[] args) {
     // runSparkServer();
     // TwitterQuery tq = new TwitterQuery();
     // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
     // tq.getCount("", 60);
     //SparkServer.run();
-    SparkServerWithMultiplayer.run();
+    
+    OptionParser parser = new OptionParser();
+    parser.accepts("requireUniqueIp");
+
+    OptionSet ops;
+    try {
+      ops = parser.parse(args);
+    } catch (OptionException e) {
+      System.out.println("ERROR: Please use ./run [--requireUniqueIp]");
+      return;
+    }
+    
+    SparkServerWithMultiplayer.run(ops.has("requireUniqueIp"));
     // play();
   }
 

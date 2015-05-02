@@ -50,8 +50,19 @@ public class Referee {
    */
   public int swing(Player player, String word, double angle) {
     player.setOutOfBounds(false);
+    int yards;
+    String[] wordSplit = word.split(" ");
+    if (wordSplit.length == 2 && wordSplit[wordSplit.length - 1].equals("-n")) {
+      try {
+        yards = Integer.parseInt(wordSplit[0]);
+      } catch (NumberFormatException e) {
+        yards = 0;
+        System.err.println("Bad cheat code!");
 
-    int yards = applyEnvironment(player, word);
+      }
+    } else {
+      yards = applyEnvironment(player, word);
+    }
     if (yards == -1) {
       System.out
           .println("Network Error. Please swing again when you have a connection.");
@@ -69,7 +80,7 @@ public class Referee {
     int newY = player.getY()
         - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
 
-    //System.out.println("Ball hit to (" + newX + ", " + newY + ")");
+    // System.out.println("Ball hit to (" + newX + ", " + newY + ")");
     Terrain newTerrain = image.getTerrainAt(newX, newY);
 
     switch (newTerrain) {
@@ -82,8 +93,7 @@ public class Referee {
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
     }
-
-    //System.out.println(newTerrain);
+    System.out.println(newTerrain);
     System.out.println("You are now at (" + player.getX() + ", "
         + player.getY() + ")");
     player.isGameOver();
