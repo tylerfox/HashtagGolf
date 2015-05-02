@@ -159,8 +159,9 @@ $("#myCanvas").qtip({
 		for (var i in balls) {
 		var someball = balls[i];		
 		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {		
-			nearby = true;	
-			if (players[id] == null) {
+			nearby = true;
+			console.log(players[1]);
+			if (players[1] == null) {
 				//messagepopup("your ball");				
 				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + calcDistToHole(someball));
 				$(this).qtip('show'); // Show the qTip
@@ -306,7 +307,7 @@ function enableSwingButton() {
 	random = Math.floor((Math.random() * 3) + 1);
 	if (myPlayer.terrain == "BUNKER") {
 		terrainpic.setAttribute("class", "terrain_bunker");
-		terrainpic.innerHTML = "your ball is in<br> the bunker";
+		terrainpic.innerHTML = "your ball is in<br> the bunker <br> query seconds: 30";
 		if (oldterrain != "terrain_bunker") {
 			switch (random) {
 			case 1: messagepopup("fun in the sand");
@@ -319,7 +320,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "FAIRWAY") {
 		terrainpic.setAttribute("class", "terrain_fairway");
-		terrainpic.innerHTML = "your ball is on<br> the fairway";
+		terrainpic.innerHTML = "your ball is on<br> the fairway <br> query seconds: 60";
 		if (oldterrain != "terrain_fairway") {
 			switch (random) {
 			case 1: messagepopup("nice shot!");
@@ -332,7 +333,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "ROUGH") {
 		terrainpic.setAttribute("class", "terrain_rough");
-		terrainpic.innerHTML = "your ball is in<br> the rough";
+		terrainpic.innerHTML = "your ball is in<br> the rough <br> query seconds: 45";
 		if (oldterrain != "terrain_rough") {
 			switch (random) {
 			case 1: messagepopup("you're going to have a rough time");
@@ -345,7 +346,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "GREEN") {
 		terrainpic.setAttribute("class", "terrain_green");
-		terrainpic.innerHTML = "your ball is on<br> the green";
+		terrainpic.innerHTML = "your ball is on<br> the green <br> query seconds: 60";
     if (oldterrain != "terrain_green" && disttohole > 10) {
       switch (random) {
         case 1: messagepopup("it's all putting from here!");
@@ -358,7 +359,7 @@ function enableSwingButton() {
     }
 	} else if (myPlayer.terrain == "TEE") {
 		terrainpic.setAttribute("class", "terrain_tee");
-		terrainpic.innerHTML = "your ball is in<br> the teebox";
+		terrainpic.innerHTML = "your ball is in<br> the teebox <br> query seconds: 60";
 		if (oldterrain != "terrain_tee") {
 			switch (random) {
 			case 1: messagepopup("how'd you get back here?");

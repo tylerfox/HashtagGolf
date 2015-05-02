@@ -8,6 +8,8 @@ p{
 	/*margin-top:200px;*/
 	margin-left: 30px;
 	margin-right:30px;
+	margin-top:0px;
+	/*margin-bottom:10px;*/
 	text-align: center;
 	font-size: 17pt;
 	font-family:"Comics";
@@ -19,12 +21,19 @@ div {
 	max-width: 700px;
 	background-color: rgba(255,255,255,.50);
 	border-radius: 10px;
+	text-align: center;
 	
+}
+
+#tutbutton {
+	text-align: center;
+	margin: auto;
+	margin-bottom: 15px
 }
 
 #firstpara {
 	margin-top:50px;
-	padding-top:120px;
+	padding-top:80px;
 }
 
 #center {
@@ -38,6 +47,8 @@ div {
 }
 
 h1{
+	margin-top:0px;
+	margin-bottom:0px;
 	position: absolute;
 	left:550px;
 }

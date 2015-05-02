@@ -22,6 +22,7 @@
 	      <p>guess something too popular, and you will fly past the hole.</p> 
 	      <p>guess something too obscure, and you won't go anywhere. </p>
 	      <p>you'll have to think of just the right words to get you to the hole. so get playing!  </p>
+        <button id="tutbutton" class="myButton" onclick="document.location.href = '/tutorial';">tutorial</button>
       </div>
       
        <!-- Again, we're serving up the unminified source for clarity. -->
