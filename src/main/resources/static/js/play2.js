@@ -34,6 +34,7 @@ var canvas;
 var image;
 var qtipHidden;
 var qtipContent = "balls";
+var canenter = true;
 
 window.onbeforeunload = confirmExit;
 
@@ -303,12 +304,7 @@ function enableSwingButton() {
 	swingButton.className = "load-button myButton zoom-in";  
 	swingButton.removeAttribute( 'data-loading'); 
 	swingButton.disabled = false;
-	/*linetoggleable = wastoggleable;
-	if (linetoggleable) {
-		linemoveable = true;
-	} else {
-		toHole(balls[id]);
-	}*/
+	canenter = true;
 	document.getElementById("tweetme").value = "";
 	//Terrain
 	var myPlayer = players[id];
@@ -397,6 +393,7 @@ function disableSwingButton() {
 	swingButton.disabled = true;
 	wastoggleable = linetoggleable;
 	linetoggleable = false;
+	canenter = false;
 }
 
 function rollIn(ball, playerId) {
@@ -560,7 +557,7 @@ function isgameover(ball) {
 
 function isenter(evt) {
 	//TODO: CHANGE ME TO ACCOUNT FOR NOT ABLE TO SWING
-	if (evt.keyCode == 13) {
+	if (evt.keyCode == 13 && canenter) {
 		swing();
 	}
 }
@@ -587,7 +584,10 @@ messagepopup("let's play!");
 
 function swing() {
 	var word = document.getElementById("tweetme").value.toLowerCase();
-
+	if (word == "") {
+		messagepopup("you didnt input a word!");
+		return;
+	}
 	if (!linetoggleable) {
 		toHole(balls[id]);
 	}
