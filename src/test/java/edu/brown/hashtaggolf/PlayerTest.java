@@ -15,6 +15,9 @@ public class PlayerTest {
     int before = player.getDistanceToHole();
     player.moveBall(10, 0);
     int after = player.getDistanceToHole();
+    
+    assertTrue(before >= 0);
+    assertTrue(after >= 0);
     //assertTrue(Math.abs(before-10) == after);
     //assertTrue(player.toString().equals());
     System.out.println(player.toString());
