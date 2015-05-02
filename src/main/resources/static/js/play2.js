@@ -169,7 +169,6 @@ $("#myCanvas").qtip({
 		var someball = balls[i];		
 		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {		
 			nearby = true;
-			console.log(players[1]);
 			if (players[1] == null) {
 				//messagepopup("your ball");				
 				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + disttohole);
@@ -197,7 +196,7 @@ function magnitude(x, y) {
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
 
-function moveBall(ball, dest_X, dest_Y, player) {
+function moveBall(ball, dest_X, dest_Y, player) {	
 	var terrain = player.terrain;
 	var playerId = player.id;
 	var preX = ball.x;
@@ -209,9 +208,9 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	var bounce = Math.min(maxBounce, mag * .01);
 	var airX;
 	var airY;
-	if (terrain === "WATER") {
-		airX = deltaX;
-		airY = deltaY;
+	if (terrain === "WATER") {		
+		airX = deltaX * .5;
+		airY = deltaY * .5;
 	} else {
 		airX = deltaX * .45;
 		airY = deltaY * .45;
@@ -223,7 +222,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	}, {
 		duration: "normal",
 		easing: "linear",
-		callback: function () {
+		callback: function () {			
 			ball.animate({
 				x: ball.x + airX,
 				y: ball.y + airY,
@@ -231,12 +230,14 @@ function moveBall(ball, dest_X, dest_Y, player) {
 			}, {
 				duration: "normal",
 				easing: "linear",
-				callback: function () {        
+				callback: function () {  					
 					if (terrain === "WATER") {
 						sink(ball, preX, preY);
 						if (player.id == id) {
 							messagepopup("your ball is sleeping with the fishes!");
 						}
+					} else if (terrain == "OUT_OF_BOUNDS") {
+						outOfBounds(ball, preX, preY);
 					} else {
 						ball.animate({
 							x: ball.x + deltaX * .05,
@@ -255,20 +256,19 @@ function moveBall(ball, dest_X, dest_Y, player) {
 									easing: "linear",
 									callback: function () { 
 										enableSwingButton();
-										if (outofbounds(ball, canvas)) {
+										/*if (outofbounds(ball, canvas)) {
 											ball.x = preX;
 											ball.y = preY;
 											if (playerId == id) {
 												messagepopup("that went way too far!"); 
 											}
-										} else {
+										} else {*/
 											if (playerId == id) {
 												disttohole = calcDistToHole(ball);
 												document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 											}
-										}
-										if (player.isGameOver) {
-											console.log(playerId + " in moveBall");
+										//}
+										if (player.isGameOver) {											
 											rollIn(ball, playerId);
 										}
 
@@ -303,12 +303,13 @@ function enableSwingButton() {
 	swingButton.className = "load-button myButton zoom-in";  
 	swingButton.removeAttribute( 'data-loading'); 
 	swingButton.disabled = false;
-	linetoggleable = wastoggleable;
+	/*linetoggleable = wastoggleable;
 	if (linetoggleable) {
 		linemoveable = true;
 	} else {
 		toHole(balls[id]);
-	}
+	}*/
+	document.getElementById("tweetme").value = "";
 	//Terrain
 	var myPlayer = players[id];
 	var terrainpic = document.getElementById("terrainpic");
@@ -316,7 +317,7 @@ function enableSwingButton() {
 	random = Math.floor((Math.random() * 3) + 1);
 	if (myPlayer.terrain == "BUNKER") {
 		terrainpic.setAttribute("class", "terrain_bunker");
-		terrainpic.innerHTML = "your ball is in<br> the bunker <br> query seconds: 30";
+		terrainpic.innerHTML = "your ball is in<br> the bunker <br> <img src='css/clock.png'> 30 seconds";
 		if (oldterrain != "terrain_bunker") {
 			switch (random) {
 			case 1: messagepopup("fun in the sand");
@@ -329,7 +330,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "FAIRWAY") {
 		terrainpic.setAttribute("class", "terrain_fairway");
-		terrainpic.innerHTML = "your ball is on<br> the fairway <br> query seconds: 60";
+		terrainpic.innerHTML = "your ball is on<br> the fairway <br> <img src='css/clock.png'> 60 seconds";
 		if (oldterrain != "terrain_fairway") {
 			switch (random) {
 			case 1: messagepopup("nice shot!");
@@ -342,7 +343,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "ROUGH") {
 		terrainpic.setAttribute("class", "terrain_rough");
-		terrainpic.innerHTML = "your ball is in<br> the rough <br> query seconds: 45";
+		terrainpic.innerHTML = "your ball is in<br> the rough <br> <img src='css/clock.png'> 45 seconds";
 		if (oldterrain != "terrain_rough") {
 			switch (random) {
 			case 1: messagepopup("you're going to have a rough time");
@@ -355,7 +356,7 @@ function enableSwingButton() {
 		}
 	} else if (myPlayer.terrain == "GREEN") {
 		terrainpic.setAttribute("class", "terrain_green");
-		terrainpic.innerHTML = "your ball is on<br> the green <br> query seconds: 60";
+		terrainpic.innerHTML = "your ball is on<br> the green <br> <img src='css/clock.png'> 60 seconds";
     if (oldterrain != "terrain_green" && disttohole > 10) {
       switch (random) {
         case 1: messagepopup("it's all putting from here!");
@@ -368,7 +369,7 @@ function enableSwingButton() {
     }
 	} else if (myPlayer.terrain == "TEE") {
 		terrainpic.setAttribute("class", "terrain_tee");
-		terrainpic.innerHTML = "your ball is in<br> the teebox <br> query seconds: 60";
+		terrainpic.innerHTML = "your ball is in<br> the teebox <br> <img src='css/clock.png'> 60 seconds";
 		if (oldterrain != "terrain_tee") {
 			switch (random) {
 			case 1: messagepopup("how'd you get back here?");
@@ -382,6 +383,12 @@ function enableSwingButton() {
 	}
 	}
 	//end terrain
+	linetoggleable = wastoggleable;
+	if (linetoggleable) {
+		linemoveable = true;
+	} else {
+		toHole(balls[id]);
+	}
 }
 
 function disableSwingButton() {
@@ -410,9 +417,9 @@ function rollIn(ball, playerId) {
 
 					if (playerId == id) {
 						if (strokenum == 1) {
-							alert("Congratulations, " + players[id].name + "! You got a hole-in-one!");
+							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
 						} else {
-							alert("Congratulations, " + players[id].name + "! You finished in " + strokenum + " strokes!");
+							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
 						}
 
 						if (entireGameOver) {
@@ -423,9 +430,9 @@ function rollIn(ball, playerId) {
 						}
 					} else {
 						if (players[playerId].stroke == 1) {
-							alert(players[playerId].name + " got a hole-in-one!");
+							messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
 						} else {
-							alert(players[playerId].name + " finished in " + players[playerId].stroke + " strokes!");
+							messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke + " strokes!");
 						}
 					}
 					
@@ -434,6 +441,14 @@ function rollIn(ball, playerId) {
 			});
 		}
 	});
+}
+
+function outOfBounds(ball, x, y) {     
+	ball.x = x;
+	ball.y = y;
+	ball.radius = 5;
+	messagepopup("that went way too far!");
+	enableSwingButton(); 
 }
 
 function sink(ball, x, y) {
@@ -590,9 +605,12 @@ function swing() {
 	} else if (word == "hole!") {    
 		moveBall(balls[id], hole_x, hole_y, players[id]);
 	} else {
+		var wordSplit = word.split(" ");
 		if (usedWords[word] == 1) {
 			messagepopup("word already used!");
 			enableSwingButton();
+		} else if(wordSplit[wordSplit.length - 1] === "-n") {
+			postSwing(postParameters);
 		} else {
 			usedWords[word]  = 1;
 			postSwing(postParameters);
@@ -607,8 +625,7 @@ function postSwing(postParameters) {
 		var newPlayers = responseObject.players;
 		var myPlayer = newPlayers[parseInt(id)];
 		entireGameOver = responseObject.entireGameOver;
-		var oldPlayers = players;
-		console.log(myPlayer);
+		var oldPlayers = players;		
 		animateBalls(0);
 
 		function animateBalls(i) {
@@ -628,10 +645,7 @@ function postSwing(postParameters) {
 						} else if (otherPlayerNew.outOfBounds || distance == -14) {
 							if (otherPlayerNew.id == id) {
 								addStroke(2);
-							}
-							console.log(balls[i].x + 1000*Math.cos(angle*Math.PI / 180));
-							console.log(balls[i].y + 1000*Math.sin(angle*Math.PI / 180));
-							console.log(angle);
+							}							
 							moveBall(balls[i], balls[i].x + 1000*Math.cos(angle*Math.PI / 180), 
 									balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
 									otherPlayerNew);

@@ -87,6 +87,8 @@ public class Referee {
       case OUT_OF_BOUNDS:
         player.setOutOfBounds(true);
         player.applyStrokePenalty();
+        player.moveBall(yards, angle);
+        player.setTerrain(newTerrain);
         return OUT;
       default:
         player.setOutOfBounds(false);

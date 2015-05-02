@@ -17,7 +17,7 @@ public class Game {
   private int startX = 0;
   private int startY = 0;
   private int holeX = 0;
-  private int holeY= 0;
+  private int holeY = 0;
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
@@ -26,10 +26,9 @@ public class Game {
     ref = new Referee(level, key);
   }
 
-  public void setLevel(String level,
-      String key, int startX, int startY, 
+  public void setLevel(String level, String key, int startX, int startY,
       int holeX, int holeY) throws IOException {
-    ref = new Referee(level,key);
+    ref = new Referee(level, key);
     this.startX = startX;
     this.startY = startY;
     this.holeX = holeX;
@@ -152,7 +151,8 @@ public class Game {
       // Moves the ball back to its original positioning, since it
       // went into the water (however the front ends receives
       // where the ball went in the water)
-      if (player != null && player.getTerrain() == Terrain.WATER) {
+      if (player != null
+          && (player.getTerrain() == Terrain.WATER || player.getTerrain() == Terrain.OUT_OF_BOUNDS)) {
         Player oldPlayer = savedState[Integer.parseInt(player.getId())];
         player.setX(oldPlayer.getX());
         player.setY(oldPlayer.getY());
@@ -162,7 +162,6 @@ public class Game {
 
     savedState = new Player[MAX_PLAYERS];
   }
-
 
   /**
    * Updates and returns number of players still playing.
@@ -201,7 +200,7 @@ public class Game {
 
     if (!allOtherPlayersReady) {
       myPlayer.setReady(false);
-    } else { 
+    } else {
       roomReadiness.addAndGet(1);
     }
     /*try {
