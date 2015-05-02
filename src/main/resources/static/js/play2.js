@@ -35,17 +35,26 @@ var image;
 var qtipHidden;
 var qtipContent = "balls";
 
-window.onbeforeunload = function(e) {
+window.onbeforeunload = confirmExit;
+
+function confirmExit(e) {
 	var e = e || window.event;
 	console.log(e);
 	
-	//IE & Firefox
+	//For IE & Firefox
 	if (e && !gameover) {
+		e.returnValue = 'Warning! Your game data will not be saved.';
+		
 		var postParameters = {};
-		$.post("/exit", postParameters, function(responseJSON){
-		});
+		$.post("/exit", postParameters, function(responseJSON) {});
 	}
+	
+	window.location.href = "/start";
+	
+	//For Safari & Chrome
+	return 'Warning! Your game data will not be saved.';
 };
+
 
 function waitForOthers() {
 	disableSwingButton();
