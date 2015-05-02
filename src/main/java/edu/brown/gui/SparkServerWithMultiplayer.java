@@ -203,9 +203,7 @@ public final class SparkServerWithMultiplayer {
 
           for (int i = 0; i < levelnum; i++) {
             read = reader.readLine();
-            System.out.println(read);
           }
-          System.out.println(read);
 
           String[] readarr = read.split(",");
 

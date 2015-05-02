@@ -28,6 +28,7 @@ body {
 	background-color: #00ADEF;
 	font-family:"Comics";
 	overflow: hidden;
+	text-align: center;
 	/*background-image: url("gui_hole1.png");*/
 		user-select:none;
         -moz-user-select: none; 
@@ -73,6 +74,32 @@ body {
 
 label{
 	margin-right:30px;
+}
+
+#messagediv {
+	position: relative;
+	background-color: red;
+	width:1280px;
+	/*width:100%;*/
+	text-align: center;
+	/*margin: 0 auto;*/
+	/*z-index:-5;*/
+}
+
+#mymessage{
+	font-size: 30pt;
+	background: transparent;
+	visibility: hidden;
+	/*position: absolute;
+	left: 550px;
+	top:280px;*/
+	z-index: 30;
+	margin: auto;  
+  	position: absolute;
+  	left:0;
+  	right: 0;
+  	top: 190px;
+  	bottom: 0;
 }
 
 p {
@@ -252,16 +279,10 @@ p {
 	z-index: 10;
 }
 
-#mymessage{
-	font-size: 30pt;
-	background: transparent;
-	visibility: hidden;
-	text-align: left;
-	position: absolute;
-	width:100%;
-	left: 550px;
-	top:280px;
-	z-index: 30;
+
+img {
+	width:30px;
+	height:30px;
 }
 
 /* Modal stuff is for the Score Card at the end of the game*/

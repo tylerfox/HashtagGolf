@@ -21,7 +21,6 @@
             <button class="myButton" onclick="start()"> menu </button>
           </div>
         
-          <p id="mymessage">Message!</p>
         <div id="container1">
           <button class="myButton menubutton" onclick="start()"> menu </button>
 
@@ -29,10 +28,13 @@
           <p class="hud" id= "parhud"> par#: 3</p>
           <p class="hud" id="strokehud"> stroke#: 1</p>
         </div>
+        <div id="messagediv">
+          <p id="mymessage">Message!</p>
+        </div>
         <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
         <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
         <div id="container2">
-          <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee <br> query seconds: 60</div>
+          <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee <br> <img src="css/clock.png"> 60 seconds</div>
           <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="type a word or phrase"></input> 
           <!--<button class="myButton" onclick="swing()"> swing!</button>-->
           <button id="swingButton" class="load-button myButton zoom-in" onclick="swing()"><span class="label">swing!</span> <span class="spinner"></span></button> 
