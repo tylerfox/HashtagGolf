@@ -41,11 +41,12 @@ public final class SparkServerWithMultiplayer {
   private static int starty = 0;
   private static int par = 0;
   private static String guihole = "gui_hole1.png";
+  private static boolean uniqueIpRequired = false;
 
   /**
    * Starts running the GUI for #golf
    */
-  public static void run() {
+  public static void run(boolean requireUniqueIp) {
     Spark.setPort(PORT);
     Spark.externalStaticFileLocation("src/main/resources/static");
     Spark.exception(Exception.class, new ExceptionPrinter());
@@ -53,6 +54,7 @@ public final class SparkServerWithMultiplayer {
     FreeMarkerEngine freeMarker = createEngine();
     rooms = new ConcurrentHashMap<>();
     ipAddresses = new ConcurrentHashMap<>();
+    uniqueIpRequired = requireUniqueIp;
 
     // Pages
     Spark.get("/", new FrontPageHandler(), freeMarker);
@@ -455,7 +457,7 @@ public final class SparkServerWithMultiplayer {
           new ImmutableMap.Builder<String, Object>()
           .put("roomExists", roomExists)
           .put("roomFull", roomFull)
-          .put("duplicateIp", duplicateIp)
+          .put("duplicateIp", duplicateIp && uniqueIpRequired)
           .build();
 
       return GSON.toJson(variables);
