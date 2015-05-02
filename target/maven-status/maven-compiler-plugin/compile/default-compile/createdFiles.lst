@@ -20,6 +20,7 @@ edu\brown\gui\SparkServerWithMultiplayer$ExitHandler.class
 edu\brown\hashtaggolf\Terrain.class
 edu\brown\hashtaggolf\Referee.class
 edu\brown\gui\SparkServerWithMultiplayer$LobbyHandler.class
+edu\brown\gui\SparkServerWithMultiplayer$MultiLevelHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$HostLobbyHandler.class
 edu\brown\imageprocessing\PixelColor.class
 edu\brown\gui\SparkServerWithMultiplayer$SinglePlayerSelectHandler.class

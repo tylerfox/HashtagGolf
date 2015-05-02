@@ -75,7 +75,6 @@ $.post("/setup", postParameters, function(responseJSON){
 	/*document.getElementById("myCanvas").style.background = "white";*/
 	myguihole = "js/" + responseObject.guihole;
 	loadcanvas();
-	console.log(myguihole);
 	document.getElementById("parhud").innerHTML = "par#: " + par;
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
@@ -137,7 +136,6 @@ function loadcanvas() {
 		image: /*"js/"+*/myguihole
 	}).add();
 
-	console.log("here:"+myguihole+":here");
 }
 
 
@@ -400,7 +398,17 @@ function sink(ball, x, y) {
 }
 
 function linedraw(evt) {
-	var ball = balls[id];
+	ball = balls[id];
+	for (var i in balls) {
+		var someball = balls[i];
+		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {
+			if (players[id] == null) {
+				messagepopup("your ball");
+			} else {
+				messagepopup(players[i].name + "'s ball")
+			}
+		}
+	}
 
 	if (linemoveable && typeof ball != 'undefined') {  
 		var mouseX = canvas.mouse.x;
@@ -573,6 +581,7 @@ function postSwing(postParameters) {
 							moveBall(balls[i], (balls[i].x + 1000*Math.cos(angle*Math.PI / 180)), 
 									balls[i].y + 1000*Math.sin(angle*Math.PI / 180),
 									otherPlayerNew);
+
 						} else {
 							if (otherPlayerNew.id == id) {
 								addStroke(1);
