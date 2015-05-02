@@ -32,6 +32,8 @@ var entireGameOver = false;
 var myguihole = "";
 var canvas;
 var image;
+var qtipHidden;
+var qtipContent = "balls";
 
 window.onbeforeunload = function(e) {
 	var e = e || window.event;
@@ -126,6 +128,7 @@ function createBall(color, id, z) {
 
 	balls[id] = newBall;
 }
+
 function loadcanvas() {
 	canvas = oCanvas.create({ canvas: "#myCanvas"});
 
@@ -135,6 +138,47 @@ function loadcanvas() {
 		origin: { x: "center", y: "center" },
 		image: /*"js/"+*/myguihole
 	}).add();
+
+$("#myCanvas").qtip({
+		content: qtipContent,
+		show: false,
+		hide: false,
+		position: {
+        	target: 'mouse'
+    	},
+    	style: {        	
+        	classes: 'qtip-light qtip-rounded'
+    	}    	   
+
+
+	})
+	.bind('mousemove', function(evt) {		
+		// Check the x and y coordinates and valid
+		var nearby = false;
+
+		for (var i in balls) {
+		var someball = balls[i];		
+		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {		
+			nearby = true;	
+			if (players[id] == null) {
+				//messagepopup("your ball");				
+				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + calcDistToHole(someball));
+				$(this).qtip('show'); // Show the qTip
+				qtipHidden = false;				
+			} else {
+				//messagepopup(players[i].name + "'s ball")
+				$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + calcDistToHole(someball));
+				$(this).qtip('show'); // Show the qTip
+				qtipHidden = false;
+			}
+		}
+	}
+	if (!nearby && !qtipHidden) {
+		$(this).qtip('hide'); 
+		qtipHidden = true;
+	}		
+	})
+
 
 }
 
@@ -399,7 +443,7 @@ function sink(ball, x, y) {
 
 function linedraw(evt) {
 	ball = balls[id];
-	for (var i in balls) {
+	/*for (var i in balls) {
 		var someball = balls[i];
 		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {
 			if (players[id] == null) {
@@ -408,7 +452,7 @@ function linedraw(evt) {
 				messagepopup(players[i].name + "'s ball")
 			}
 		}
-	}
+	}*/
 
 	if (linemoveable && typeof ball != 'undefined') {  
 		var mouseX = canvas.mouse.x;

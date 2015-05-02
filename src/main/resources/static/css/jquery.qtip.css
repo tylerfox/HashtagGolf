@@ -252,6 +252,7 @@
 .qtip-rounded .qtip-content{
 		padding: .5em;
 		font: 16px comics;
+		text-align: center;
 
 		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);
 		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);";

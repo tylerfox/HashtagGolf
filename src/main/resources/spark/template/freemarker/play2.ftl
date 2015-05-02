@@ -10,6 +10,7 @@
          <link rel="stylesheet" href="css/html5bp.css">    
          <link rel="stylesheet" href="css/button.css">
          <link rel="stylesheet" href="css/play.css">
+         <link rel="stylesheet" href="css/jquery.qtip.css">
        </head>
        <body>
        
@@ -46,7 +47,7 @@
         <script src="js/ocanvas-2.7.3.js"></script>
         <script src="js/play2.js"></script> 
         <script src="js/main.js"></script>
-
+        <script src="js/jquery.qtip.min.js"></script>
       </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
   dealing with real world issues like old bowsers.  -->
