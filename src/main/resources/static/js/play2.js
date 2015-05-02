@@ -36,8 +36,7 @@ var qtipHidden;
 var qtipContent = "balls";
 
 window.onbeforeunload = function(e) {
-	var e = e || window.event;
-	console.log(e);
+	var e = e || window.event;	
 	
 	//IE & Firefox
 	if (e && !gameover) {
@@ -159,8 +158,7 @@ $("#myCanvas").qtip({
 		for (var i in balls) {
 		var someball = balls[i];		
 		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {		
-			nearby = true;
-			console.log(players[1]);
+			nearby = true;			
 			if (players[1] == null) {
 				//messagepopup("your ball");				
 				$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + disttohole);
@@ -188,7 +186,7 @@ function magnitude(x, y) {
 	return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
 }
 
-function moveBall(ball, dest_X, dest_Y, player) {
+function moveBall(ball, dest_X, dest_Y, player) {	
 	var terrain = player.terrain;
 	var playerId = player.id;
 	var preX = ball.x;
@@ -200,9 +198,9 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	var bounce = Math.min(maxBounce, mag * .01);
 	var airX;
 	var airY;
-	if (terrain === "WATER") {
-		airX = deltaX;
-		airY = deltaY;
+	if (terrain === "WATER") {		
+		airX = deltaX * .5;
+		airY = deltaY * .5;
 	} else {
 		airX = deltaX * .45;
 		airY = deltaY * .45;
@@ -214,7 +212,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	}, {
 		duration: "normal",
 		easing: "linear",
-		callback: function () {
+		callback: function () {			
 			ball.animate({
 				x: ball.x + airX,
 				y: ball.y + airY,
@@ -222,12 +220,14 @@ function moveBall(ball, dest_X, dest_Y, player) {
 			}, {
 				duration: "normal",
 				easing: "linear",
-				callback: function () {        
+				callback: function () {  					
 					if (terrain === "WATER") {
 						sink(ball, preX, preY);
 						if (player.id == id) {
 							messagepopup("your ball is sleeping with the fishes!");
 						}
+					} else if (terrain == "OUT_OF_BOUNDS") {
+						outOfBounds(ball, preX, preY);
 					} else {
 						ball.animate({
 							x: ball.x + deltaX * .05,
@@ -246,20 +246,19 @@ function moveBall(ball, dest_X, dest_Y, player) {
 									easing: "linear",
 									callback: function () { 
 										enableSwingButton();
-										if (outofbounds(ball, canvas)) {
+										/*if (outofbounds(ball, canvas)) {
 											ball.x = preX;
 											ball.y = preY;
 											if (playerId == id) {
 												messagepopup("that went way too far!"); 
 											}
-										} else {
+										} else {*/
 											if (playerId == id) {
 												disttohole = calcDistToHole(ball);
 												document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
 											}
-										}
-										if (player.isGameOver) {
-											console.log(playerId + " in moveBall");
+										//}
+										if (player.isGameOver) {											
 											rollIn(ball, playerId);
 										}
 
@@ -427,6 +426,14 @@ function rollIn(ball, playerId) {
 	});
 }
 
+function outOfBounds(ball, x, y) {     
+	ball.x = x;
+	ball.y = y;
+	ball.radius = 5;
+	messagepopup("that went way too far!");
+	enableSwingButton(); 
+}
+
 function sink(ball, x, y) {
 	ball.animate({
 		radius: 0
@@ -581,9 +588,12 @@ function swing() {
 	} else if (word == "hole!") {    
 		moveBall(balls[id], hole_x, hole_y, players[id]);
 	} else {
+		var wordSplit = word.split(" ");
 		if (usedWords[word] == 1) {
 			messagepopup("word already used!");
 			enableSwingButton();
+		} else if(wordSplit[wordSplit.length - 1] === "-n") {
+			postSwing(postParameters);
 		} else {
 			usedWords[word]  = 1;
 			postSwing(postParameters);
@@ -598,8 +608,7 @@ function postSwing(postParameters) {
 		var newPlayers = responseObject.players;
 		var myPlayer = newPlayers[parseInt(id)];
 		entireGameOver = responseObject.entireGameOver;
-		var oldPlayers = players;
-		console.log(myPlayer);
+		var oldPlayers = players;		
 		animateBalls(0);
 
 		function animateBalls(i) {
@@ -619,10 +628,7 @@ function postSwing(postParameters) {
 						} else if (otherPlayerNew.outOfBounds || distance == -14) {
 							if (otherPlayerNew.id == id) {
 								addStroke(2);
-							}
-							console.log(balls[i].x + 1000*Math.cos(angle*Math.PI / 180));
-							console.log(balls[i].y + 1000*Math.sin(angle*Math.PI / 180));
-							console.log(angle);
+							}							
 							moveBall(balls[i], balls[i].x + 1000*Math.cos(angle*Math.PI / 180), 
 									balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
 									otherPlayerNew);
