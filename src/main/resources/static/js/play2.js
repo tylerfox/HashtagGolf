@@ -59,7 +59,7 @@ function confirmExit(e) {
 
 function waitForOthers() {
 	disableSwingButton();
-	var postParameters={"word":"!doneplaying!", "angle":0};
+	var postParameters={};
 	$.post("/spectate", postParameters, function(responseJSON) {
 		animateTurn(responseJSON);
 	});
@@ -173,12 +173,10 @@ function loadcanvas() {
 			if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {		
 				nearby = true;
 				if (players[1] == null) {
-					//messagepopup("your ball");				
 					$("#myCanvas").qtip('option', 'content.text', "<b>your ball</b><br>" + "distance to hole: "  + disttohole);
 					$(this).qtip('show'); // Show the qTip
 					qtipHidden = false;				
 				} else {
-					//messagepopup(players[i].name + "'s ball")
 					$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + disttohole);
 					$(this).qtip('show'); // Show the qTip
 					qtipHidden = false;
@@ -283,9 +281,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 
 					if (distance == -14) {
 						messagepopup("ball went too far!");
-					} //else if (disttohole != 0) {
-					//	messagepopup("good job!");
-					//}
+					}
 				}
 			});
 		}
@@ -466,18 +462,8 @@ function sink(ball, x, y) {
 
 function linedraw(evt) {
 	ball = balls[id];
-	/*for (var i in balls) {
-		var someball = balls[i];
-		if(Math.abs(someball.x - evt.pageX) < 5  && Math.abs(someball.y - evt.pageY) < 5) {
-			if (players[id] == null) {
-				messagepopup("your ball");
-			} else {
-				messagepopup(players[i].name + "'s ball")
-			}
-		}
-	}*/
-
-	if (linemoveable && typeof ball != 'undefined') {  
+	
+	if (!players[id].isGameOver && linemoveable && typeof ball != 'undefined') {  
 		var mouseX = canvas.mouse.x;
 		var mouseY = canvas.mouse.y;
 		var oldcanvas = document.getElementById("myCanvas");
@@ -553,7 +539,6 @@ function outofbounds(ball, canvas) {
 
 function isgameover(ball) {
 	return Math.abs(ball.x - hole_x) < 5 && Math.abs(ball.y - hole_y) < 5;
-	//return gameOver;
 }
 
 function isenter(evt) {
@@ -644,7 +629,6 @@ function animateTurn(responseJSON) {
 					&& otherPlayerNew != null) {
 				setTimeout(function() {
 					if (otherPlayerNew.isGameOver) {
-						console.log("other player wins! " + otherPlayerNew.name + " " + i);
 						moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
 					} else if (otherPlayerNew.outOfBounds || distance == -14) {
 						if (otherPlayerNew.id == id) {
