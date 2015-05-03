@@ -67,16 +67,17 @@ public final class SparkServerWithMultiplayer {
 
 
     // Front End Requesting Information
-
     Spark.post("/setup", new SetupHandler());
-    Spark.post("/swing", new SwingHandler());
-    Spark.post("/host", new HostHandler());
-    Spark.post("/join", new JoinHandler());
     Spark.post("/exit", new ExitHandler());
+    Spark.post("/swing", new SwingHandler());
     Spark.post("/spectate", new SpectateHandler());
 
+    // Hosting and joining post requests
+    Spark.post("/host", new HostHandler());
+    Spark.post("/join", new JoinHandler());
     Spark.post("/hoststart", new HostStartHandler());
     Spark.post("/ready", new PlayerReadyHandler());
+    Spark.post("/joinedPlayers", new JoinedPlayersHandler());
   }
 
   /**
@@ -308,7 +309,9 @@ public final class SparkServerWithMultiplayer {
   private static class LobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      String roomName = req.cookie("room");
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "roomName", roomName);
       return new ModelAndView(variables, "lobby.ftl");
     }
   }
@@ -316,7 +319,9 @@ public final class SparkServerWithMultiplayer {
   private static class HostLobbyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf");
+      String roomName = req.cookie("room");
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "roomName", roomName);
       return new ModelAndView(variables, "hostlobby.ftl");
     }
   }
@@ -495,4 +500,28 @@ public final class SparkServerWithMultiplayer {
       return GSON.toJson(variables);
     }
   }
+
+  /**
+   * Returns the players in the game.
+   */
+  private static class JoinedPlayersHandler implements Route {
+
+    @Override
+    public Object handle(Request req, Response res) {
+      String room = req.cookie("room");
+      Game game = rooms.get(room);
+      List<Player> players = game.getCopyOfPlayers();
+      StringBuilder str = new StringBuilder("");
+      for (Player player : players) {
+       str.append(player.getName() + "<br>");
+      }
+
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .put("playerNames", str.toString())
+          .build();
+      return GSON.toJson(variables);
+
+  }
+}
 }

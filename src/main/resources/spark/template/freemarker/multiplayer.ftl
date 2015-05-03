@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/html5bp.css">    
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/start.css">
+    <link rel="stylesheet" href="css/multiplayer.css">
   </head>
   <body>
    <button onclick="start()" class= "myButton menubutton"> menu </button>

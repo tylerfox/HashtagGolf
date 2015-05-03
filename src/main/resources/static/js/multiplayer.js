@@ -1,10 +1,13 @@
-/*
+/**
  * Redirects to the start page
  */
 function back() {
 	window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 }
 
+/**
+ *  Host popup.  Prompts for room and name.
+ */
 function host() {
 	var room = prompt("Room name");
 	if (room != null) {
@@ -29,6 +32,9 @@ function host() {
 	}
 }
 
+/**
+ * Join popup.  Prompts for room and name to join a game.
+ */
 function join() {
 	var room = prompt("Room name");
 
@@ -65,6 +71,9 @@ function join() {
 	}
 }
 
+/**
+ * When the host clicks start game, send request to backend to see if all players are ready yet.
+ */
 function startGame() {
 	var postParameters = {};
 
@@ -79,12 +88,15 @@ function startGame() {
 	});
 }
 
+/**
+ * All non-host players click readyToPlay before game begins.
+ */
 function readyToPlay() {
 	var playButton = document.getElementById("lobbybutton");
 	playButton.disabled = true;
 	playButton.className = "load-button myButtonGrey zoom-in";  
 	playButton.setAttribute( 'data-loading', '' ); 
-	
+
 	var postParameters = {};
 	$.post("/ready", postParameters, function(responseJSON) {
 		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
@@ -92,24 +104,26 @@ function readyToPlay() {
 
 }
 
+/**
+ * Checks who is in the game every seconds.
+ */
+function checkPlayers() {
+	setInterval(function() {
+		var postParameters = {};
+		$.post("/joinedPlayers", postParameters, function(responseJSON) {
+			var players = JSON.parse(responseJSON).playerNames.toLowerCase();
+			document.getElementById("players").innerHTML = players;
+		});
+		
+	}, 1000);
+}
+
+/**
+ * Any time a player exits the host/join pages, alerts the backend to drop the player from the game.
+ */
 function exit() {
 	var postParameters = {};
 	$.post("/exit", postParameters, function(responseJSON){
 		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

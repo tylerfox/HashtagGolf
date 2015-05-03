@@ -10,15 +10,27 @@
     <link rel="stylesheet" href="../css/html5bp.css">    
     <link rel="stylesheet" href="../css/button.css">
     <link rel="stylesheet" href="../css/start.css">
+    <link rel="stylesheet" href="../css/multiplayer.css">
   </head>
-  <body>
+  <body onload ="checkPlayers()">
   <button onclick="start()" class= "myButton menubutton"> exit </button>
   
     <div id="container">
       <div id ="background">
         <h1> lobby </h1>
 		<div id="center">
-			<button class="myButton" onclick="readyToPlay()" id="lobbybutton">ready to play!</button>
+		<h3> Room Name: ${roomName}</h3>
+        <h3> Tell other players to join the room "${roomName}" to play this game with you!</h3>
+			<div id ="whitebox">
+				<p>
+					current players in game: 
+					<p id="players"> </p>
+				</p>
+			</div>
+			<br>
+			<div>
+				<button class="myButton" onclick="readyToPlay()" id="lobbybutton">ready to play!</button>
+			</div>
 	  	</div>
 	  </div>
    </div>
