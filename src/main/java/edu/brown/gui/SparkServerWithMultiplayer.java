@@ -382,20 +382,23 @@ public final class SparkServerWithMultiplayer {
         int id = Integer.parseInt(req.cookie("id"));
         String room = req.cookie("room");
         Game game = rooms.get(room);
-        List<Player> players = game.spectate(id);
+        List<Player> players = null;
+        if (game != null) {
+          players = game.spectate(id);
 
-        game.checkResetState();
-        boolean entireGameOver = game.isGameOver();
+          game.checkResetState();
+          boolean entireGameOver = game.isGameOver();
 
-        if (entireGameOver) {
-          rooms.remove(room);
+          if (entireGameOver) {
+            rooms.remove(room);
+          }
+          final Map<String, Object> variables =
+              new ImmutableMap.Builder<String, Object>()
+              .put("players", players)
+              .put("entireGameOver", entireGameOver)
+              .build();
+          return GSON.toJson(variables);
         }
-        final Map<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>()
-            .put("players", players)
-            .put("entireGameOver", entireGameOver)
-            .build();
-        return GSON.toJson(variables);
       } catch (Exception e) {
         e.printStackTrace(); //TODO: get rid of this
       }
