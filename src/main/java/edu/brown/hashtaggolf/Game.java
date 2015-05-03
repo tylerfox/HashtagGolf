@@ -47,8 +47,8 @@ public class Game {
     }
   }
 
-  public AtomicInteger getNumPlayers() {
-    return numPlayers;
+  public int getNumPlayers() {
+    return numPlayers.get();
   }
 
   public boolean isGameOver() {

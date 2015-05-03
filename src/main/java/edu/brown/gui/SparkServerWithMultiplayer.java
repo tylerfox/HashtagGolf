@@ -206,11 +206,13 @@ public final class SparkServerWithMultiplayer {
       try {
         Game game = new Game("new_hole1.png", "key.png");
         game.addPlayer("Tiger");
+        game.setActive(true);
 
         int hashKey = game.hashCode();
         while (rooms.containsKey(hashKey)) {
           hashKey++;
         }
+
         String roomName = String.valueOf(hashKey);
         rooms.put(roomName, game);
         res.cookie("room", String.valueOf(hashKey));
@@ -275,10 +277,15 @@ public final class SparkServerWithMultiplayer {
 
       Game game = rooms.get(room);
       assert game != null;
-
       List<Player> players = game.getPlayers();
+
       players.set(id, null);
       game.decrementNumPlayers();
+
+      // if all players left the game, then remove the room from the hashmap
+      if (game.getNumPlayers() == 0) {
+        rooms.remove(room);
+      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players,

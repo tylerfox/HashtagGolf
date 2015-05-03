@@ -130,12 +130,12 @@ function checkPlayers() {
 			var displayPlayers = "";
 			for (var i = 0; i < players.length; i++) {
 				var myPlayer = players[i];
-				if (i == 0) {
-					displayPlayers = displayPlayers + "<font color =\"green\">host: " + myPlayer.name + "</font><br>";
+				if (i == 0 && myPlayer != null) {
+					displayPlayers = displayPlayers + "<font color =\"green\">host: " + myPlayer.name.toLowerCase() + "</font><br>";
 				} else if (myPlayer.ready) {
-					displayPlayers = displayPlayers + "<font color =\"green\">" + myPlayer.name + " - ready</font><br>";
+					displayPlayers = displayPlayers + "<font color =\"green\">" + myPlayer.name.toLowerCase() + " - ready</font><br>";
 				} else {
-					displayPlayers  = displayPlayers  + "<font color =\"red\">" +  myPlayer.name + " - not ready</font><br>";
+					displayPlayers  = displayPlayers  + "<font color =\"red\">" +  myPlayer.name.toLowerCase() + " - not ready</font><br>";
 				}
 			}
 			document.getElementById("players").innerHTML = displayPlayers;
