@@ -15,7 +15,7 @@
 
       <button onclick="document.location.href= '/start'" class= "myButton menubutton"> menu </button>
       <p id= "para1"> welcome to the tutorial screen! <br> i'll teach you what everything on the play screen does. <br>click next at the top left</p>
-      <p id= "para2"> here is your main play screen. you can move this line around with your mouse,<br> and click to toggle when you have it at the angle you want.</p>
+      <p id= "para2"> here is your main play screen. you can move this line around with your mouse,<br> and click to toggle when you have it at the angle you want. <br> in multiplayer, you can hover your mouse over a ball to see whose it is.</p>
       <p id= "para3"> this is where you type in <br> the word or phrase you want to swing with. <br> be creative, you can't use the same word twice!</p>
       <p id= "para4"> when you have input your word, <br>click this 'swing' button or press enter <br>to query with your word.</p>
       <p id= "para5"> checking this box will <br>always aim the angle of your <br> swing at the hole. useful! </p>

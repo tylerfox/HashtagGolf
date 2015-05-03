@@ -17,12 +17,12 @@
           <div id ="background">
             <h1> choose a level </h1>
             <div id = "left">
-             <a onclick = "chooselevel('1');" class="myButton" id = "start">level 1</a>
-             <a onclick = "chooselevel('2');" class="myButton" id = "multiplayer">level 2</a>
+             <button onclick = "chooselevel('1');" class="myButton" id = "start">level 1</button>
+             <button onclick = "chooselevel('2');" class="myButton" id = "multiplayer">level 2</button>
              <br><br>
 
-             <a onclick = "chooselevel('3');" class="myButton" id ="settings">level 4</a>
-             <a onclick = "chooselevel('4');" class="myButton" id ="create">level 3</a>
+             <button onclick = "chooselevel('3');" class="myButton" id ="settings">level 4</button>
+             <button onclick = "chooselevel('4');" class="myButton" id ="create">level 3</button>
              <br> <br>
              <button onclick= "play();" id = "playbutton" class="myButton"> play </button>
            </div>

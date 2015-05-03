@@ -15,7 +15,7 @@
         <button onclick="start()" class= "myButton menubutton"> menu </button>
         <div id="container">
           <div id ="background">
-            <h1> choose a player </h1>
+            <h1> choose a color </h1>
             <div id = "left">
              <a onclick = "choosecolor('red');" class="redPlayerButton" id = "start">red</a>
              <a onclick = "choosecolor('blue');" class="bluePlayerButton" id = "multiplayer">blue</a>
