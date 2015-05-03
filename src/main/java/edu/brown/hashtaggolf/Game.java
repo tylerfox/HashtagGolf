@@ -93,6 +93,7 @@ public class Game {
     // makes copies of all players
     List<Player> newPlayers = getCopyOfPlayers();
     roomReadiness.addAndGet(1);
+    System.out.println("returning from swing.");
     return newPlayers;
   }
 
@@ -115,13 +116,20 @@ public class Game {
   public List<Player> spectate(int id) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
-    myPlayer.setReady(true);
-    waitUntilAllPlayersReady();
+    if (!myPlayer.isSpectating()) {
+      myPlayer.setSpectating(true);
+      myPlayer.setReady(true);
+      waitUntilAllPlayersReady();
 
-    // makes copies of all players
-    List<Player> newPlayers = getCopyOfPlayers();
-    roomReadiness.addAndGet(1);
-    return newPlayers;
+      // makes copies of all players
+      List<Player> newPlayers = getCopyOfPlayers();
+      roomReadiness.addAndGet(1);
+      
+      return newPlayers;
+    } else {
+      List<Player> newPlayers = getCopyOfPlayers();
+      return newPlayers;
+    }
   }
 
   private synchronized void waitUntilAllPlayersReady() {
@@ -155,6 +163,9 @@ public class Game {
   public void resetReadinessAndState() {
     for (Player player : players) {
       if (player != null) {
+        if (player.isGameOver()) {
+          player.setSpectating(false);
+        }
         player.setReady(false);
       }
     }
@@ -166,7 +177,6 @@ public class Game {
       // went into the water (however the front ends receives
       // where the ball went in the water)
       if (player != null){
-
         // if player is out, revert state back to past state
         if (player.getTerrain() == Terrain.WATER
             || player.getTerrain() == Terrain.OUT_OF_BOUNDS) {
@@ -174,14 +184,6 @@ public class Game {
           player.setX(oldPlayer.getX());
           player.setY(oldPlayer.getY());
           player.setTerrain(oldPlayer.getTerrain());
-          player.applyStrokePenalty();
-        }
-
-        // apply stroke penalties as necessary
-        if (player.getTerrain() == Terrain.WATER) {
-          player.addStroke(1);
-        } else if (player.getTerrain() == Terrain.OUT_OF_BOUNDS) {
-          player.applyStrokePenalty();
         }
       }
     }

@@ -430,10 +430,6 @@ function rollIn(ball, playerId) {
 						} else {
 							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
 						}
-
-						if (!entireGameOver) {
-							waitForOthers();
-						}
 					} else {
 						if (players[playerId].stroke == 1) {
 							messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
