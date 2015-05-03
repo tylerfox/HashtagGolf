@@ -34,13 +34,6 @@ public final class SparkServerWithMultiplayer {
   private static Map<String, Game> rooms;
   private static Map<Game, List<String>> ipAddresses;
   private static String color = "white";
-  private static int levelnum = 0;
-  private static int holex = 0;
-  private static int holey = 0;
-  private static int startx = 0;
-  private static int starty = 0;
-  private static int par = 0;
-  private static String guihole = "gui_hole1.png";
   private static boolean uniqueIpRequired = false;
 
   /**
@@ -80,6 +73,7 @@ public final class SparkServerWithMultiplayer {
     Spark.post("/host", new HostHandler());
     Spark.post("/join", new JoinHandler());
     Spark.post("/exit", new ExitHandler());
+    Spark.post("/spectate", new SpectateHandler());
 
     Spark.post("/hoststart", new HostStartHandler());
     Spark.post("/ready", new PlayerReadyHandler());
@@ -140,90 +134,62 @@ public final class SparkServerWithMultiplayer {
   }
 
   /**
-   * Displays levelselect page of #golf.
+   * Displays single level select page of #golf.
    */
   private static class LevelHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String newlevel = qm.value("level");
-
-      if (newlevel != null){
-        levelnum = Integer.parseInt(newlevel);
-        
-        try {
-          BufferedReader reader = new BufferedReader(new FileReader(
-              new File("src/main/resources/levelconfig.txt")));
-          String read = "";
-
-          for (int i = 0; i < levelnum; i++) {
-            read = reader.readLine();
-            System.out.println(read);
-          }
-          System.out.println(read);
-
-          String[] readarr = read.split(",");
-          System.out.println(readarr);
-          String roomName = req.cookie("room");
-          Game game = rooms.get(roomName);
-         
-          startx = Integer.parseInt(readarr[2]);
-          starty = Integer.parseInt(readarr[3]);
-          holex = Integer.parseInt(readarr[4]);
-          holey = Integer.parseInt(readarr[5]);
-          game.setLevel(readarr[0], readarr[1], startx, starty, holex, holey);
-          par = Integer.parseInt(readarr[6]);
-          guihole = readarr[7];
-          System.out.println(guihole);
-          reader.close();
-
-        } catch (IOException e1) {
-          System.out.println("failed");
-        }
-      }
-      
+      levelSelect(req, res);
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "level_select.ftl");
     }
   }
-  
+
   /**
-   * Displays levelselect page of #golf.
+   * Displays multiplayer level select page of #golf.
    */
   private static class MultiLevelHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String newlevel = qm.value("level");
-      if (newlevel != null){
-        levelnum = Integer.parseInt(newlevel);
-        
-        try {
-          BufferedReader reader = new BufferedReader(new FileReader(
-              new File("src/main/resources/levelconfig.txt")));
-          String read = "";
-
-          for (int i = 0; i < levelnum; i++) {
-            read = reader.readLine();
-          }
-
-          String[] readarr = read.split(",");
-
-          startx = Integer.parseInt(readarr[2]);
-          starty = Integer.parseInt(readarr[3]);
-          holex = Integer.parseInt(readarr[4]);
-          holey = Integer.parseInt(readarr[5]);
-          par = Integer.parseInt(readarr[6]);
-          guihole = readarr[7];
-
-          reader.close();
-
-        } catch (IOException e1) {
-          System.out.println("failed");
-        }
-      }
+      levelSelect(req, res);
       Map<String, Object> variables = ImmutableMap.of("title", "#golf");
       return new ModelAndView(variables, "multi_level_select.ftl");
+    }
+  }
+
+  private static void levelSelect(Request req, Response res) {
+    QueryParamsMap qm = req.queryMap();
+    String newlevel = qm.value("level");
+
+    if (newlevel != null){
+      int levelnum = Integer.parseInt(newlevel);
+
+      try {
+        BufferedReader reader = new BufferedReader(new FileReader(
+            new File("src/main/resources/levelconfig.txt")));
+        String read = "";
+
+        for (int i = 0; i < levelnum; i++) {
+          read = reader.readLine();
+        }
+
+        String[] readarr = read.split(",");
+        String roomName = req.cookie("room");
+        Game game = rooms.get(roomName);
+
+        int startx = Integer.parseInt(readarr[2]);
+        int starty = Integer.parseInt(readarr[3]);
+        int holex = Integer.parseInt(readarr[4]);
+        int holey = Integer.parseInt(readarr[5]);
+        int par = Integer.parseInt(readarr[6]);
+        String guihole = readarr[7];
+        game.setLevel(readarr[0], readarr[1], startx,
+            starty, holex, holey, par, guihole);
+        reader.close();
+
+      } catch (IOException e1) {
+        System.out.println("ERROR: Level reading failed");
+      }
     }
   }
 
@@ -279,21 +245,22 @@ public final class SparkServerWithMultiplayer {
       String room = req.cookie("room");
 
       assert rooms.get(room) != null;
-      List<Player> players = rooms.get(room).getPlayers();
+      Game game = rooms.get(room);
+      List<Player> players = game.getPlayers();
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf")
           .put("color", color)
-          .put("players", players) 
+          .put("players", players)
           .put("id", id)
-          .put("holex", holex)
-          .put("holey", holey)
-          .put("startx", startx)
-          .put("starty", starty)
-          .put("par", par)
-          .put("guihole",guihole)
+          .put("holex", game.getHoleX())
+          .put("holey", game.getHoleY())
+          .put("startx", game.getStartX())
+          .put("starty", game.getStartY())
+          .put("par", game.getPar())
+          .put("guihole", game.getGuihole())
           .build();
-      
+
       return GSON.toJson(variables);
     }
   }
@@ -355,7 +322,7 @@ public final class SparkServerWithMultiplayer {
   }
 
   /**
-   * Displays menu page of #golf.
+   * Swings.
    */
   private static class SwingHandler implements Route {
 
@@ -370,7 +337,37 @@ public final class SparkServerWithMultiplayer {
         String room = req.cookie("room");
         Game game = rooms.get(room);
         List<Player> players = game.swing(id, word, angle);
-        
+
+        game.checkResetState();
+
+        final Map<String, Object> variables =
+            new ImmutableMap.Builder<String, Object>()
+            .put("players", players)
+            .put("entireGameOver", game.isGameOver())
+            .build();
+
+        System.out.println("id: " + id + " on stroke: " + players.get(id).getStroke());
+        return GSON.toJson(variables);
+      } catch (Exception e) {
+        e.printStackTrace(); //TODO: get rid of this
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Spectates.
+   */
+  private static class SpectateHandler implements Route {
+
+    @Override
+    public Object handle(Request req, Response res) {
+      try {
+        int id = Integer.parseInt(req.cookie("id"));
+        String room = req.cookie("room");
+        Game game = rooms.get(room);
+        List<Player> players = game.spectate(id);
+
         game.checkResetState();
 
         final Map<String, Object> variables =
@@ -381,7 +378,7 @@ public final class SparkServerWithMultiplayer {
 
         return GSON.toJson(variables);
       } catch (Exception e) {
-        e.printStackTrace();
+        e.printStackTrace(); //TODO: get rid of this
       }
       return null;
     }
@@ -433,21 +430,20 @@ public final class SparkServerWithMultiplayer {
       if (roomExists) {
         Game game = rooms.get(roomName);
         List<String> ipAddressList = ipAddresses.get(game);
-        
+
         if (ipAddressList.contains(req.ip())) {
           duplicateIp = true;
         } else {
           ipAddressList.add(req.ip());
           ipAddresses.put(game, ipAddressList);
-          
-          String id = game.addPlayer(playerName);
-          
-          if (id != null) {
-            res.cookie("id", id);
-            res.cookie("room", roomName);
-          } else {
-            roomFull = true;
-          }
+        }
+
+        String id = game.addPlayer(playerName);
+        if (id != null) {
+          res.cookie("id", id);
+          res.cookie("room", roomName);
+        } else {
+          roomFull = true;
         }
       }
 
@@ -476,13 +472,11 @@ public final class SparkServerWithMultiplayer {
       if (unreadyPlayers.isEmpty()) {
         allOtherPlayersReady = true;
       }
-      
+
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("startGame", allOtherPlayersReady)
           .put("unreadyPlayers", unreadyPlayers).build();
-      System.out.println("Host Readiness: " + game.getPlayers().get(Integer.parseInt(id)));
       game.checkResetState();
-      System.out.println("Host Readiness: " + game.getPlayers().get(Integer.parseInt(id)));
       return GSON.toJson(variables);
     }
   }

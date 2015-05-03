@@ -12,12 +12,13 @@ public class Game {
   private Player[] savedState;
   private List<Player> players;
   private AtomicInteger numPlayers;
-  // private int activePlayerCount;
   private Referee ref;
   private int startX = 0;
   private int startY = 0;
   private int holeX = 0;
   private int holeY = 0;
+  private int par = 0;
+  private String guihole = "";
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
@@ -27,12 +28,14 @@ public class Game {
   }
 
   public void setLevel(String level, String key, int startX, int startY,
-      int holeX, int holeY) throws IOException {
+      int holeX, int holeY, int par, String guihole) throws IOException {
     ref = new Referee(level, key);
     this.startX = startX;
     this.startY = startY;
     this.holeX = holeX;
     this.holeY = holeY;
+    this.par = par;
+    this.guihole = guihole;
 
     for (Player p : players) {
       p.setX(startX);
@@ -48,7 +51,13 @@ public class Game {
   }
 
   public boolean isGameOver() {
-    return getActivePlayerCount() == 0;
+    boolean gameover = true;
+
+    for (Player player : players) {
+      gameover = gameover && (player == null || player.isGameOver());
+    }
+
+    return gameover;
   }
 
   /**
@@ -79,24 +88,40 @@ public class Game {
     ref.swing(myPlayer, word, angle);
     myPlayer.setReady(true);
 
-    System.out.println("Waiting for all players..." + id);
     waitUntilAllPlayersReady();
-    System.out.println("Done waiting!");
+
     // makes copies of all players
-    List<Player> tempList = new ArrayList<>();
+    List<Player> newPlayers = getCopyOfPlayers();
+    roomReadiness.addAndGet(1);
+    return newPlayers;
+  }
+
+  public List<Player> getCopyOfPlayers() {
+    List<Player> playerCopies = new ArrayList<>();
+
     for (int i = 0; i < players.size(); i++) {
       Player player = players.get(i);
 
       if (player == null) {
-        tempList.add(null);
+        playerCopies.add(null);
       } else {
-        tempList.add(new Player(player));
+        playerCopies.add(new Player(player));
       }
     }
 
+    return playerCopies;
+  }
+
+  public List<Player> spectate(int id) {
+    assert players.get(id) != null;
+    Player myPlayer = players.get(id);
+    myPlayer.setReady(true);
+    waitUntilAllPlayersReady();
+
+    // makes copies of all players
+    List<Player> newPlayers = getCopyOfPlayers();
     roomReadiness.addAndGet(1);
-    System.out.println(id + " room readiness: " + roomReadiness.get());
-    return tempList;
+    return newPlayers;
   }
 
   private synchronized void waitUntilAllPlayersReady() {
@@ -113,18 +138,12 @@ public class Game {
         }
       }
 
-      /* try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        System.out.println("ERROR: Issue sleeping"
-            + " thread in wait until all players ready.");
-      }*/
     }
   }
 
   public synchronized void checkResetState() {
     int activePlayers = getActivePlayerCount();
-    System.out.println("Number of Active Players: " + activePlayers);
+
     if (roomReadiness.get() >= activePlayers) {
       resetReadinessAndState();
     }
@@ -134,14 +153,9 @@ public class Game {
    * Sets all the readiness of all activePlayers to false.
    */
   public void resetReadinessAndState() {
-    System.out.println("resetting readiness and state!!");
     for (Player player : players) {
       if (player != null) {
-        if (player.isGameOver()) {
-          player.setReady(true);
-        } else {
-          player.setReady(false);
-        }
+        player.setReady(false);
       }
     }
 
@@ -151,12 +165,24 @@ public class Game {
       // Moves the ball back to its original positioning, since it
       // went into the water (however the front ends receives
       // where the ball went in the water)
-      if (player != null
-          && (player.getTerrain() == Terrain.WATER || player.getTerrain() == Terrain.OUT_OF_BOUNDS)) {
-        Player oldPlayer = savedState[Integer.parseInt(player.getId())];
-        player.setX(oldPlayer.getX());
-        player.setY(oldPlayer.getY());
-        player.setTerrain(oldPlayer.getTerrain());
+      if (player != null){
+
+        // if player is out, revert state back to past state
+        if (player.getTerrain() == Terrain.WATER
+            || player.getTerrain() == Terrain.OUT_OF_BOUNDS) {
+          Player oldPlayer = savedState[Integer.parseInt(player.getId())];
+          player.setX(oldPlayer.getX());
+          player.setY(oldPlayer.getY());
+          player.setTerrain(oldPlayer.getTerrain());
+          player.applyStrokePenalty();
+        }
+
+        // apply stroke penalties as necessary
+        if (player.getTerrain() == Terrain.WATER) {
+          player.addStroke(1);
+        } else if (player.getTerrain() == Terrain.OUT_OF_BOUNDS) {
+          player.applyStrokePenalty();
+        }
       }
     }
 
@@ -171,7 +197,7 @@ public class Game {
     int count = 0;
 
     for (Player player : players) {
-      if (player != null && !player.isGameOver()) {
+      if (player != null) {
         count++;
       }
     }
@@ -203,11 +229,6 @@ public class Game {
     } else {
       roomReadiness.addAndGet(1);
     }
-    /*try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      System.err.println("ERROR: Issue sleeping thread.");
-    } */
     return unreadyPlayers;
   }
 
@@ -221,7 +242,6 @@ public class Game {
 
     waitUntilAllPlayersReady();
     roomReadiness.addAndGet(1);
-    System.out.println("Done waiting for all players.");
   }
 
   public void decrementNumPlayers() {
@@ -230,5 +250,29 @@ public class Game {
 
   public List<Player> getPlayers() {
     return players;
+  }
+
+  public int getPar() {
+    return par;
+  }
+
+  public String getGuihole() {
+    return guihole;
+  }
+
+  public int getHoleX() {
+    return holeX;
+  }
+
+  public int getHoleY() {
+    return holeY;
+  }
+
+  public int getStartX() {
+    return startX;
+  }
+
+  public int getStartY() {
+    return startY;
   }
 }

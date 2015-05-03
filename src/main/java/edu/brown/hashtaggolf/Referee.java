@@ -65,7 +65,7 @@ public class Referee {
     }
     if (yards == -1) {
       System.out
-          .println("Network Error. Please swing again when you have a connection.");
+      .println("Network Error. Please swing again when you have a connection.");
       return -1;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
@@ -95,9 +95,9 @@ public class Referee {
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
     }
-    System.out.println(newTerrain);
-    System.out.println("You are now at (" + player.getX() + ", "
-        + player.getY() + ")");
+    // System.out.println(newTerrain);
+    //System.out.println("You are now at (" + player.getX() + ", "
+    //   + player.getY() + ")");
     player.isGameOver();
     return yards;
   }
@@ -127,7 +127,7 @@ public class Referee {
     }
     try {
       int count = tq.getCount(word, seconds);
-      System.out.println(count);
+      //System.out.println(count);
       return player.powerup(count);
     } catch (TwitterException e) {
       e.printStackTrace();

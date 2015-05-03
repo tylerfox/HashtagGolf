@@ -138,6 +138,14 @@ public class Player {
     stroke += STROKE_PENALTY;
   }
 
+  /**
+   * Adds value to stroke number.
+   * @param num to be added to stroke number
+   */
+  public void addStroke(int num) {
+    stroke += num;
+  }
+
   public void setOutOfBounds(boolean outOfBounds) {
     this.outOfBounds = outOfBounds;
   }
@@ -213,7 +221,7 @@ public class Player {
   public int getY() {
     return y;
   }
-  
+
   /**
    * Sets the hole_x coordinate.
    * @param hole_x the new value to set the hole_x coordinate to
