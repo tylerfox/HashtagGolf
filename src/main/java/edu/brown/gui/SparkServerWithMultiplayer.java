@@ -344,11 +344,15 @@ public final class SparkServerWithMultiplayer {
         List<Player> players = game.swing(id, word, angle);
 
         game.checkResetState();
+        boolean entireGameOver = game.isGameOver();
 
+        if (entireGameOver) {
+          rooms.remove(room);
+        }
         final Map<String, Object> variables =
             new ImmutableMap.Builder<String, Object>()
             .put("players", players)
-            .put("entireGameOver", game.isGameOver())
+            .put("entireGameOver", entireGameOver)
             .build();
 
         return GSON.toJson(variables);
@@ -373,10 +377,15 @@ public final class SparkServerWithMultiplayer {
         List<Player> players = game.spectate(id);
 
         game.checkResetState();
+        boolean entireGameOver = game.isGameOver();
+
+        if (entireGameOver) {
+          rooms.remove(room);
+        }
         final Map<String, Object> variables =
             new ImmutableMap.Builder<String, Object>()
             .put("players", players)
-            .put("entireGameOver", game.isGameOver())
+            .put("entireGameOver", entireGameOver)
             .build();
         return GSON.toJson(variables);
       } catch (Exception e) {
@@ -515,6 +524,6 @@ public final class SparkServerWithMultiplayer {
           .build();
       return GSON.toJson(variables);
 
+    }
   }
-}
 }

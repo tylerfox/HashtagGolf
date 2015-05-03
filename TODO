@@ -1,7 +1,6 @@
 TODO:
 	Tyler
 	- Make more levels (minimum we should have 4 ready by Tuesday)
-	- Ball select screen: players shouldn't have the white background?
 	- The box that asks you if you would like to go full screen should have a taller height (on linux computers - for whatever reason, it pops up with a scroll bar since the font/buttons are too big; adjusting the height should fix this)
 
 	Dan
@@ -19,11 +18,9 @@ TODO:
 	ANYONE CAN TAKE
 	- Error handling in SwingHandler (for TwitterQueries) - how should we handle for the GUI? --> ie: general connection lost
 	- Let the user know who hasn't swung yet (get the loading animation to work on Chrome)
-	- Very explicitly tell people what ball color they are (it's actually pretty confusing and I still think having something in the HUD to just tell them this would be beneficial)
+	- Very explicitly tell people what ball color they are (it's actually pretty confusing and I still think having something in the HUD to just tell them this would be beneficial - Beverly)
 	- See what the other person's word is (or at least show this at the end on the score card - maybe a button on the score card that's like "show words" and it will show each players' words")
-	- Play again possibility.
-	- Take out games that are finished from the "Rooms" hashmap. (Beverly or Dan should/will take this.)
-
+	- Play again possibility - probably more difficult that it sounds.
 
 	CHECKOUT/TEST
 	- I added the feature so you see who is ready in the multiplayer handler - please check it out and let me know if you want to change how it displays/design.  I wasn't exactly sure what to change when you see a player is ready. - Beverly
