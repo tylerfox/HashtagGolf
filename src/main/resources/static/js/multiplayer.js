@@ -111,8 +111,19 @@ function checkPlayers() {
 	setInterval(function() {
 		var postParameters = {};
 		$.post("/joinedPlayers", postParameters, function(responseJSON) {
-			var players = JSON.parse(responseJSON).playerNames.toLowerCase();
-			document.getElementById("players").innerHTML = players;
+			var players = JSON.parse(responseJSON).players;
+			var displayPlayers = "";
+			for (var i = 0; i < players.length; i++) {
+				var myPlayer = players[i];
+				if (i == 0) {
+					displayPlayers = displayPlayers + "<font color =\"green\">host: " + myPlayer.name.toLowerCase() + "</font><br>";
+				} else if (myPlayer.ready) {
+					displayPlayers = displayPlayers + "<font color =\"green\">" + myPlayer.name.toLowerCase() + " - ready</font><br>";
+				} else {
+					displayPlayers  = displayPlayers  + "<font color =\"red\">" +  myPlayer.name.toLowerCase() + " - not ready</font><br>";
+				}
+			}
+			document.getElementById("players").innerHTML = displayPlayers;
 		});
 		
 	}, 1000);

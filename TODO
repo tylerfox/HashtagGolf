@@ -2,6 +2,7 @@ TODO:
 	Tyler
 	- Make more levels (minimum we should have 4 ready by Tuesday)
 	- Ball select screen: players shouldn't have the white background?
+	- The box that asks you if you would like to go full screen should have a taller height (on linux computers - for whatever reason, it pops up with a scroll bar since the font/buttons are too big; adjusting the height should fix this)
 
 	Dan
 	- In javascript swing function: players is an array with String keys, but newPlayers is an array with numerical keys (figure out if this is a problem/how javascript deals with this)
@@ -9,7 +10,6 @@ TODO:
 	- Ensure only one client per IP Addrress.
 
 	Beverly
-	- Let the host know who is ready in the lobby
 	- Force users to have names that are shorter than some number characters since names that are too long are ugly
 
 	Brandon
@@ -25,3 +25,6 @@ TODO:
 	- Play again possibility.
 	- Take out games that are finished from the "Rooms" hashmap. (Beverly or Dan should/will take this.)
 
+
+	CHECKOUT/TEST
+	- I added the feature so you see who is ready in the multiplayer handler - please check it out and let me know if you want to change how it displays/design.  I wasn't exactly sure what to change when you see a player is ready. - Beverly
