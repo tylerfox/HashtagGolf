@@ -12,14 +12,27 @@
     <link rel="stylesheet" href="css/start.css">
     <link rel="stylesheet" href="css/multiplayer.css">
   </head>
-  <body>
+  <body onload="availableRooms()">
    <button onclick="start()" class= "myButton menubutton"> menu </button>
     <div id="container">
       <div id ="background">
       <h1> multiplayer </h1>
   	 <button class="myButton" onclick="host()" id="left"> host</button>
      <button class="myButton" onclick="join()" id="right"> join</button>
-     <br><br>
+     <br><br><br><br><br>
+
+    <div id ="whitebox">
+      <p>
+
+        <h2>available rooms:</h2>
+      
+        <p id="rooms"> </p>
+      
+      </p>
+      
+    </div>
+
+
     </div>
    </div>
   	

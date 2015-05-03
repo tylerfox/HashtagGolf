@@ -19,6 +19,7 @@ public class Game {
   private int holeY = 0;
   private int par = 0;
   private String guihole = "";
+  private boolean active = false;
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
@@ -124,7 +125,7 @@ public class Game {
       // makes copies of all players
       List<Player> newPlayers = getCopyOfPlayers();
       roomReadiness.addAndGet(1);
-      
+
       return newPlayers;
     } else {
       List<Player> newPlayers = getCopyOfPlayers();
@@ -153,6 +154,7 @@ public class Game {
     int activePlayers = getActivePlayerCount();
 
     if (roomReadiness.get() >= activePlayers) {
+      setActive(true);
       resetReadinessAndState();
     }
   }
@@ -276,5 +278,13 @@ public class Game {
 
   public int getStartY() {
     return startY;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 }

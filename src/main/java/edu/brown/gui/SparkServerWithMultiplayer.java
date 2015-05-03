@@ -78,6 +78,7 @@ public final class SparkServerWithMultiplayer {
     Spark.post("/hoststart", new HostStartHandler());
     Spark.post("/ready", new PlayerReadyHandler());
     Spark.post("/joinedPlayers", new JoinedPlayersHandler());
+    Spark.post("/availableRooms", new AvailableRoomsHandler());
   }
 
   /**
@@ -521,6 +522,29 @@ public final class SparkServerWithMultiplayer {
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("players", players)
+          .build();
+      return GSON.toJson(variables);
+
+    }
+  }
+
+  /**
+   * Returns the available rooms.
+   */
+  private static class AvailableRoomsHandler implements Route {
+
+    @Override
+    public Object handle(Request req, Response res) {
+      List<String> listRooms = new ArrayList<>();
+      for (String room : rooms.keySet()) {
+        if (rooms.get(room) != null && !rooms.get(room).isActive()) {
+          listRooms.add(room);
+        }
+      }
+
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .put("rooms", listRooms)
           .build();
       return GSON.toJson(variables);
 
