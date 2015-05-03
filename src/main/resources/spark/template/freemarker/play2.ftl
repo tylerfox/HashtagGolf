@@ -20,6 +20,12 @@
             <h2 id="info"> congrats on completing this course! </h2>
             <button class="myButton" onclick="start()"> menu </button>
           </div>
+
+          <div id="fullscreen-modal-content" style="display: none;">            
+            <h2 id="fullscreenInfo"> please enable full screen mode for a better experience. </h2> <br>
+            <button class="myButton" onclick="fullScreen()"> go fullscreen </button>
+            <button class="myButton" onclick="closeFullScreenPopup()"> no thanks </button>
+          </div>
         
         <div id="container1">
           <button class="myButton menubutton" onclick="start()"> menu </button>

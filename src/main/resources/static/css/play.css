@@ -38,7 +38,7 @@ body {
 }
 
 #container1 {
-	position: relative;
+	position: absolute;
 	width: 1280px;
 	text-align: center;
 	/*right:100px;*/
@@ -77,7 +77,7 @@ label{
 }
 
 #messagediv {
-	position: relative;
+	position: absolute;
 	background-color: red;
 	width:1280px;
 	/*width:100%;*/
@@ -310,3 +310,9 @@ img {
 #simplemodal-container button {position: absolute; bottom: 10px; left: 30%;}
 /* For internet explorer: */
 #simplemodal-container a.modalCloseImg {background:none; right:-14px; width:22px; height:26px; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/basic/x.png',sizingMethod='scale');}
+
+
+#fullscreen-modal-container {height:125px; width:620px; color:#bbb; background-color:#D2B48C; border:4px solid #444; padding:12px;}
+#fullscreen-modal-container h2 {color:#000;
+							margin: 0px;
+							padding: 1px;}

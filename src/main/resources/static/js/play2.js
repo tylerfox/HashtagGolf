@@ -36,6 +36,8 @@ var qtipHidden;
 var qtipContent = "balls";
 var canenter = true;
 var colors = ["red", "blue", "green", "yellow"];
+var fullScreenPopup;
+var fullScreenModal;
 
 window.onbeforeunload = confirmExit;
 
@@ -64,6 +66,34 @@ function waitForOthers() {
 	$.post("/spectate", postParameters, function(responseJSON) {
 		animateTurn(responseJSON);
 	});
+}
+
+function displayFullscreenModal() {
+	fullScreenPopup = $('#fullscreen-modal-content');
+	fullscreenModal = fullScreenPopup.modal({																
+		containerId: 'fullscreen-modal-container'
+	});	
+}
+
+function fullScreen() {
+	var element = document.head;
+	// Supports most browsers and their versions.
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(element);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+        }
+    }
+    fullScreenPopup.hide();
+    $.modal.close();       
+}
+
+function closeFullScreenPopup() {	
+	$.modal.close();
 }
 
 function displayScorecard() {
@@ -119,22 +149,22 @@ $.post("/setup", postParameters, function(responseJSON){
 function createBall(color, id, z) {
 	var ballcolor = "#fff";
 	switch(color) {
-	case "white": ballcolor = "#fff";
-	break;
+		case "white": ballcolor = "#fff";
+		break;
 
-	case "red" : ballcolor = "#f00";
-	break;
+		case "red" : ballcolor = "#f00";
+		break;
 
-	case "blue" : ballcolor = "#00f";
-	break;
+		case "blue" : ballcolor = "#00f";
+		break;
 
-	case "green" : ballcolor = "#0f0";
-	break;
+		case "green" : ballcolor = "#0f0";
+		break;
 
-	case "yellow" : ballcolor = "#ff0";
-	break;
+		case "yellow" : ballcolor = "#ff0";
+		break;
 
-	default: ballcolor = "#fff";
+		default: ballcolor = "#fff";
 	}
 
 	var newBall = canvas.display.ellipse({
@@ -195,7 +225,10 @@ function loadcanvas() {
 			qtipHidden = true;
 		}		
 	})
-
+	
+	if (!(screen.width == window.outerWidth && screen.height == window.outerHeight)) {
+		displayFullscreenModal();
+	}
 
 }
 
@@ -278,10 +311,10 @@ function moveBall(ball, dest_X, dest_Y, player) {
 												messagepopup("that went way too far!"); 
 											}
 										} else {*/
-										if (playerId == id) {
-											disttohole = calcDistToHole(ball);
-											document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
-										}
+											if (playerId == id) {
+												disttohole = calcDistToHole(ball);
+												document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
+											}
 										//}
 										if (player.isGameOver) {											
 											rollIn(ball, playerId);
@@ -291,15 +324,15 @@ function moveBall(ball, dest_X, dest_Y, player) {
 								});
 							}
 						});
-					}
+}
 
-					if (distance == -14) {
-						messagepopup("ball went too far!");
-					}
-				}
-			});
-		}
-	});
+if (distance == -14) {
+	messagepopup("ball went too far!");
+}
+}
+});
+}
+});
 }
 
 function calcDistToHole(ball) {
@@ -328,12 +361,12 @@ function enableSwingButton() {
 			terrainpic.innerHTML = "your ball is in<br> the bunker <br> <img src='css/clock.png'> 30 seconds";
 			if (oldterrain != "terrain_bunker") {
 				switch (random) {
-				case 1: messagepopup("fun in the sand");
-				break;
-				case 2: messagepopup("bunker down for some chipping");
-				break;
-				case 3: messagepopup("not where you want to be");
-				break;
+					case 1: messagepopup("fun in the sand");
+					break;
+					case 2: messagepopup("bunker down for some chipping");
+					break;
+					case 3: messagepopup("not where you want to be");
+					break;
 				}
 			}
 		} else if (myPlayer.terrain == "FAIRWAY") {
@@ -341,12 +374,12 @@ function enableSwingButton() {
 			terrainpic.innerHTML = "your ball is on<br> the fairway <br> <img src='css/clock.png'> 60 seconds";
 			if (oldterrain != "terrain_fairway") {
 				switch (random) {
-				case 1: messagepopup("nice shot!");
-				break;
-				case 2: messagepopup("nice one!");
-				break;
-				case 3: messagepopup("great shot!");
-				break;
+					case 1: messagepopup("nice shot!");
+					break;
+					case 2: messagepopup("nice one!");
+					break;
+					case 3: messagepopup("great shot!");
+					break;
 				}
 			}
 		} else if (myPlayer.terrain == "ROUGH") {
@@ -354,12 +387,12 @@ function enableSwingButton() {
 			terrainpic.innerHTML = "your ball is in<br> the rough <br> <img src='css/clock.png'> 45 seconds";
 			if (oldterrain != "terrain_rough") {
 				switch (random) {
-				case 1: messagepopup("you're going to have a rough time");
-				break;
-				case 2: messagepopup("this shot's going to be tricky");
-				break;
-				case 3: messagepopup("not your best shot");
-				break;
+					case 1: messagepopup("you're going to have a rough time");
+					break;
+					case 2: messagepopup("this shot's going to be tricky");
+					break;
+					case 3: messagepopup("not your best shot");
+					break;
 				}
 			}
 		} else if (myPlayer.terrain == "GREEN") {
@@ -367,12 +400,12 @@ function enableSwingButton() {
 			terrainpic.innerHTML = "your ball is on<br> the green <br> <img src='css/clock.png'> 60 seconds";
 			if (oldterrain != "terrain_green" && disttohole > 10) {
 				switch (random) {
-				case 1: messagepopup("it's all putting from here!");
-				break;
-				case 2: messagepopup("nice setup!");
-				break;
-				case 3: messagepopup("just tap it in happy");
-				break;
+					case 1: messagepopup("it's all putting from here!");
+					break;
+					case 2: messagepopup("nice setup!");
+					break;
+					case 3: messagepopup("just tap it in happy");
+					break;
 				}
 			}
 		} else if (myPlayer.terrain == "TEE") {
@@ -380,12 +413,12 @@ function enableSwingButton() {
 			terrainpic.innerHTML = "your ball is in<br> the teebox <br> <img src='css/clock.png'> 60 seconds";
 			if (oldterrain != "terrain_tee") {
 				switch (random) {
-				case 1: messagepopup("how'd you get back here?");
-				break;
-				case 2: messagepopup("did you not hit it very far?");
-				break;
-				case 3: messagepopup("a little closer to the hole next time");
-				break;
+					case 1: messagepopup("how'd you get back here?");
+					break;
+					case 2: messagepopup("did you not hit it very far?");
+					break;
+					case 3: messagepopup("a little closer to the hole next time");
+					break;
 				}
 			}
 		}
@@ -593,9 +626,9 @@ function swing() {
 	if(!isNaN(+word)) {
 		var num = +word;    
 		moveBall(balls[id], 
-				balls[id].x + num * Math.cos(angle * Math.PI / 180), 
-				balls[id].y - num * Math.sin(angle * Math.PI / 180),
-				players[id]);
+			balls[id].x + num * Math.cos(angle * Math.PI / 180), 
+			balls[id].y - num * Math.sin(angle * Math.PI / 180),
+			players[id]);
 	} else if (word == "hole!") {    
 		moveBall(balls[id], hole_x, hole_y, players[id]);
 	} else {
@@ -634,7 +667,7 @@ function animateTurn(responseJSON) {
 			var otherPlayerOld = oldPlayers[i.toString()];
 			var otherPlayerNew = newPlayers[i];
 			if (otherPlayerOld != null && !otherPlayerOld.isGameOver
-					&& otherPlayerNew != null) {
+				&& otherPlayerNew != null) {
 				setTimeout(function() {
 					if (otherPlayerNew.isGameOver) {
 						moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
@@ -643,8 +676,8 @@ function animateTurn(responseJSON) {
 							addStroke(2);
 						}							
 						moveBall(balls[i], balls[i].x + 1000*Math.cos(angle*Math.PI / 180), 
-								balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
-								otherPlayerNew);
+							balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
+							otherPlayerNew);
 
 					} else {
 						if (otherPlayerNew.id == id) {
@@ -655,13 +688,13 @@ function animateTurn(responseJSON) {
 					players[i] = newPlayers[i];
 					animateBalls(i + 1);
 				}, timeDelay);
-			} else {
-				players[i] = newPlayers[i];
-				animateBalls(i + 1);
-			}
-		} else if (!entireGameOver && myPlayer != null && myPlayer.isGameOver) {
-			waitForOthers();
+		} else {
+			players[i] = newPlayers[i];
+			animateBalls(i + 1);
 		}
+	} else if (!entireGameOver && myPlayer != null && myPlayer.isGameOver) {
+		waitForOthers();
 	}
+}
 
 }
