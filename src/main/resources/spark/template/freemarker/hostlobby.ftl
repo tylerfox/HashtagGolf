@@ -20,7 +20,7 @@
         <h1> host lobby </h1>
         <h3> Room Name: ${roomName}</h3>
         <h3> Tell other players to join the room "${roomName}" to play this game with you!</h3>
-		
+		    <h3> When all players are ready, click the "Start" button on the bottom of the page to begin your game.</h3>
 		<div id ="whitebox">
 			<p>
 				current players in game: 

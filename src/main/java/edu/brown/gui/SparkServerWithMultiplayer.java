@@ -508,15 +508,11 @@ public final class SparkServerWithMultiplayer {
       String room = req.cookie("room");
       Game game = rooms.get(room);
       List<Player> players = game.getCopyOfPlayers();
-//      StringBuilder str = new StringBuilder("");
-//      for (Player player : players) {
-//       str.append(player.getName() + "<br>");
-//      }
+
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("players", players)
           .build();
-      System.out.println(players.get(0));
       return GSON.toJson(variables);
 
   }

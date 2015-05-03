@@ -1,3 +1,4 @@
+var MAX_NAME_LENGTH = 15;
 /**
  * Redirects to the start page
  */
@@ -11,24 +12,34 @@ function back() {
 function host() {
 	var room = prompt("Room name");
 	if (room != null) {
-		var player = prompt("Your name");
+		if (room.length > MAX_NAME_LENGTH) {
+			alert("Please input a room name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+			host();
+		} else {
+			var player = prompt("Your name");
 
-		var postParameters = {
-				"room" : room,
-				"player" : player
-		};
-
-		$.post("/host", postParameters, function(responseJSON) {
-			var valid = JSON.parse(responseJSON).success;
-
-			if (valid) {
-				window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
-				//window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
-			} else {
-				alert("Room name has already been taken. Please enter a new room name.");
+			if (player == null && room.length > MAX_NAME_LENGTH) {
+				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
 				host();
-			}
-		});
+			} else {
+				var postParameters = {
+					"room" : room,
+					"player" : player
+				};
+
+				$.post("/host", postParameters, function(responseJSON) {
+					var valid = JSON.parse(responseJSON).success;
+					if (valid) {
+						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
+						//window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
+					} else {
+						alert("Room name has already been taken. Please enter a new room name.");
+						host();
+					}
+				});
+			} 			
+		}
+		
 	}
 }
 
@@ -42,31 +53,35 @@ function join() {
 		var player = prompt("Your name");
 
 		if (player != null) {
-			var userId = 0;
+			if (player.length > MAX_NAME_LENGTH) {
+				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+				join();
+			} else {
+				var postParameters = {
+						"room" : room,
+						"player" : player
+				};
 
-			var postParameters = {
-					"room" : room,
-					"player" : player
-			};
+				$.post("/join", postParameters, function(responseJSON) {
+					var roomExists = JSON.parse(responseJSON).roomExists;
+					var roomFull = JSON.parse(responseJSON).roomFull;
+					var duplicateIp = JSON.parse(responseJSON).duplicateIp;
 
-			$.post("/join", postParameters, function(responseJSON) {
-				var roomExists = JSON.parse(responseJSON).roomExists;
-				var roomFull = JSON.parse(responseJSON).roomFull;
-				var duplicateIp = JSON.parse(responseJSON).duplicateIp;
-
-				if (roomExists && !roomFull && !duplicateIp) {
-					//brings user to the lobby
-					window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
-				} else if (!roomExists) {
-					alert("No room by this name exists. Please enter a new room name.");
-					join();
-				} else if (roomFull) {
-					alert("This room is full. Please enter a new room name.");
-					join();
-				} else if (duplicateIp) {
-					alert("You are already participating in this game in another window.");
-				}
-			});
+					if (roomExists && !roomFull && !duplicateIp) {
+						//brings user to the lobby
+						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
+					} else if (!roomExists) {
+						alert("No room by this name exists. Please enter a new room name.");
+						join();
+					} else if (roomFull) {
+						alert("This room is full. Please enter a new room name.");
+						join();
+					} else if (duplicateIp) {
+						alert("You are already participating in this game in another window.");
+					}
+				});
+			}
+			
 		}
 	}
 }

@@ -21,6 +21,7 @@
 		<div id="center">
 		<h3> Room Name: ${roomName}</h3>
         <h3> Tell other players to join the room "${roomName}" to play this game with you!</h3>
+        <h3> Click the "ready to play" button on the bottom of the screen when you are ready to play.</h3>
 			<div id ="whitebox">
 				<p>
 					current players in game: 
