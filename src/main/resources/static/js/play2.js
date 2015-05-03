@@ -212,8 +212,15 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	var deltaX = dest_X - ball.x;
 	var deltaY = dest_Y - ball.y;
 	var mag = magnitude(deltaX, deltaY);
-	var scale = Math.min(maxRad, mag * .05);
-	var bounce = Math.min(maxBounce, mag * .01);
+	var scale;
+	var bounce;	
+	if ((mag / 3.5) <= 25) {
+		scale = 0;
+		bounce = 0;
+	} else {
+		scale = Math.min(maxRad, mag * .05);
+		bounce = Math.min(maxBounce, mag * .01);
+	}
 	var airX;
 	var airY;
 	if (terrain === "WATER") {		
