@@ -93,7 +93,6 @@ public class Game {
     // makes copies of all players
     List<Player> newPlayers = getCopyOfPlayers();
     roomReadiness.addAndGet(1);
-    System.out.println("returning from swing.");
     return newPlayers;
   }
 
@@ -116,6 +115,7 @@ public class Game {
   public List<Player> spectate(int id) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
+    System.out.println(myPlayer);
     if (!myPlayer.isSpectating()) {
       myPlayer.setSpectating(true);
       myPlayer.setReady(true);

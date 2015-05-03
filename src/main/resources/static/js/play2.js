@@ -38,6 +38,7 @@ var canenter = true;
 var colors = ["red", "blue", "green", "yellow"];
 var fullScreenPopup;
 var fullScreenModal;
+var allPlayersSwung = false;
 
 window.onbeforeunload = confirmExit;
 
@@ -97,13 +98,14 @@ function closeFullScreenPopup() {
 }
 
 function displayScorecard() {
-	$('#basic-modal-content').modal();
+	console.log("displaying score card");
 	var playerInfo = "<h3>par: " + par + "</h3><br>";
 	for (var i = 0; i < players.length; i++) {
 		var name = endPlayers[i].name.toLowerCase();
 		playerInfo = playerInfo + name + ": " + (endPlayers[i].stroke - 1) + "<br>";
 	}
 	document.getElementById("info").innerHTML = playerInfo;
+	$('#basic-modal-content').modal();
 }
 
 var postParameters = {};
@@ -457,23 +459,24 @@ function rollIn(ball, playerId) {
 				callback: function() {
 					endPlayers[parseInt(playerId)] = players[playerId];
 
-					if (playerId == id) {
+					if (playerId == id && !entireGameOver) {
 						if (strokenum == 1) {
 							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
-						} else {
+						} else if (!entireGameOver){
 							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
 						}
 					} else {
-						if (players[playerId].stroke == 1) {
+						if (players[playerId].stroke == 1 && !entireGameOver) {
 							messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
-						} else {
-							messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke + " strokes!");
+						} else if (!entireGameOver){
+							messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke - 1 + " strokes!");
 						}
 					}
 
-					if (entireGameOver) {
+					if (entireGameOver && allPlayersSwung) {
 						displayScorecard();
 					}
+
 				}
 			});
 		}
@@ -669,14 +672,15 @@ function animateTurn(responseJSON) {
 			if (otherPlayerOld != null && !otherPlayerOld.isGameOver
 				&& otherPlayerNew != null) {
 				setTimeout(function() {
+					console.log("inside the settimeout function!!");
 					if (otherPlayerNew.isGameOver) {
 						moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
 					} else if (otherPlayerNew.outOfBounds || distance == -14) {
 						if (otherPlayerNew.id == id) {
 							addStroke(2);
 						}							
-						moveBall(balls[i], balls[i].x + 1000*Math.cos(angle*Math.PI / 180), 
-							balls[i].y + -1000*Math.sin(angle*Math.PI / 180),
+						moveBall(balls[i], balls[i].x + 1000*Math.cos(angle * Math.PI / 180), 
+							balls[i].y + -1000 * Math.sin(angle * Math.PI / 180),
 							otherPlayerNew);
 
 					} else {
@@ -692,9 +696,15 @@ function animateTurn(responseJSON) {
 			players[i] = newPlayers[i];
 			animateBalls(i + 1);
 		}
-	} else if (!entireGameOver && myPlayer != null && myPlayer.isGameOver) {
-		waitForOthers();
-	}
+
+	// after all players have gone:
+	} else {
+		allPlayersSwung = true;
+
+		if (myPlayer != null && myPlayer.isGameOver) {
+			waitForOthers();
+		}	
+	} 
 }
 
 }
