@@ -579,7 +579,7 @@ function messagepopup(message){
 function swing() {
 	var word = document.getElementById("tweetme").value.toLowerCase();
 	if (word == "") {
-		messagepopup("you didnt input a word!");
+		messagepopup("you didn't input a word!");
 		return;
 	}
 	if (!linetoggleable) {

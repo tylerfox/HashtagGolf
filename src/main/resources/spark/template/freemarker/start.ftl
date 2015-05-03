@@ -15,12 +15,12 @@
     <div id="container">
       <div id ="background">
       <h1> #golf </h1>
-  	 <a href="/single_player_select" class="myButton" id = "left">start</a>
-     <a href="/multiplayer" class="myButton" id ="right">multiplayer</a>
+  	 <button onclick="document.location.href= '/single_player_select'" class="myButton" id = "left">start</button>
+     <button onclick="document.location.href= '/multiplayer'" class="myButton" id ="right">multiplayer</button>
      <br><br>
 
-      <a href="/tutorial" class="myButton" id ="tutorial">tutorial</a>
-      <a href="/instructions" class="myButton" id ="instructions">instructions</a>
+      <button onclick="document.location.href= '/tutorial'" class="myButton" id ="tutorial">tutorial</button>
+      <button onclick="document.location.href= '/instructions'" class="myButton" id ="instructions">instructions</button>
 
     </div>
    </div>

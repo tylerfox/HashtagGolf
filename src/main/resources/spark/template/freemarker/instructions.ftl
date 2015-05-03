@@ -14,7 +14,7 @@
        </head>
        <body>
       
-      <a href="/start" class= "myButton menubutton"> menu </a>
+      <button onclick="document.location.href= '/start'" class= "myButton menubutton"> menu </button>
       <h1> how to play </h1>
       <div>
 	      <p id = "firstpara">the aim of the game is just like in regular golf: get the ball in the hole in as few shots as possible.</p>
