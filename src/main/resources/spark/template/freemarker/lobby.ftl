@@ -12,12 +12,14 @@
     <link rel="stylesheet" href="../css/start.css">
   </head>
   <body>
+  <button onclick="start()" class= "myButton menubutton"> exit </button>
+  
     <div id="container">
       <div id ="background">
         <h1> lobby </h1>
-		<button class="myButton" onclick="readyToPlay()" id="lobbybutton">ready to play!</button>
-	  	<button onclick="start()" class= "myButton menubutton"> exit </button>
-	  
+		<div id="center">
+			<button class="myButton" onclick="readyToPlay()" id="lobbybutton">ready to play!</button>
+	  	</div>
 	  </div>
    </div>
     
