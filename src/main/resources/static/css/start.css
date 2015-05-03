@@ -3,12 +3,12 @@
 	background-size: cover;
 } */
 
-#start {
+#left {
 	margin: 50px;
 	float: left;
 }
 
-#multiplayer {
+#right {
 	margin: 50px;
 	float: right;
 }

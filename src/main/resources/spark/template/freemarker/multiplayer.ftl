@@ -12,13 +12,12 @@
     <link rel="stylesheet" href="css/start.css">
   </head>
   <body>
+   <button onclick="start()" class= "myButton menubutton"> menu </button>
     <div id="container">
       <div id ="background">
       <h1> multiplayer </h1>
   	 <button class="myButton" onclick="host()" id="left"> host</button>
      <button class="myButton" onclick="join()" id="right"> join</button>
-     
-     <button onclick="start()" class= "myButton" id ="left"> menu </button>
      <br><br>
     </div>
    </div>

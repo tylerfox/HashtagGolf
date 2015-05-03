@@ -35,6 +35,7 @@ var image;
 var qtipHidden;
 var qtipContent = "balls";
 var canenter = true;
+var colors = ["red", "blue", "green", "yellow"];
 
 window.onbeforeunload = confirmExit;
 
@@ -93,7 +94,6 @@ $.post("/setup", postParameters, function(responseJSON){
 	if (players.length == 1) {
 		createBall(responseObject.color, id, 2);
 	} else {
-		var colors = ["red", "blue", "green", "yellow"];
 		for (var i = 0; i < players.length; i++) {
 			console.log("drawing player " + i + "'s ball!");
 			if (id != i.toString()) {
@@ -107,6 +107,13 @@ $.post("/setup", postParameters, function(responseJSON){
 
 	disttohole = calcDistToHole(balls[id]);
 	document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
+	
+	if (players.length > 1) {
+		messagepopup("let's play! your ball color is " + colors[id]);	
+	} else {
+		messagepopup("let's play!");
+	}
+
 });
 
 function createBall(color, id, z) {
@@ -565,8 +572,6 @@ function messagepopup(message){
 		}, 10);
 	}, 2000);
 }
-
-messagepopup("let's play!");
 
 function swing() {
 	var word = document.getElementById("tweetme").value.toLowerCase();

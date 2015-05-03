@@ -15,8 +15,8 @@
     <div id="container">
       <div id ="background">
       <h1> #golf </h1>
-  	 <a href="/single_player_select" class="myButton" id = "start">start</a>
-     <a href="/multiplayer" class="myButton" id = "multiplayer">multiplayer</a>
+  	 <a href="/single_player_select" class="myButton" id = "left">start</a>
+     <a href="/multiplayer" class="myButton" id ="right">multiplayer</a>
      <br><br>
 
       <a href="/tutorial" class="myButton" id ="tutorial">tutorial</a>
