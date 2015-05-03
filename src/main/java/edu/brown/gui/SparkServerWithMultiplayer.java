@@ -350,8 +350,7 @@ public final class SparkServerWithMultiplayer {
             .put("players", players)
             .put("entireGameOver", game.isGameOver())
             .build();
-
-        System.out.println("id: " + id + " on stroke: " + players.get(id).getStroke());
+        
         return GSON.toJson(variables);
       } catch (Exception e) {
         e.printStackTrace(); //TODO: get rid of this
@@ -374,13 +373,11 @@ public final class SparkServerWithMultiplayer {
         List<Player> players = game.spectate(id);
 
         game.checkResetState();
-
         final Map<String, Object> variables =
             new ImmutableMap.Builder<String, Object>()
             .put("players", players)
             .put("entireGameOver", game.isGameOver())
             .build();
-
         return GSON.toJson(variables);
       } catch (Exception e) {
         e.printStackTrace(); //TODO: get rid of this
