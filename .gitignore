@@ -60,4 +60,3 @@ $RECYCLE.BIN/
 target/
 surefire-reports/
 
-src/main/resources/static/css/multiplayer.css
