@@ -1,32 +1,27 @@
 TODO:
 	Tyler
-	- Make more levels (including at least one where the optimal path is not simply a straight line path to the hole)
-	- Create level select screen
+	- Make more levels (minimum we should have 4 ready by Tuesday)
 	- Ball select screen: players shouldn't have the white background?
 
-	GENERAL CLEANUP/CURRENT BUGS TO FIX:
+	Dan
+	- In javascript swing function: players is an array with String keys, but newPlayers is an array with numerical keys (figure out if this is a problem/how javascript deals with this)
+	- Disposing of "windows"/clients/threads when they x out of the browser in host/join. If the host leaves in the join/host handler, things are messed up.
+	- Ensure only one client per IP Addrress.
+
+	Beverly
+	- Let the host know who is ready in the lobby
+	- Force users to have names that are shorter than some number characters since names that are too long are ugly
 
 	Brandon
-	- Reformat/fix menu buttons to be on all pages (buttons, not links!)
-	- small matter: "Uncaught ReferenceError: linedraw is not defined" / random stuff that comes up in the console during gameplay
-	- Test whether used words persist past the end of an individual game
+	- Tell users (in the instructions or tutorial?) that queries are case insensitive.
+	- The upper case looks pretty ugly in the input box (due to the Comics font).  Maybe we could change the font in the input word box and/or lowercase displayal to make displayal nicer.
 
-
-	Multiplayer Stuffs
-	Dan
-	- In javascript swing function: players is an array with String keys, but newPlayers is an array with numerical keys (this should probably be fixed...)
-	- Disposing of "windows"/clients/threads when they x out of the browser
-
-
-	EVERYONE:
-	- error handling in SwingHandler (for TwitterQueries) - how should we handle for the GUI? --> General connection lost, how we should deal with this
-
-	"Extras"
-	- Display names to balls (ie: like terrain display)
-	- Display names in lobby
-	- Ensuring only one client from each IPAddress
-	- Multiplayer:
-		- users continue to watch the game after they have won and then a final popup will tell them the final results of the entire game (how many strokes each player before finishing)
-		- Allow players to select their ball color
-
+	ANYONE CAN TAKE
+	- Error handling in SwingHandler (for TwitterQueries) - how should we handle for the GUI? --> ie: general connection lost
+	- Display the current player's ball color
+	- Let the user know who hasn't swung yet (get the loading animation to work on Chrome)
+	- Very explicitly tell people what ball color they are (it's actually pretty confusing and I still think having something in the HUD to just tell them this would be beneficial)
+	- See what the other person's word is (or at least show this at the end on the score card - maybe a button on the score card that's like "show words" and it will show each players' words")
+	- Play again possibility.
+	- Take out games that are finished from the "Rooms" hashmap. (Beverly or Dan should/will take this.)
 
