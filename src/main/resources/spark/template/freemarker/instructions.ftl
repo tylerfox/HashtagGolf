@@ -26,6 +26,7 @@
 	      <br><br>
 	      note that different types of terrain will cause the number of seconds to vary.
 	      <br><br>
+	      <br><br>
 	      </p>
         <button id="tutbutton" class="myButton" onclick="document.location.href = '/tutorial';">tutorial</button>
       </div>
