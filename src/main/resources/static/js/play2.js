@@ -43,24 +43,40 @@ var allPlayersSwung = false;
 
 window.onbeforeunload = confirmExit;
 
-function confirmExit(e) {
+function confirmExit(e) {  
   var e = e || window.event;
-  //console.log(e);
 
-  //For IE & Firefox
-  if (e && !gameover) {
-    //e.returnValue = 'Warning! Your game data will not be saved.';
-
+  if (e && !gameover) {   
     var postParameters = {};
-    $.post("/exit", postParameters, function(responseJSON) {});
+    $.post("/exit", postParameters, function(responseJSON) {
+    	window.location.href = "/start";
+    });
   }
+}
 
-  //window.location.href = "/start";
+function checkRefresh() {
+    console.log("On load detected");
+    console.log(document.getElementById("refreshField").value);
+    
+    if (document.getElementById("refreshField").value == "0") { //fresh page load
+        console.log("Fresh page load");
+        document.getElementById("refreshField").value = "1";
+        console.log("refreshField has been changed to " + document.getElementById("refreshField").value);
+	} else { //on refresh
+		console.log("Refresh detected");
+	    window.location.href = "/start";  
+	}
+}
 
-  //For Safari & Chrome
-  //return 'Warning! Your game data will not be saved.';
-};
+function redirectOnRefresh(evt) {
+  /**
+  if (evt.keyCode == 116) {
+  	alert("Redirecting to home page."); //Do NOT delete this alert. It is necessary for functionality.
+    window.location.href = "/start";
+  } */
+}
 
+$(document).bind("keydown", redirectOnRefresh);
 
 function waitForOthers() {
   disableSwingButton();
@@ -595,13 +611,12 @@ function isenter(evt) {
   }
 }
 
-
 function messagepopup(message){
   messagediv = document.getElementById("mymessage");
   messagediv.innerHTML = message;
   messagediv.style.visibility = "visible";
   messagediv.style.opacity = 1;
-  setTimeout(function(){
+  setTimeout(function() {
     messageinterval = setInterval(function(){ 
       if (messagediv.style.opacity > 0) {
         messagediv.style.opacity -= 0.01;
@@ -672,8 +687,8 @@ function animateTurn(responseJSON) {
     if (i < players.length) {
       var otherPlayerOld = oldPlayers[i.toString()];
       var otherPlayerNew = newPlayers[i];
-      if (otherPlayerOld != null && !otherPlayerOld.isGameOver
-          && otherPlayerNew != null) {
+      
+      if (otherPlayerOld != null && !otherPlayerOld.isGameOver && otherPlayerNew != null) {
         setTimeout(function() {
           console.log("inside the settimeout function!!");
           if (otherPlayerNew.isGameOver) {
@@ -699,9 +714,7 @@ function animateTurn(responseJSON) {
         players[i] = newPlayers[i];
         animateBalls(i + 1);
       }
-
-      // after all players have gone:
-    } else {
+    } else { // after all players have gone:
       allPlayersSwung = true;
 
       if (myPlayer != null && myPlayer.isGameOver) {
