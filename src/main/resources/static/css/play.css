@@ -63,6 +63,7 @@ body {
 }
 
 #ballcolorhud {
+	visibility: hidden;
 	font-size: 10pt;
 }
 

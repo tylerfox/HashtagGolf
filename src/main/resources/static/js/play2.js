@@ -193,26 +193,41 @@ $.post("/setup", postParameters, function(responseJSON){
 
   //Ball Colors Hud
   ballcolorhud = document.getElementById("ballcolorhud");
-  for (person in players) {
-    var hudballcolor;
-    switch(balls[person].fill) {
-      case "#fff": hudballcolor = "white";
-      break;
-      case "#f00" : hudballcolor = "red";
-      break;
-      case "#00f" : hudballcolor = "blue";
-      break;
-      case "#0f0" : hudballcolor = "green";
-      break;
-      case "#ff0" : hudballcolor = "yellow";
-      break;
-      default: hudballcolor = "white";
+  if (players.length !=1) {
+    switch (balls[id].fill) {
+        case "#fff": hudballcolor = "white";
+        break;
+        case "#f00" : hudballcolor = "red";
+        break;
+        case "#00f" : hudballcolor = "blue";
+        break;
+        case "#0f0" : hudballcolor = "green";
+        break;
+        case "#ff0" : hudballcolor = "yellow";
+        break;
     }
-    if (players.length == 1) {
-      ballcolorhud.style.visibility = "hidden";
-    } else {
-      ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
-        players[person].name.toLowerCase() + "'s ball color: " + hudballcolor;
+    ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
+        "<b>you: " + hudballcolor + "</b>";
+    for (person in players) {
+      var hudballcolor;
+      switch(balls[person].fill) {
+        case "#fff": hudballcolor = "white";
+        break;
+        case "#f00" : hudballcolor = "red";
+        break;
+        case "#00f" : hudballcolor = "blue";
+        break;
+        case "#0f0" : hudballcolor = "green";
+        break;
+        case "#ff0" : hudballcolor = "yellow";
+        break;
+        default: hudballcolor = "white";
+      }
+      ballcolorhud.style.visibility = "visible";
+      if (person != id) {
+        ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
+        players[person].name.toLowerCase() + ": " + hudballcolor;
+      }
     }
   }
 
