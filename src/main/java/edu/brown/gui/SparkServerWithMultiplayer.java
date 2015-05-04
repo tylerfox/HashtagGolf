@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.eclipse.jetty.util.ConcurrentHashSet;
 
 import spark.ModelAndView;
 import spark.QueryParamsMap;
@@ -32,7 +35,7 @@ public final class SparkServerWithMultiplayer {
   private static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
   private static Map<String, Game> rooms;
-  private static Map<Game, List<String>> ipAddresses;
+  private static Set<String> ipAddresses;
   private static String color = "white";
   private static boolean uniqueIpRequired = false;
 
@@ -46,7 +49,7 @@ public final class SparkServerWithMultiplayer {
 
     FreeMarkerEngine freeMarker = createEngine();
     rooms = new ConcurrentHashMap<>();
-    ipAddresses = new ConcurrentHashMap<>();
+    ipAddresses = new ConcurrentHashSet<>();
     uniqueIpRequired = requireUniqueIp;
 
     // Pages
@@ -201,7 +204,10 @@ public final class SparkServerWithMultiplayer {
   private static class SinglePlayerSelectHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      res.cookie("id", "0");
+      if (req.cookie("id") == null) {
+        System.out.println("Initial assignment of ID cookie.");
+        res.cookie("id", "0");
+      }
 
       try {
         Game game = new Game("new_hole1.png", "key.png");
@@ -234,9 +240,13 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String newcolor = qm.value("color");
-      if(newcolor != null) {
+      
+      if (newcolor != null) {
         color = newcolor;
       }
+      
+      ipAddresses.add(req.ip());
+      
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return new ModelAndView(variables, "play2.ftl");
     }
@@ -273,12 +283,16 @@ public final class SparkServerWithMultiplayer {
     @Override
     public Object handle(Request req, Response res) {
       int id = Integer.parseInt(req.cookie("id"));
+      boolean ipFoundAndRemoved = ipAddresses.remove(req.ip());
+      System.out.println("Whether user's IP address was found and removed: " + ipFoundAndRemoved);
+      System.out.println(ipAddresses.toString());
+      //assert ipFoundAndRemoved;
+      
       String room = req.cookie("room");
-
       Game game = rooms.get(room);
       assert game != null;
       List<Player> players = game.getPlayers();
-
+      
       players.set(id, null);
       game.decrementNumPlayers();
 
@@ -286,6 +300,9 @@ public final class SparkServerWithMultiplayer {
       if (game.getNumPlayers() == 0) {
         rooms.remove(room);
       }
+      
+      res.removeCookie("id");
+      res.removeCookie("room");
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players,
@@ -318,8 +335,7 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       String roomName = req.cookie("room");
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
-          "roomName", roomName);
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "roomName", roomName);
       return new ModelAndView(variables, "lobby.ftl");
     }
   }
@@ -365,17 +381,16 @@ public final class SparkServerWithMultiplayer {
 
         return GSON.toJson(variables);
       } catch (Exception e) {
-        e.printStackTrace(); //TODO: get rid of this
+        System.out.println("ERROR: Failure to swing.");
       }
       return null;
     }
   }
 
   /**
-   * Spectates.
+   * Handles spectator mode.
    */
   private static class SpectateHandler implements Route {
-
     @Override
     public Object handle(Request req, Response res) {
       try {
@@ -400,7 +415,7 @@ public final class SparkServerWithMultiplayer {
           return GSON.toJson(variables);
         }
       } catch (Exception e) {
-        e.printStackTrace(); //TODO: get rid of this
+        System.out.println("ERROR: Could not spectate.");
       }
       return null;
     }
@@ -412,28 +427,39 @@ public final class SparkServerWithMultiplayer {
       QueryParamsMap qm = req.queryMap();
       String roomName = qm.value("room");
       String playerName = qm.value("player");
-      boolean success;
+      boolean nameAvailable = !rooms.containsKey(roomName);
+      boolean duplicateIp = false;
 
       try {
-        success = !rooms.containsKey(roomName);
-        if (success) {
+        if (nameAvailable) {
+          if (ipAddresses.contains(req.ip())) {
+            duplicateIp = true;
+          } else {
+            ipAddresses.add(req.ip());
+          }
+          
           Game game = new Game("new_hole1.png", "key.png");
-          List<String> ipAddressList = new ArrayList<String>();
-          ipAddressList.add(req.ip());
-          ipAddresses.put(game, ipAddressList);
           game.addPlayer(playerName);
-          rooms.put(roomName, game);
+          
+          if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
+            rooms.put(roomName, game);
+          }
 
           res.cookie("id", String.valueOf(0));
           res.cookie("room", roomName);
         }
       } catch (IOException e) {
-        success = false;
+        nameAvailable = false;
         System.out.println("ERROR: Issue loading level.");
       }
 
-      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("success", success).build();
+      
+      System.out.println(duplicateIp);
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .put("nameAvailable", nameAvailable)
+          .put("duplicateIp", duplicateIp && uniqueIpRequired)
+          .build();
       return GSON.toJson(variables);
     }
   }
@@ -451,13 +477,11 @@ public final class SparkServerWithMultiplayer {
 
       if (roomExists) {
         Game game = rooms.get(roomName);
-        List<String> ipAddressList = ipAddresses.get(game);
 
-        if (ipAddressList.contains(req.ip())) {
+        if (ipAddresses.contains(req.ip())) {
           duplicateIp = true;
         } else {
-          ipAddressList.add(req.ip());
-          ipAddresses.put(game, ipAddressList);
+          ipAddresses.add(req.ip());
         }
 
         String id = game.addPlayer(playerName);
