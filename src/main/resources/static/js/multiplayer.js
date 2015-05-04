@@ -31,7 +31,6 @@ function host() {
 					var valid = JSON.parse(responseJSON).success;
 					if (valid) {
 						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
-						//window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/hostlobby/" + room;
 					} else {
 						alert("Room name has already been taken. Please enter a new room name.");
 						host();
@@ -155,15 +154,11 @@ function availableRooms() {
 			var rooms = JSON.parse(responseJSON).rooms;
 			var displayRooms = "";
 
-			if (rooms.length == 0) {
-				displayRooms = "There are currently no rooms available.  Click on the \"Host\" button to host your own room."
-			} else {
-				for (var i = 0; i < rooms.length; i++) {
-					var room = rooms[i];
-					displayRooms = displayRooms + room + "<br>";
-				}
+			for (var i = 0; i < rooms.length; i++) {
+				var room = rooms[i];
+				displayRooms = displayRooms + "<li id=\""+ i +"\" class=\"room\">" + room + "</li>";
 			}
-			
+			displayRooms = displayRooms + "<br>"
 			document.getElementById("rooms").innerHTML = displayRooms;
 		});
 	}, 1500);
@@ -178,3 +173,43 @@ function exit() {
 		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/start";
 	});
 }
+
+$("#rooms").click (function(event) {
+	var id = "#" + event.target.id;
+	var roomName = $(id).text();
+	console.log(roomName);
+
+	var player = prompt("Your name");
+
+	if (player != null) {
+		if (player.length > MAX_NAME_LENGTH) {
+			alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+			join();
+		} else {
+			var postParameters = {
+					"room" : roomName,
+					"player" : player
+			};
+
+			$.post("/join", postParameters, function(responseJSON) {
+				var roomExists = JSON.parse(responseJSON).roomExists;
+				var roomFull = JSON.parse(responseJSON).roomFull;
+				var duplicateIp = JSON.parse(responseJSON).duplicateIp;
+
+				if (roomExists && !roomFull && !duplicateIp) {
+					//brings user to the lobby
+					window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + roomName;
+				} else if (!roomExists) {
+					alert("No room by this name exists. Please enter a new room name.");
+					join();
+				} else if (roomFull) {
+					alert("This room is full. Please enter a new room name.");
+					join();
+				} else if (duplicateIp) {
+					alert("You are already participating in this game in another window.");
+				}
+			});
+		}
+	}
+
+}); 

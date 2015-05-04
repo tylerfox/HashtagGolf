@@ -7,9 +7,6 @@ p {
         font-family:"Comics";
 }
 
-p#rooms {
-        font-family:"Comic Sans MS";
-}
 
 #whitebox {
         margin-top: 50px;
@@ -31,6 +28,24 @@ h2 {
         font-family: "Comics";
         padding: 10px;
 }
+
 div {
         text-align: center;
+}
+
+p ul {
+        font-family:"Comic Sans MS";
+        list-style: none;
+}
+
+li {
+        font-family:"Comic Sans MS";
+        list-style: none;
+        font-size: 24px;
+}
+
+li:hover {
+        color: orange;
+        cursor: pointer;
+        cursor: hand;
 }

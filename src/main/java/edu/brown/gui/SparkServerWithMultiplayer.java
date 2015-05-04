@@ -547,7 +547,9 @@ public final class SparkServerWithMultiplayer {
     public Object handle(Request req, Response res) {
       List<String> listRooms = new ArrayList<>();
       for (String room : rooms.keySet()) {
-        if (rooms.get(room) != null && !rooms.get(room).isActive()) {
+        Game game = rooms.get(room);
+        if (game != null && !game.isActive()
+            && game.getNumPlayers() < game.getMaxPlayers()) {
           listRooms.add(room);
         }
       }

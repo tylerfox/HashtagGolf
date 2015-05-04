@@ -25,8 +25,10 @@
       <p>
 
         <h2>available rooms:</h2>
-      
-        <p id="rooms"> </p>
+
+        <ul id="rooms">
+          
+        </ul>
       
       </p>
       

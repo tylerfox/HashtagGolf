@@ -287,4 +287,8 @@ public class Game {
   public void setActive(boolean active) {
     this.active = active;
   }
+
+  public int getMaxPlayers() {
+    return MAX_PLAYERS;
+  }
 }
