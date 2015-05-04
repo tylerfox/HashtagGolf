@@ -30,6 +30,7 @@
         <button class="myButton" onclick="fullScreen()"> go fullscreen </button>
         <button class="myButton" onclick="closeFullScreenPopup()"> no thanks </button>
     </div>
+    <div id = "watereffect"></div>
     <div id="container1">
         <button class="myButton menubutton" onclick="start()"> menu </button>
         <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>

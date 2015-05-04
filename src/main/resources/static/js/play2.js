@@ -393,6 +393,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
             sink(ball, preX, preY);
             if (player.id == id) {
               messagepopup("your ball is sleeping with the fishes!");
+              splash();
             }
           } else if (terrain == "OUT_OF_BOUNDS") {
             outOfBounds(ball, preX, preY);
@@ -714,6 +715,24 @@ function messagepopup(message){
       } else {
         clearInterval(messageinterval);
         messagediv.style.visibility = "hidden";
+      }
+    }, 10);
+  }, 2000);
+}
+
+function splash() {
+  var waterdiv = document.getElementById("watereffect");
+  waterdiv.style.visibility = "visible";
+  waterdiv.style.opacity = 1;
+  waterdiv.style.zIndex = 50;
+  setTimeout(function() {
+    waterinterval = setInterval(function(){ 
+      if (waterdiv.style.opacity > 0) {
+        waterdiv.style.opacity -= 0.01;
+      } else {
+        clearInterval(waterinterval);
+        waterdiv.style.visibility = "hidden";
+        waterdiv.style.zIndex = -50;
       }
     }, 10);
   }, 2000);

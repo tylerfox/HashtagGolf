@@ -8,6 +8,14 @@
 	border-radius: 15px;
 }
 
+#watereffect {
+	position:absolute;
+	visibility:hidden;
+	background-image: url(watereffect.png);
+	width:1280px;
+	height:720px;
+	z-index:-50;
+}
 
 #tweetme {
 	text-transform: lowercase;
