@@ -116,7 +116,6 @@ public class Game {
   public List<Player> spectate(int id) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
-    System.out.println(myPlayer);
     if (!myPlayer.isSpectating()) {
       myPlayer.setSpectating(true);
       myPlayer.setReady(true);

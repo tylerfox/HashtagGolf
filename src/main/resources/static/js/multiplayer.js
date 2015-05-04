@@ -54,7 +54,7 @@ function join() {
 		if (player != null) {
 			if (player.length > MAX_NAME_LENGTH) {
 				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
-				join();
+				getName(roomName);
 			} else {
 				var postParameters = {
 						"room" : room,
@@ -115,7 +115,6 @@ function readyToPlay() {
 	$.post("/ready", postParameters, function(responseJSON) {
 		window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
 	});
-
 }
 
 /**
@@ -145,6 +144,25 @@ function checkPlayers() {
 
 /**
 * Checks for available rooms.
+	var room = prompt("Room name");
+	if (room != null) {
+		if (room.length > MAX_NAME_LENGTH) {
+			alert("Please input a room name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+			host();
+		} else {
+			var player = prompt("Your name");
+
+			if (player == null && room.length > MAX_NAME_LENGTH) {
+				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+				host();
+			} else {
+				var postParameters = {
+					"room" : room,
+					"player" : player
+				};
+
+				$.post("/host", postParameters, function(responseJSON) {
+					var valid = JSON.pars
 */
 
 function availableRooms() {
@@ -177,14 +195,16 @@ function exit() {
 $("#rooms").click (function(event) {
 	var id = "#" + event.target.id;
 	var roomName = $(id).text();
-	console.log(roomName);
+	getName(roomName);
+}); 
 
+function getName(roomName) {
 	var player = prompt("Your name");
 
 	if (player != null) {
 		if (player.length > MAX_NAME_LENGTH) {
 			alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
-			join();
+			getName(roomName);
 		} else {
 			var postParameters = {
 					"room" : roomName,
@@ -211,5 +231,4 @@ $("#rooms").click (function(event) {
 			});
 		}
 	}
-
-}); 
+}

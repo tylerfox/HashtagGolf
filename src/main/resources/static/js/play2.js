@@ -202,6 +202,7 @@ $.post("/setup", postParameters, function(responseJSON){
 
     // draws your ball on top of everyone else's ball
     createBall(colors[parseInt(id)], id, "front");
+
   }
 
   disttohole = calcDistToHole(balls[id]);
@@ -550,7 +551,6 @@ function disableSwingButton() {
   linetoggleable = false;
   canenter = false;
 }
-
 function rollIn(ball, playerId) {
   ball.animate({
     x: hole_x,
@@ -571,13 +571,13 @@ function rollIn(ball, playerId) {
             if (strokenum == 1) {
               messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
             } else if (!entireGameOver){
-              messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
+              messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + (players[playerId].stroke - 1) + " strokes!");
             }
           } else {
             if (players[playerId].stroke == 1 && !entireGameOver) {
               messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
             } else if (!entireGameOver){
-              messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke - 1 + " strokes!");
+              messagepopup(players[playerId].name.toLowerCase() + " finished in " + (players[playerId].stroke - 1) + " strokes!");
             }
           }
 
