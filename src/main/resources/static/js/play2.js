@@ -98,6 +98,8 @@ function closeFullScreenPopup() {
   $.modal.close();
 }
 
+//displayScorecard();
+
 function displayScorecard() {
   console.log("displaying score card");
   var playerInfo = "<h3>par: " + par + "</h3><br>";
@@ -107,6 +109,54 @@ function displayScorecard() {
   }
   document.getElementById("info").innerHTML = playerInfo;
   $('#basic-modal-content').modal();
+}
+
+function nextlevel() {
+  //js/gui_hole1.png
+  console.log(myguihole);
+  //location.reload();
+  //console.log("after");
+  var postParameters = {};
+  $.post("/setup", postParameters, function(responseJSON){
+    console.log(responseObject);
+    responseObject = JSON.parse(responseJSON);
+    id = responseObject.id;
+    players = responseObject.players;
+    START_X = responseObject.startx;
+    START_Y = responseObject.starty;
+    hole_x = responseObject.holex;
+    hole_y = responseObject.holey;
+    par = responseObject.par;
+    /*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
+    /*document.getElementById("myCanvas").style.background = "white";*/
+    myguihole = "js/" + responseObject.guihole;
+    console.log(myguihole);
+    loadcanvas();
+    document.getElementById("parhud").innerHTML = "par#: " + par;
+    if (players.length == 1) {
+      createBall(responseObject.color, id, 2);
+    } else {
+      for (var i = 0; i < players.length; i++) {
+        console.log("drawing player " + i + "'s ball!");
+        if (id != i.toString()) {
+          createBall(colors[i], i.toString(), 2);
+        }
+      }
+
+      // draws your ball on top of everyone else's ball
+      createBall(colors[parseInt(id)], id, "front");
+    }
+
+    disttohole = calcDistToHole(balls[id]);
+    document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
+
+    if (players.length > 1) {
+      messagepopup("let's play! your ball color is " + colors[id]); 
+    } else {
+      messagepopup("let's play!");
+    }
+
+  });
 }
 
 var postParameters = {};
@@ -140,6 +190,31 @@ $.post("/setup", postParameters, function(responseJSON){
 
   disttohole = calcDistToHole(balls[id]);
   document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
+
+  //Ball Colors Hud
+  ballcolorhud = document.getElementById("ballcolorhud");
+  for (person in players) {
+    var hudballcolor;
+    switch(balls[person].fill) {
+      case "#fff": hudballcolor = "white";
+      break;
+      case "#f00" : hudballcolor = "red";
+      break;
+      case "#00f" : hudballcolor = "blue";
+      break;
+      case "#0f0" : hudballcolor = "green";
+      break;
+      case "#ff0" : hudballcolor = "yellow";
+      break;
+      default: hudballcolor = "white";
+    }
+    if (players.length == 1) {
+      ballcolorhud.style.visibility = "hidden";
+    } else {
+      ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
+        players[person].name.toLowerCase() + "'s ball color: " + hudballcolor;
+    }
+  }
 
   if (players.length > 1) {
     messagepopup("let's play! your ball color is " + colors[id]); 
@@ -196,11 +271,11 @@ function loadcanvas() {
     show: false,
     hide: false,
     position: {
-    target: 'mouse'
-  },
-  style: {          
-    classes: 'qtip-light qtip-rounded'
-  }        
+      target: 'mouse'
+    },
+    style: {          
+      classes: 'qtip-light qtip-rounded'
+    }        
 
 
   })
@@ -274,39 +349,39 @@ function moveBall(ball, dest_X, dest_Y, player) {
     duration: "normal",
     easing: "linear",
     callback: function () {     
-    ball.animate({
-      x: ball.x + airX,
-      y: ball.y + airY,
-      radius: ball.radius - scale
-    }, {
-      duration: "normal",
-      easing: "linear",
-      callback: function () {           
-      if (terrain === "WATER") {
-        sink(ball, preX, preY);
-        if (player.id == id) {
-          messagepopup("your ball is sleeping with the fishes!");
-        }
-      } else if (terrain == "OUT_OF_BOUNDS") {
-        outOfBounds(ball, preX, preY);
-      } else {
-        ball.animate({
-          x: ball.x + deltaX * .05,
-          y: ball.y + deltaY * .05,
-          radius: ball.radius + bounce      
-        }, {
-          duration: "short",
-          easing: "linear",
-          callback: function () {
-          ball.animate({
-            x: ball.x + deltaX * .05,
-            y: ball.y + deltaY * .05,
-            radius: ball.radius - bounce
-          }, {
-            duration: "normal",
-            easing: "linear",
-            callback: function () { 
-            enableSwingButton();
+      ball.animate({
+        x: ball.x + airX,
+        y: ball.y + airY,
+        radius: ball.radius - scale
+      }, {
+        duration: "normal",
+        easing: "linear",
+        callback: function () {           
+          if (terrain === "WATER") {
+            sink(ball, preX, preY);
+            if (player.id == id) {
+              messagepopup("your ball is sleeping with the fishes!");
+            }
+          } else if (terrain == "OUT_OF_BOUNDS") {
+            outOfBounds(ball, preX, preY);
+          } else {
+            ball.animate({
+              x: ball.x + deltaX * .05,
+              y: ball.y + deltaY * .05,
+              radius: ball.radius + bounce      
+            }, {
+              duration: "short",
+              easing: "linear",
+              callback: function () {
+                ball.animate({
+                  x: ball.x + deltaX * .05,
+                  y: ball.y + deltaY * .05,
+                  radius: ball.radius - bounce
+                }, {
+                  duration: "normal",
+                  easing: "linear",
+                  callback: function () { 
+                    enableSwingButton();
             /*if (outofbounds(ball, canvas)) {
                       ball.x = preX;
                       ball.y = preY;
@@ -314,28 +389,28 @@ function moveBall(ball, dest_X, dest_Y, player) {
                         messagepopup("that went way too far!"); 
                       }
                     } else {*/
-            if (playerId == id) {
-              disttohole = calcDistToHole(ball);
-              document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
-            }
+                      if (playerId == id) {
+                        disttohole = calcDistToHole(ball);
+                        document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
+                      }
             //}
             if (player.isGameOver) {                      
               rollIn(ball, playerId);
             }
 
           }
-          });
-        }
         });
-      }
+              }
+            });
+}
 
-      if (distance == -14) {
-        messagepopup("ball went too far!");
-      }
-    }
-    });
-  }
-  });
+if (distance == -14) {
+  messagepopup("ball went too far!");
+}
+}
+});
+}
+});
 }
 
 function calcDistToHole(ball) {
@@ -439,6 +514,7 @@ function disableSwingButton() {
   swingButton.className = "load-button myButtonGrey zoom-in";  
   swingButton.setAttribute( 'data-loading', '' ); 
   swingButton.disabled = true;
+  linemoveable = false;
   wastoggleable = linetoggleable;
   linetoggleable = false;
   canenter = false;
@@ -452,36 +528,36 @@ function rollIn(ball, playerId) {
     duration: "short",
     easing: "linear",
     callback: function () { 
-    ball.animate({
-      radius: 0
-    }, {
-      duration: "normal",
-      easing: "linear",
-      callback: function() {
-      endPlayers[parseInt(playerId)] = players[playerId];
+      ball.animate({
+        radius: 0
+      }, {
+        duration: "normal",
+        easing: "linear",
+        callback: function() {
+          endPlayers[parseInt(playerId)] = players[playerId];
 
-      if (playerId == id && !entireGameOver) {
-        if (strokenum == 1) {
-          messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
-        } else if (!entireGameOver){
-          messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
+          if (playerId == id && !entireGameOver) {
+            if (strokenum == 1) {
+              messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
+            } else if (!entireGameOver){
+              messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + strokenum + " strokes!");
+            }
+          } else {
+            if (players[playerId].stroke == 1 && !entireGameOver) {
+              messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
+            } else if (!entireGameOver){
+              messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke - 1 + " strokes!");
+            }
+          }
+
+          if (entireGameOver && allPlayersSwung) {
+            displayScorecard();
+          }
+
         }
-      } else {
-        if (players[playerId].stroke == 1 && !entireGameOver) {
-          messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
-        } else if (!entireGameOver){
-          messagepopup(players[playerId].name.toLowerCase() + " finished in " + players[playerId].stroke - 1 + " strokes!");
-        }
-      }
-
-      if (entireGameOver && allPlayersSwung) {
-        displayScorecard();
-      }
-
-    }
-    });
-  }
-  });
+      });
+}
+});
 }
 
 function outOfBounds(ball, x, y) {     
@@ -499,11 +575,11 @@ function sink(ball, x, y) {
     duration: "normal",
     easing: "linear",
     callback: function () {      
-    ball.x = x;
-    ball.y = y;
-    ball.radius = 5;
-    enableSwingButton(); 
-  }
+      ball.x = x;
+      ball.y = y;
+      ball.radius = 5;
+      enableSwingButton(); 
+    }
   });
 }
 
@@ -630,9 +706,9 @@ function swing() {
   if(!isNaN(+word)) {
     var num = +word;    
     moveBall(balls[id], 
-        balls[id].x + num * Math.cos(angle * Math.PI / 180), 
-        balls[id].y - num * Math.sin(angle * Math.PI / 180),
-        players[id]);
+      balls[id].x + num * Math.cos(angle * Math.PI / 180), 
+      balls[id].y - num * Math.sin(angle * Math.PI / 180),
+      players[id]);
   } else if (word == "hole!") {    
     moveBall(balls[id], hole_x, hole_y, players[id]);
   } else {
@@ -673,7 +749,7 @@ function animateTurn(responseJSON) {
       var otherPlayerOld = oldPlayers[i.toString()];
       var otherPlayerNew = newPlayers[i];
       if (otherPlayerOld != null && !otherPlayerOld.isGameOver
-          && otherPlayerNew != null) {
+        && otherPlayerNew != null) {
         setTimeout(function() {
           console.log("inside the settimeout function!!");
           if (otherPlayerNew.isGameOver) {
@@ -683,8 +759,8 @@ function animateTurn(responseJSON) {
               addStroke(2);
             }             
             moveBall(balls[i], balls[i].x + 1000 * Math.cos(angle * Math.PI / 180), 
-                balls[i].y - 1000 * Math.sin(angle * Math.PI / 180),
-                otherPlayerNew);
+              balls[i].y - 1000 * Math.sin(angle * Math.PI / 180),
+              otherPlayerNew);
 
           } else {
             if (otherPlayerNew.id == id) {
@@ -695,10 +771,10 @@ function animateTurn(responseJSON) {
           players[i] = newPlayers[i];
           animateBalls(i + 1);
         }, timeDelay);
-      } else {
-        players[i] = newPlayers[i];
-        animateBalls(i + 1);
-      }
+    } else {
+      players[i] = newPlayers[i];
+      animateBalls(i + 1);
+    }
 
       // after all players have gone:
     } else {

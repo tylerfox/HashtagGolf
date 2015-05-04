@@ -12,13 +12,10 @@ TODO:
 	
 
 	Brandon
-	- Tell users (in the instructions or tutorial?) that queries are case insensitive.
-	- The upper case looks pretty ugly in the input box (due to the Comics font).  Maybe we could change the font in the input word box and/or lowercase displayal to make displayal nicer.
 
 	ANYONE CAN TAKE
 	- Error handling in SwingHandler (for TwitterQueries) - how should we handle for the GUI? --> ie: general connection lost
 	- Let the user know who hasn't swung yet (get the loading animation to work on Chrome)
-	- Very explicitly tell people what ball color they are (it's actually pretty confusing and I still think having something in the HUD to just tell them this would be beneficial - Beverly)
 	- See what the other person's word is (or at least show this at the end on the score card - maybe a button on the score card that's like "show words" and it will show each players' words")
 	- Play again possibility - probably more difficult that it sounds.
 

@@ -19,6 +19,7 @@
             <h1>score card</h1>
             <h2 id="info"> congrats on completing this course! </h2>
             <button class="myButton" onclick="start()"> menu </button>
+            <!--<button id = "nxtlvlbtn" class="myButton" onclick="nextlevel()"> next level </button>-->
           </div>
 
           <div id="fullscreen-modal-content" style="display: none;">            
@@ -33,6 +34,7 @@
           <p class="hud" id= "distancehud"> distance to hole: 658 yards</p>
           <p class="hud" id= "parhud"> par#: 3</p>
           <p class="hud" id="strokehud"> stroke#: 1</p>
+          <p class="hud" id="ballcolorhud">ball colors:</p>
         </div>
         <div id="messagediv">
           <p id="mymessage">Message!</p>
