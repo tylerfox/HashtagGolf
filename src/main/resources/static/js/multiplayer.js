@@ -28,8 +28,12 @@ function host() {
 				};
 
 				$.post("/host", postParameters, function(responseJSON) {
-					var valid = JSON.parse(responseJSON).success;
-					if (valid) {
+					var nameAvailable = JSON.parse(responseJSON).nameAvailable;
+					var duplicateIp = JSON.parse(responseJSON).duplicateIp;
+					
+					if (duplicateIp) {
+						alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
+					} else if (nameAvailable) {
 						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
 					} else {
 						alert("Room name has already been taken. Please enter a new room name.");
@@ -226,7 +230,7 @@ function getName(roomName) {
 					alert("This room is full. Please enter a new room name.");
 					join();
 				} else if (duplicateIp) {
-					alert("You are already participating in this game in another window.");
+					alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
 				}
 			});
 		}
