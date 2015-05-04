@@ -205,7 +205,7 @@ public final class SparkServerWithMultiplayer {
 
       try {
         Game game = new Game("new_hole1.png", "key.png");
-        game.addPlayer("Tiger");
+        game.addPlayer("You");
         game.setActive(true);
 
         int hashKey = game.hashCode();

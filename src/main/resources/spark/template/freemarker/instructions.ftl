@@ -24,7 +24,7 @@
 	      2. input a word - the distance the ball travels will be based on 
 	      how many times this word (case insensitive) has been tweeted in the past 60 seconds.
 	      <br><br>
-	      note that different types of terrain will cause the number of seconds to vary.
+	      Different types of terrain will cause the number of seconds to vary, so be careful where you aim!
 	      <br><br>
 	      note: your game data will not be saved if you refresh or close the page.
 	      <br><br>
