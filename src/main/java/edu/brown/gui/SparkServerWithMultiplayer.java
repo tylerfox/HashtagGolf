@@ -368,7 +368,9 @@ public final class SparkServerWithMultiplayer {
 
         String room = req.cookie("room");
         Game game = rooms.get(room);
-        List<Player> players = game.swing(id, word, angle);
+        
+        List<Integer> disconnectedIds = new ArrayList<>();
+        List<Player> players = game.swing(id, word, angle, disconnectedIds);
 
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
@@ -380,7 +382,9 @@ public final class SparkServerWithMultiplayer {
         //}
 
         final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-            .put("players", players).put("entireGameOver", entireGameOver)
+            .put("players", players)
+            .put("disconnectedIds", disconnectedIds)
+            .put("entireGameOver", entireGameOver)
             .build();
 
         return GSON.toJson(variables);
