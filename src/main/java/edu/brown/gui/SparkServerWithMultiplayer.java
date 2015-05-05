@@ -488,7 +488,12 @@ public final class SparkServerWithMultiplayer {
           ipAddresses.add(req.ip());
         }
 
-        String id = game.addPlayer(playerName);
+        String id = null;
+        
+        if (!(duplicateIp && uniqueIpRequired)) {
+          id = game.addPlayer(playerName);
+        }
+        
         if (id != null) {
           res.cookie("id", id);
           res.cookie("room", roomName);

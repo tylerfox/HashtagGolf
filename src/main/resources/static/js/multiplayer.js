@@ -74,14 +74,14 @@ function join() {
 					if (roomExists && !roomFull && !duplicateIp) {
 						//brings user to the lobby
 						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + room;
+					} else if (duplicateIp) {
+						alert("You are already participating in this game in another window.");
 					} else if (!roomExists) {
 						alert("No room by this name exists. Please enter a new room name.");
 						join();
 					} else if (roomFull) {
 						alert("This room is full. Please enter a new room name.");
 						join();
-					} else if (duplicateIp) {
-						alert("You are already participating in this game in another window.");
 					}
 				});
 			}
@@ -210,14 +210,14 @@ function getName(roomName) {
 				if (roomExists && !roomFull && !duplicateIp) {
 					//brings user to the lobby
 					window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/lobby/" + roomName;
+				} else if (duplicateIp) {
+					alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
 				} else if (!roomExists) {
 					alert("No room by this name exists. Please enter a new room name.");
 					join();
 				} else if (roomFull) {
 					alert("This room is full. Please enter a new room name.");
 					join();
-				} else if (duplicateIp) {
-					alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
 				}
 			});
 		}
