@@ -351,7 +351,7 @@ function loadcanvas() {
 					$(this).qtip('show'); // Show the qTip
 					qtipHidden = false;       
 				} else {
-					$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + disttohole);
+					$("#myCanvas").qtip('option', 'content.text', "<b>" + players[i].name.toLowerCase() + "'s ball</b><br>" + "distance to hole: " + calcDistToHole(balls[players[i].id]));
 					$(this).qtip('show'); // Show the qTip
 					qtipHidden = false;
 				}
