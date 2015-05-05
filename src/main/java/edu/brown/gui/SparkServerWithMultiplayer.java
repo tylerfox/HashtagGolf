@@ -215,6 +215,9 @@ public final class SparkServerWithMultiplayer {
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
+        
+        assert (id != null);
+        
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -300,7 +303,7 @@ public final class SparkServerWithMultiplayer {
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
-        // rooms.remove(room); //TODO GET RID OF THIS
+        // rooms.remove(room);
         // System.out.println("Removed room " + room);
       }
 
@@ -375,10 +378,10 @@ public final class SparkServerWithMultiplayer {
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
 
-        // if (entireGameOver) {
-        // rooms.remove(room);
-        // System.out.println("Removing room: " + room);
-        // }
+        //if (entireGameOver) {
+          //rooms.remove(room);
+          //System.out.println("Removing room: " + room);
+        //}
 
         final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
             .put("players", players).put("disconnectedIds", disconnectedIds)
@@ -443,10 +446,9 @@ public final class SparkServerWithMultiplayer {
             ipAddresses.add(req.ip());
           }
 
-          Game game = new Game("new_hole1.png", "key.png");
-          game.addPlayer(playerName);
-
           if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
+            Game game = new Game("new_hole1.png", "key.png");
+            game.addPlayer(playerName);
             rooms.put(roomName, game);
           }
 
@@ -486,7 +488,12 @@ public final class SparkServerWithMultiplayer {
           ipAddresses.add(req.ip());
         }
 
-        String id = game.addPlayer(playerName);
+        String id = null;
+        
+        if (!(duplicateIp && uniqueIpRequired)) {
+          id = game.addPlayer(playerName);
+        }
+        
         if (id != null) {
           res.cookie("id", id);
           res.cookie("room", roomName);

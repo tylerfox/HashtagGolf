@@ -28,6 +28,7 @@
 }
 
 #tweetme {
+	padding-left: 20px;
 	text-transform: lowercase;
     font-family:"Comics";
     src: url("comics.ttf");
@@ -296,7 +297,7 @@ p {
 
 .terrain_fairway {
 	top: 650px;
-	left:100px;
+	left:83px;
 	text-align: center;
 	background-color: #3AB54A;
 	border: solid;

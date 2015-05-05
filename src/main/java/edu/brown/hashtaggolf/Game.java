@@ -152,6 +152,18 @@ public class Game {
       for (int i = 0; i < players.size(); i++) {
         Player player = players.get(i);
 
+        boolean hasPlayerDisconnected = false;
+
+        if (player != null && pingTimes.containsKey(player)
+            && pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
+          hasPlayerDisconnected = true;
+          disconnectedIds.add(i);
+          players.set(i, null);
+          decrementNumPlayers();
+
+          System.out.println("Player " + i + " has disconnected!");
+        }
+
         if (player != null && !player.isReady()) {
           allPlayersReady = false;
         }
