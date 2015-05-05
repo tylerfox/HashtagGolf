@@ -50,7 +50,7 @@ function confirmExit(e) {
   if (e && !gameover) {   
     var postParameters = {};
     $.post("/exit", postParameters, function(responseJSON) {
-    	window.location.href = "/start";
+    	//window.location.href = "/start";
     });
   }
 }
@@ -65,7 +65,7 @@ function checkRefresh() {
         console.log("refreshField has been changed to " + document.getElementById("refreshField").value);
 	} else { //on refresh
 		console.log("Refresh detected");
-	    window.location.href = "/start";  
+	    //window.location.href = "/start";  
 	}
 }
 
@@ -73,7 +73,7 @@ function redirectOnRefresh(evt) {
   /**
   if (evt.keyCode == 116) {
   	alert("Redirecting to home page."); //Do NOT delete this alert. It is necessary for functionality.
-    window.location.href = "/start";
+    //window.location.href = "/start";
   } */
 }
 
@@ -129,14 +129,35 @@ function displayScorecard() {
 }
 
 function nextlevel() {
+  singlepostParameters ={};
+  $.get("/single_player_select", singlepostParameters, function(responseJSON) {
+    colpostParameters={"color":"red"};
+    console.log("c");
+    $.get("/play", colpostParameters, function(responseJSON) {
+      lvlpostParameters={"level":"2"};
+      console.log("b");
+      $.get("/level_select", lvlpostParameters, function(responseJSON) {
+        console.log("a");
+        document.location.href = "/play";
+      });
+    });
+  });
+
+
+
+
   //js/gui_hole1.png
-  console.log(myguihole);
+  //console.log(myguihole);
   //location.reload();
   //console.log("after");
-  var postParameters = {};
+  /*var postParameters = {};
   $.post("/setup", postParameters, function(responseJSON){
+  	alert("gets here");
+  	console.log("a");
     console.log(responseObject);
     responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    
     id = responseObject.id;
     players = responseObject.players;
     START_X = responseObject.startx;
@@ -147,7 +168,7 @@ function nextlevel() {
     scaleFactor = responseObject.scaleFactor;    
     /*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
     /*document.getElementById("myCanvas").style.background = "white";*/
-    myguihole = "js/" + responseObject.guihole;
+    /*myguihole = "js/" + responseObject.guihole;
     console.log(myguihole);
     loadcanvas();
     document.getElementById("parhud").innerHTML = "par#: " + par;
@@ -174,12 +195,13 @@ function nextlevel() {
       messagepopup("let's play!");
     }
 
-  });
+  });*/
 }
 
 var postParameters = {};
 $.post("/setup", postParameters, function(responseJSON){
   responseObject = JSON.parse(responseJSON);
+  console.log(responseObject);
   id = responseObject.id;
   players = responseObject.players;
   START_X = responseObject.startx;
@@ -191,6 +213,7 @@ $.post("/setup", postParameters, function(responseJSON){
   /*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
   /*document.getElementById("myCanvas").style.background = "white";*/
   myguihole = "js/" + responseObject.guihole;
+  console.log(id + " " + players + " " + START_X + " " + hole_x + " " + hole_y + " " + par);
   loadcanvas();
   document.getElementById("parhud").innerHTML = "par#: " + par;
   if (players.length == 1) {
@@ -464,6 +487,7 @@ function enableSwingButton() {
     swingButton.removeAttribute( 'data-loading'); 
     swingButton.disabled = false;
     canenter = true;
+    document.getElementById("check").disabled = false;
     document.getElementById("tweetme").value = "";
     //Terrain
     var myPlayer = players[id];
@@ -472,7 +496,7 @@ function enableSwingButton() {
     random = Math.floor((Math.random() * 3) + 1);
     if (myPlayer.terrain == "BUNKER") {
       terrainpic.setAttribute("class", "terrain_bunker");
-      terrainpic.innerHTML = "your ball is in<br> the bunker <br> <img src='css/clock.png'> 30 seconds";
+      terrainpic.innerHTML = "in the bunker <br> <img src='css/clock.png'> 30 seconds";
       if (oldterrain != "terrain_bunker") {
         switch (random) {
           case 1: messagepopup("fun in the sand");
@@ -485,7 +509,7 @@ function enableSwingButton() {
       }
     } else if (myPlayer.terrain == "FAIRWAY") {
       terrainpic.setAttribute("class", "terrain_fairway");
-      terrainpic.innerHTML = "your ball is on<br> the fairway <br> <img src='css/clock.png'> 60 seconds";
+      terrainpic.innerHTML = "on the fairway <br> <img src='css/clock.png'> 60 seconds";
       if (oldterrain != "terrain_fairway") {
         switch (random) {
           case 1: messagepopup("nice shot!");
@@ -498,7 +522,7 @@ function enableSwingButton() {
       }
     } else if (myPlayer.terrain == "ROUGH") {
       terrainpic.setAttribute("class", "terrain_rough");
-      terrainpic.innerHTML = "your ball is in<br> the rough <br> <img src='css/clock.png'> 45 seconds";
+      terrainpic.innerHTML = "in the rough <br> <img src='css/clock.png'> 45 seconds";
       if (oldterrain != "terrain_rough") {
         switch (random) {
           case 1: messagepopup("you're going to have a rough time");
@@ -511,7 +535,7 @@ function enableSwingButton() {
       }
     } else if (myPlayer.terrain == "GREEN") {
       terrainpic.setAttribute("class", "terrain_green");
-      terrainpic.innerHTML = "your ball is on<br> the green <br> <img src='css/clock.png'> 60 seconds";
+      terrainpic.innerHTML = "on the green <br> <img src='css/clock.png'> 60 seconds";
       if (oldterrain != "terrain_green" && disttohole > 10) {
         switch (random) {
           case 1: messagepopup("it's all putting from here!");
@@ -524,7 +548,7 @@ function enableSwingButton() {
       }
     } else if (myPlayer.terrain == "TEE") {
       terrainpic.setAttribute("class", "terrain_tee");
-      terrainpic.innerHTML = "your ball is in<br> the teebox <br> <img src='css/clock.png'> 60 seconds";
+      terrainpic.innerHTML = "in the teebox <br> <img src='css/clock.png'> 60 seconds";
       if (oldterrain != "terrain_tee") {
         switch (random) {
           case 1: messagepopup("how'd you get back here?");
@@ -554,6 +578,7 @@ function disableSwingButton() {
   wastoggleable = linetoggleable;
   linetoggleable = false;
   canenter = false;
+  document.getElementById("check").disabled = true;
 }
 function rollIn(ball, playerId) {
   ball.animate({

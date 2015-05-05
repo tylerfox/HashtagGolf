@@ -5,7 +5,6 @@ function chooselevel(lvl) {
 	levelimg = document.getElementById("levelimage");
 	leveldescrip = document.getElementById("leveldescript");
 	playbtn = document.getElementById("playbutton");
-
 	switch(lvl) {
 		case "1": levelimg.style.backgroundImage = "url(css/gui_hole1.png)";
 		levelimg.style.backgroundSize = "512px 288px";

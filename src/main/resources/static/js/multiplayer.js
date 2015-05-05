@@ -1,4 +1,5 @@
-var MAX_NAME_LENGTH = 15;
+var MAX_NAME_LENGTH = 18;
+
 /**
  * Redirects to the start page
  */
@@ -23,14 +24,14 @@ function host() {
 				host();
 			} else {
 				var postParameters = {
-					"room" : room,
-					"player" : player
+						"room" : room,
+						"player" : player
 				};
 
 				$.post("/host", postParameters, function(responseJSON) {
 					var nameAvailable = JSON.parse(responseJSON).nameAvailable;
 					var duplicateIp = JSON.parse(responseJSON).duplicateIp;
-					
+
 					if (duplicateIp) {
 						alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
 					} else if (nameAvailable) {
@@ -42,7 +43,7 @@ function host() {
 				});
 			} 			
 		}
-		
+
 	}
 }
 
@@ -84,7 +85,7 @@ function join() {
 					}
 				});
 			}
-			
+
 		}
 	}
 }
@@ -128,46 +129,32 @@ function checkPlayers() {
 	setInterval(function() {
 		var postParameters = {};
 		$.post("/joinedPlayers", postParameters, function(responseJSON) {
-			var players = JSON.parse(responseJSON).players;
-			var displayPlayers = "";
-			for (var i = 0; i < players.length; i++) {
-				var myPlayer = players[i];
-				if (i == 0 && myPlayer != null) {
-					displayPlayers = displayPlayers + "<font color =\"green\">host: " + myPlayer.name.toLowerCase() + "</font><br>";
-				} else if (myPlayer.ready) {
-					displayPlayers = displayPlayers + "<font color =\"green\">" + myPlayer.name.toLowerCase() + " - ready</font><br>";
-				} else {
-					displayPlayers  = displayPlayers  + "<font color =\"red\">" +  myPlayer.name.toLowerCase() + " - not ready</font><br>";
+			var jsonObject = JSON.parse(responseJSON);
+			var players = jsonObject.players;
+			var hostQuit = jsonObject.hostQuit;
+			if (hostQuit) {
+				alert("Whoops!  Looks like the host quit the game." +
+				" You will now be redirected to the multiplayer screen.");
+				window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multiplayer";
+			} else {
+				var displayPlayers = "";
+				for (var i = 0; i < players.length; i++) {
+					var myPlayer = players[i];
+					if (i == 0 && myPlayer != null) {
+						displayPlayers = displayPlayers + "<font color =\"green\">host: " + myPlayer.name.toLowerCase() + "</font><br>";
+					} else if (myPlayer == null){
+						//do nothing
+					} else if (myPlayer.ready) {
+						displayPlayers = displayPlayers + "<font color =\"green\">" + myPlayer.name.toLowerCase() + " - ready</font><br>";
+					} else if (!myPlayer.ready){
+						displayPlayers  = displayPlayers  + "<font color =\"red\">" +  myPlayer.name.toLowerCase() + " - not ready</font><br>";
+					}
 				}
+				document.getElementById("players").innerHTML = displayPlayers;
 			}
-			document.getElementById("players").innerHTML = displayPlayers;
 		});
-		
 	}, 1000);
 }
-
-/**
-* Checks for available rooms.
-	var room = prompt("Room name");
-	if (room != null) {
-		if (room.length > MAX_NAME_LENGTH) {
-			alert("Please input a room name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
-			host();
-		} else {
-			var player = prompt("Your name");
-
-			if (player == null && room.length > MAX_NAME_LENGTH) {
-				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
-				host();
-			} else {
-				var postParameters = {
-					"room" : room,
-					"player" : player
-				};
-
-				$.post("/host", postParameters, function(responseJSON) {
-					var valid = JSON.pars
-*/
 
 function availableRooms() {
 	setInterval(function() {

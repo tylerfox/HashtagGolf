@@ -40,6 +40,7 @@
      <script src="../js/jquery-2.1.1.js"></script>
      <script src="../js/main.js"></script>
      <script src="../js/multiplayer.js"></script>
+     <script src="../js/lobby.js"></script>
   </body>
   <!-- See http://html5boilerplate.com/ for a good place to start
        dealing with real world issues like old browsers.  -->

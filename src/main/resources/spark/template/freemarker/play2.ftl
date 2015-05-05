@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/jquery.qtip.css">
 </head>
 
-<body onLoad="checkRefresh()">
+  <body onLoad="checkRefresh()">
     <form name="refreshForm" id="refreshForm">
         <input type="hidden" name="visited" id="refreshField" value="0"/>
     </form>
@@ -22,6 +22,7 @@
     <div id="basic-modal-content">
         <h1>score card</h1>
         <h2 id="info"> congrats on completing this course! </h2>
+        <button class="myButton" id= "nxtlvlbtn" onclick="nextlevel()"> next level </button>
         <button class="myButton" onclick="start()"> menu </button>
     </div>
     <div id="fullscreen-modal-content" style="display: none;">
@@ -43,7 +44,7 @@
     <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
     <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
     <div id="container2">
-        <div id = "terrainpic" class="terrain_tee">your ball is on<br>the tee <br> <img src="css/clock.png"> 60 seconds</div>
+        <div id = "terrainpic" class="terrain_tee">on the tee <br> <img src="css/clock.png"> 60 seconds</div>
         <input type="text" id = "tweetme" name = "tweetme" onkeypress="isenter(event);" placeholder="type a word or phrase"></input> 
         <!--<button class="myButton" onclick="swing()"> swing!</button>-->
         <button id="swingButton" class="load-button myButton zoom-in" onclick="swing()"><span class="label">swing!</span> <span class="spinner"></span></button> 

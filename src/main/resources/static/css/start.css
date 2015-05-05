@@ -26,7 +26,11 @@
 body {
 	background-image: url(tempbackground.png);
 	background-size: 125%;
-	overflow: hidden;
+	/*overflow: hidden;*/
+}
+
+::-webkit-scrollbar { 
+    display: none; 
 }
 
 h1 {
