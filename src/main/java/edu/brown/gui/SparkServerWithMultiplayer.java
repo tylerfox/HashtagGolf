@@ -273,7 +273,7 @@ public final class SparkServerWithMultiplayer {
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
       List<Player> players = game.getPlayers();
-//      game.clearSavedPlayers();
+      //      game.clearSavedPlayers();
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf").put("color", color).put("players", players)
           .put("id", id).put("holex", game.getHoleX())
@@ -298,16 +298,17 @@ public final class SparkServerWithMultiplayer {
       assert game != null;
       List<Player> players = game.getPlayers();
 
-//      if (players.get(id) != null) {
-//        players.set(id, null);
-//        game.decrementNumPlayers();
-//      }
+      if (players.get(id) != null) {
+        players.set(id, null);
+        game.decrementNumPlayers();
+        System.out.println(id);
+      }
 
       // if all players left the game, then remove the room from the hashmap
-//      if (game.getNumPlayers() == 0) {
-//        System.out.println("removing game!");
-//        rooms.remove(room);
-//      }
+      if (game.getNumPlayers() == 0) {
+        System.out.println("removing game!");
+        rooms.remove(room);
+      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players, "id", id);

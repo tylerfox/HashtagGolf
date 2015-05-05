@@ -169,15 +169,15 @@ public class Game {
         Player player = players.get(i);
         boolean hasPlayerDisconnected = false;
 
-//        if (player != null && pingTimes.containsKey(player)
-//            && (pingTimes.get(player) + 10000 <= System.currentTimeMillis())) {
-//          hasPlayerDisconnected = true;
-//          disconnectedIds.add(i);
-//          players.set(i, null);
-//          decrementNumPlayers();
-//
-//          System.out.println("Player " + i + " has disconnected!");
-//        }
+        if (player != null && pingTimes.containsKey(player)
+            && (pingTimes.get(player) + 10000 <= System.currentTimeMillis())) {
+          hasPlayerDisconnected = true;
+          disconnectedIds.add(i);
+          players.set(i, null);
+          decrementNumPlayers();
+
+          System.out.println("Player " + i + " has disconnected!");
+        }
 
         if (player != null && !player.isReady() && !hasPlayerDisconnected) {
           allPlayersReady = false;
