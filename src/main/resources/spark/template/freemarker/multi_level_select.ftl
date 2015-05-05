@@ -21,8 +21,8 @@
              <button onclick = "chooselevel('2');" class="myButton" id = "multiplayer">level 2</button>
              <br><br>
 
-             <button onclick = "chooselevel('3');" class="myButton" id ="settings">level 4</button>
-             <button onclick = "chooselevel('4');" class="myButton" id ="create">level 3</button>
+             <button onclick = "chooselevel('3');" class="myButton" id ="create">level 3</button>
+             <button onclick = "chooselevel('4');" class="myButton" id ="settings">level 4</button>
              <br> <br>
              <button onclick= "hostlobby();" id = "playbutton" class="myButton"> next </button>
            </div>
