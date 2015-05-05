@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/jquery.qtip.css">
 </head>
 
-  <body onLoad="checkRefresh()">
+  <body>
     <form name="refreshForm" id="refreshForm">
         <input type="hidden" name="visited" id="refreshField" value="0"/>
     </form>
