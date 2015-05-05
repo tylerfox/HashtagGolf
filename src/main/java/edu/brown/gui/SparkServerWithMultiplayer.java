@@ -556,6 +556,7 @@ public final class SparkServerWithMultiplayer {
 
       if (players.get(0) == null) {
         hostQuit = true;
+        rooms.remove(room);
       }
 
       final Map<String, Object> variables =
