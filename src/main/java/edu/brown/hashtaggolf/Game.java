@@ -68,7 +68,15 @@ public class Game {
    */
   public synchronized String addPlayer(String name) {
     if (numPlayers.get() < MAX_PLAYERS) {
-      String id = String.valueOf(numPlayers);
+      int intId = numPlayers.get();
+      for (int i = 0; i < numPlayers.get(); i++) {
+        if (players.get(i) == null) {
+          intId = i;
+          break;
+        }
+      }
+
+      String id = String.valueOf(intId);
       Player myPlayer = new Player(name, id, startX, startY, holeX, holeY);
       players.add(myPlayer);
       numPlayers.getAndIncrement();
