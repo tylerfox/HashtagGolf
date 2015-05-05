@@ -920,6 +920,14 @@ function animateTurn(responseJSON) {
 	}
 }
 
+function disableF5(e) {
+	if ((e.which || e.keyCode) == 116) {
+		e.preventDefault();
+	}
+}
+
+$(document).on("keydown", disableF5);
+
 function pingServer() {
 	setTimeout(function() {
 		console.log("Pinging server");
