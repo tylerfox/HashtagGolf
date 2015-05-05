@@ -249,6 +249,7 @@ p {
 /*Terrains */
 
 .terrain_tee {
+	top: 40px;
 	text-align: center;
 	background-color: #77C35F;
 	border: solid;
@@ -261,6 +262,7 @@ p {
 }
 
 .terrain_bunker {
+	top: 40px;
 	text-align: center;
 	background-color: #f0c3a2;
 	border: solid;
@@ -273,6 +275,7 @@ p {
 }
 
 .terrain_fairway {
+	top: 40px;
 	text-align: center;
 	background-color: #3AB54A;
 	border: solid;
@@ -285,6 +288,7 @@ p {
 }
 
 .terrain_rough {
+	top: 40px;
 	text-align: center;
 	background-color: #0B9444;
 	border: solid;
@@ -297,6 +301,7 @@ p {
 }
 
 .terrain_green{
+	top: 40px;
 	text-align: center;
 	background-color: #8FC965;
 	border: solid;
