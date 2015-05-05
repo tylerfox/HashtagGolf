@@ -910,7 +910,8 @@ function animateTurn(responseJSON) {
 	for (var i = 0; i < disconnectedIds.length; i++) {
 		var disconnectedId = disconnectedIds[i];
 		balls[disconnectedId].remove();
-		messagepopup(newPlayers[disconnectedId].name + " has disconnected!");
+		//messagepopup(newPlayers[disconnectedId].name + " has disconnected!");
+		messagepopup("Player has disconnected!");
 	}
 
 	function animateBalls(i) {
