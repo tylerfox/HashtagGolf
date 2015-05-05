@@ -240,13 +240,13 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String newcolor = qm.value("color");
-      
+
       if (newcolor != null) {
         color = newcolor;
       }
-      
+
       ipAddresses.add(req.ip());
-      
+
       Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
       return new ModelAndView(variables, "play2.ftl");
     }
@@ -287,12 +287,12 @@ public final class SparkServerWithMultiplayer {
       System.out.println("Whether user's IP address was found and removed: " + ipFoundAndRemoved);
       System.out.println(ipAddresses.toString());
       //assert ipFoundAndRemoved;
-      
+
       String room = req.cookie("room");
       Game game = rooms.get(room);
       assert game != null;
       List<Player> players = game.getPlayers();
-      
+
       players.set(id, null);
       game.decrementNumPlayers();
 
@@ -300,7 +300,7 @@ public final class SparkServerWithMultiplayer {
       if (game.getNumPlayers() == 0) {
         rooms.remove(room);
       }
-      
+
       res.removeCookie("id");
       res.removeCookie("room");
 
@@ -437,10 +437,10 @@ public final class SparkServerWithMultiplayer {
           } else {
             ipAddresses.add(req.ip());
           }
-          
+
           Game game = new Game("new_hole1.png", "key.png");
           game.addPlayer(playerName);
-          
+
           if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
             rooms.put(roomName, game);
           }
@@ -453,7 +453,7 @@ public final class SparkServerWithMultiplayer {
         System.out.println("ERROR: Issue loading level.");
       }
 
-      
+
       System.out.println(duplicateIp);
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
@@ -552,10 +552,16 @@ public final class SparkServerWithMultiplayer {
       String room = req.cookie("room");
       Game game = rooms.get(room);
       List<Player> players = game.getCopyOfPlayers();
+      boolean hostQuit = false;
+
+      if (players.get(0) == null) {
+        hostQuit = true;
+      }
 
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
           .put("players", players)
+          .put("hostQuit", hostQuit)
           .build();
       return GSON.toJson(variables);
 
