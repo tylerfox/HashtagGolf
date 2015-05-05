@@ -94,7 +94,15 @@ public class Game {
     }
   }
 
-  public List<Player> swing(int id, String word, double angle) {
+  /**
+   * Calculates the result of a player's swing and waits on all other players before resolving.
+   * @param id The ID of the player swinging.
+   * @param word The word the player entered.
+   * @param angle The angle of the swing.
+   * @param disconnectedIds A list to be populated by the IDs of players that have disconnected.
+   * @return A list of copies of all players in the game with updated positions.
+   */
+  public List<Player> swing(int id, String word, double angle, List<Integer> disconnectedIds) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
 
@@ -103,7 +111,7 @@ public class Game {
     ref.swing(myPlayer, word, angle);
     myPlayer.setReady(true);
 
-    waitUntilAllPlayersReady();
+    waitUntilAllPlayersReady(disconnectedIds);
 
     // makes copies of all players
     List<Player> newPlayers = getCopyOfPlayers();
@@ -133,7 +141,7 @@ public class Game {
     if (!myPlayer.isSpectating()) {
       myPlayer.setSpectating(true);
       myPlayer.setReady(true);
-      waitUntilAllPlayersReady();
+      waitUntilAllPlayersReady(new ArrayList<Integer>());
 
       // makes copies of all players
       List<Player> newPlayers = getCopyOfPlayers();
@@ -146,7 +154,7 @@ public class Game {
     }
   }
 
-  private synchronized void waitUntilAllPlayersReady() {
+  private synchronized void waitUntilAllPlayersReady(List<Integer> disconnectedIds) {
     boolean allPlayersReady = false;
 
     while (!allPlayersReady) {
@@ -158,7 +166,11 @@ public class Game {
         
         if (pingTimes.containsKey(player) && pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
           hasPlayerDisconnected = true;
-          System.out.println("A player has disconnected!");
+          disconnectedIds.add(i);
+          players.set(i, null);
+          decrementNumPlayers();
+          
+          System.out.println("Player " + i + " has disconnected!");
         }
 
         if (player != null && !player.isReady() && !hasPlayerDisconnected) {
@@ -261,8 +273,9 @@ public class Game {
     if (myPlayer != null) {
       myPlayer.setReady(true);
     }
-
-    waitUntilAllPlayersReady();
+    
+    List<Integer> disconnectedIds = new ArrayList<Integer>();
+    waitUntilAllPlayersReady(disconnectedIds);
     roomReadiness.addAndGet(1);
   }
 

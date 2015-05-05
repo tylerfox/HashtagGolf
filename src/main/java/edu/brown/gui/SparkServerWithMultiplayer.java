@@ -215,6 +215,9 @@ public final class SparkServerWithMultiplayer {
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
+        
+        assert (id != null);
+        
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -295,12 +298,12 @@ public final class SparkServerWithMultiplayer {
       assert game != null;
       List<Player> players = game.getPlayers();
 
-      //players.set(id, null);
-      //game.decrementNumPlayers();
+      // players.set(id, null);
+      // game.decrementNumPlayers();
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
-        // rooms.remove(room); //TODO GET RID OF THIS
+        // rooms.remove(room);
         // System.out.println("Removed room " + room);
       }
 
@@ -368,7 +371,9 @@ public final class SparkServerWithMultiplayer {
 
         String room = req.cookie("room");
         Game game = rooms.get(room);
-        List<Player> players = game.swing(id, word, angle);
+
+        List<Integer> disconnectedIds = new ArrayList<>();
+        List<Player> players = game.swing(id, word, angle, disconnectedIds);
 
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
@@ -379,8 +384,8 @@ public final class SparkServerWithMultiplayer {
         //}
 
         final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-            .put("players", players).put("entireGameOver", entireGameOver)
-            .build();
+            .put("players", players).put("disconnectedIds", disconnectedIds)
+            .put("entireGameOver", entireGameOver).build();
 
         return GSON.toJson(variables);
       } catch (Exception e) {
@@ -408,14 +413,12 @@ public final class SparkServerWithMultiplayer {
           game.checkResetState();
           boolean entireGameOver = game.isGameOver();
 
-         /* if (entireGameOver) {
-            rooms.remove(room);
-            System.out.println("Removing room: " + room);
-          }*/
-          final Map<String, Object> variables =
-              new ImmutableMap.Builder<String, Object>()
-              .put("players", players)
-              .put("entireGameOver", entireGameOver)
+          /* if (entireGameOver) {
+             rooms.remove(room);
+             System.out.println("Removing room: " + room);
+           }*/
+          final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+              .put("players", players).put("entireGameOver", entireGameOver)
               .build();
           return GSON.toJson(variables);
         }
@@ -443,10 +446,9 @@ public final class SparkServerWithMultiplayer {
             ipAddresses.add(req.ip());
           }
 
-          Game game = new Game("new_hole1.png", "key.png");
-          game.addPlayer(playerName);
-
           if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
+            Game game = new Game("new_hole1.png", "key.png");
+            game.addPlayer(playerName);
             rooms.put(roomName, game);
           }
 
@@ -486,7 +488,12 @@ public final class SparkServerWithMultiplayer {
           ipAddresses.add(req.ip());
         }
 
-        String id = game.addPlayer(playerName);
+        String id = null;
+        
+        if (!(duplicateIp && uniqueIpRequired)) {
+          id = game.addPlayer(playerName);
+        }
+        
         if (id != null) {
           res.cookie("id", id);
           res.cookie("room", roomName);
@@ -587,7 +594,7 @@ public final class SparkServerWithMultiplayer {
 
     }
   }
-  
+
   /**
    * Next level.
    */
@@ -598,18 +605,17 @@ public final class SparkServerWithMultiplayer {
       int id = Integer.parseInt(req.cookie("id"));
       Game game = rooms.get(roomName);
       game.resetGame();
-      
+
       List<Player> lastGame = game.getSavedPlayers();
       String idStr = game.addPlayer(lastGame.get(id).getName());
       res.cookie("id", idStr);
       System.out.println("id for past : " + id + " new : " + idStr);
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .build();
       return GSON.toJson(variables);
     }
   }
-  
+
   /**
    * Next level.
    */
@@ -619,8 +625,9 @@ public final class SparkServerWithMultiplayer {
       String roomName = req.cookie("room");
       int id = Integer.parseInt(req.cookie("id"));
       Game game = rooms.get(roomName);
-      
+
       List<Player> lastGame = game.getSavedPlayers();
+
       boolean readyGame = true;
       if (lastGame == null) {
         readyGame = false;
@@ -628,11 +635,9 @@ public final class SparkServerWithMultiplayer {
         String idStr = game.addPlayer(lastGame.get(id).getName());
         res.cookie("id", idStr);
       }
-      
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("readyGame", readyGame)
-          .build();
+
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("readyGame", readyGame).build();
       return GSON.toJson(variables);
     }
   }
@@ -641,15 +646,15 @@ public final class SparkServerWithMultiplayer {
     @Override
     public Object handle(Request req, Response res) {
       long timeReceived = System.currentTimeMillis();
-      
+
       String room = req.cookie("room");
       Game game = rooms.get(room);
-      
+
       int id = Integer.parseInt(req.cookie("id"));
       game.updatePingTime(id, timeReceived);
 
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>().build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .build();
 
       return GSON.toJson(variables);
     }

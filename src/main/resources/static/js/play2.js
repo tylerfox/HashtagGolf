@@ -5,6 +5,7 @@ var target_y;
 var strokenum = 1;
 var hole_x;
 var hole_y;
+var terrain;
 var dest_X = hole_x;
 var dest_Y = hole_y;
 var scaleFactor;
@@ -40,6 +41,7 @@ var colors = ["red", "blue", "green", "yellow"];
 var fullScreenPopup;
 var fullScreenModal;
 var allPlayersSwung = false;
+var preterrain;
 
 window.onbeforeunload = confirmExit;
 
@@ -73,7 +75,7 @@ function redirectOnRefresh(evt) {
   if (evt.keyCode == 116) {
   	alert("Redirecting to home page."); //Do NOT delete this alert. It is necessary for functionality.
     //window.location.href = "/start";
-  } */
+} */
 }
 
 $(document).bind("keydown", redirectOnRefresh);
@@ -140,65 +142,65 @@ function displayScorecard() {
 }
 
 function nextlevel() {
-  if (players.length == 1) {
-    singlepostParameters ={};
-    $.get("/single_player_select", singlepostParameters, function(responseJSON) {
-      
-      var color = "white";
-      
-	switch (balls[id].fill) {
-		case "#fff": color = "white";
-		break;
-		case "#f00" : color = "red";
-		break;
-		case "#00f" : color = "blue";
-		break;
-		case "#0f0" : color = "green";
-		break;
-		case "#ff0" : color = "yellow";
-		break;
-	}
-      colpostParameters={"color": color};
+	if (players.length == 1) {
+		singlepostParameters ={};
+		$.get("/single_player_select", singlepostParameters, function(responseJSON) {
 
-      $.get("/play", colpostParameters, function(responseJSON) {
-	      var level = "1";
-	      switch (myguihole) {
-			case "js/gui_hole1.png": level = "2";
+			var color = "white";
+
+			switch (balls[id].fill) {
+			case "#fff": color = "white";
 			break;
-			case "js/gui_hole2.png" : level = "3";
+			case "#f00" : color = "red";
 			break;
-			case "js/gui_hole3.png" : level = "1";
+			case "#00f" : color = "blue";
 			break;
-		}
-      
-        lvlpostParameters={"level": level};
-        $.get("/level_select", lvlpostParameters, function(responseJSON) {
-          document.location.href = "/play";
-        });
-      });
-   });
-  } else if (id == 0) {
-    // the host
-    $.post("/next_level_multi_host", postParameters, function(){  
-       document.location.href = "/multi_levelselect";
-    });
-   
-  } else {
-    // all other players
-    $.post("/next_level_multi", postParameters, function(responseJSON){  
-       var startedRoom = JSON.parse(responseJSON).readyRoom;
-       if (startedRoom) {
-       	 	document.location.href = "/lobby/nextLevel";
-       	} else {
-       		alert("Host has not yet created a room.");
-       	}
-    });
-    
-  }
+			case "#0f0" : color = "green";
+			break;
+			case "#ff0" : color = "yellow";
+			break;
+			}
+			colpostParameters={"color": color};
+
+			$.get("/play", colpostParameters, function(responseJSON) {
+				var level = "1";
+				switch (myguihole) {
+				case "js/gui_hole1.png": level = "2";
+				break;
+				case "js/gui_hole2.png" : level = "3";
+				break;
+				case "js/gui_hole3.png" : level = "1";
+				break;
+				}
+
+				lvlpostParameters={"level": level};
+				$.get("/level_select", lvlpostParameters, function(responseJSON) {
+					document.location.href = "/play";
+				});
+			});
+		});
+	} else if (id == 0) {
+		// the host
+		$.post("/next_level_multi_host", postParameters, function(){  
+			document.location.href = "/multi_levelselect";
+		});
+
+	} else {
+		// all other players
+		$.post("/next_level_multi", postParameters, function(responseJSON){  
+			var startedRoom = JSON.parse(responseJSON).readyRoom;
+			if (startedRoom) {
+				document.location.href = "/lobby/nextLevel";
+			} else {
+				alert("Host has not yet created a room.");
+			}
+		});
+
+	}
 }
 
 var postParameters = {};
-$.post("/setup", postParameters, function(responseJSON){
+$.post("/setup", postParameters, function(responseJSON) {
 	responseObject = JSON.parse(responseJSON);
 	console.log(responseObject);
 	id = responseObject.id;
@@ -235,18 +237,18 @@ $.post("/setup", postParameters, function(responseJSON){
 
 	//Ball Colors Hud
 	ballcolorhud = document.getElementById("ballcolorhud");
-	if (players.length !=1) {
+	if (players.length > 1) {
 		switch (balls[id].fill) {
-			case "#fff": hudballcolor = "white";
-			break;
-			case "#f00" : hudballcolor = "<font color=\"red\">red</font>";
-			break;
-			case "#00f" : hudballcolor = "<font color=\"blue\">blue</font>";
-			break;
-			case "#0f0" : hudballcolor = "<font color=\"green\">green</font>";
-			break;
-			case "#ff0" : hudballcolor = "<font color=\"yellow\">yellow</font>";
-			break;
+		case "#fff": hudballcolor = "white";
+		break;
+		case "#f00" : hudballcolor = "<font color=\"red\">red</font>";
+		break;
+		case "#00f" : hudballcolor = "<font color=\"blue\">blue</font>";
+		break;
+		case "#0f0" : hudballcolor = "<font color=\"green\">green</font>";
+		break;
+		case "#ff0" : hudballcolor = "<font color=\"yellow\">yellow</font>";
+		break;
 		}
 		ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
 		"<b>you: " + hudballcolor + "</b>";
@@ -271,14 +273,13 @@ $.post("/setup", postParameters, function(responseJSON){
 				players[person].name.toLowerCase() + ": " + hudballcolor;
 			}
 		}
-	}
 
-	if (players.length > 1) {
-		messagepopup("let's play! your ball color is " + colors[id]); 
-	} else {
-		messagepopup("let's play!");
+		if (players.length > 1) {
+			messagepopup("let's play! your ball color is " + colors[id]); 
+		} else {
+			messagepopup("let's play!");
+		}
 	}
-
 });
 
 function createBall(color, id, z) {
@@ -373,7 +374,7 @@ function magnitude(x, y) {
 }
 
 function moveBall(ball, dest_X, dest_Y, player) { 
-	var terrain = player.terrain;
+	terrain = player.terrain;
 	var playerId = player.id;
 	var preX = ball.x;
 	var preY = ball.y;
@@ -382,7 +383,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 	var mag = magnitude(deltaX, deltaY);
 	var scale;
 	var bounce; 
-	if ((mag / scaleFactor) <= 25) {
+	if ((mag / scaleFactor) <= 25 && preterrain === "GREEN") {
 		scale = 0;
 		bounce = 0;
 	} else {
@@ -442,12 +443,13 @@ function moveBall(ball, dest_X, dest_Y, player) {
 									callback: function () { 
 										enableSwingButton();
 										/*if (outofbounds(ball, canvas)) {	
+
                       ball.x = preX;
                       ball.y = preY;
                       if (playerId == id) {
                         messagepopup("that went way too far!"); 
                       }
-                    } else {*/
+                  } else {*/
 										if (playerId == id) {
 											disttohole = calcDistToHole(ball);
 											document.getElementById("distancehud").innerHTML = "distance to hole: " + disttohole + " yards";
@@ -456,7 +458,6 @@ function moveBall(ball, dest_X, dest_Y, player) {
 										if (player.isGameOver) {                      
 											rollIn(ball, playerId);
 										}
-
 									}
 								});
 							}
@@ -493,7 +494,7 @@ function enableSwingButton() {
 		//Terrain
 		var myPlayer = players[id];
 		var terrainpic = document.getElementById("terrainpic");
-		var oldterrain = terrainpic.className;
+		oldterrain = terrainpic.className;
 		random = Math.floor((Math.random() * 3) + 1);
 		if (myPlayer.terrain == "BUNKER") {
 			terrainpic.setAttribute("class", "terrain_bunker");
@@ -566,7 +567,7 @@ function enableSwingButton() {
 	linetoggleable = wastoggleable;
 	if (linetoggleable) {
 		linemoveable = true;
-	} else {
+	} else if (document.getElementById("check").enabled === true) {
 		toHole(balls[id]);
 	}
 }
@@ -593,7 +594,7 @@ function rollIn(ball, playerId) {
 		x: hole_x,
 		y: hole_y
 	}, {
-		duration: "short",
+		duration: "long",
 		easing: "linear",
 		callback: function () { 
 			ball.animate({
@@ -817,8 +818,8 @@ function splash2(x,y) {
 	}, 500);
 }
 
-function swing() {
-	console.log(myguihole);
+function swing() {	
+	preterrain = terrain;
 	var word = document.getElementById("tweetme").value.toLowerCase();
 	if (word == "") {
 		messagepopup("you didn't input a word!");
@@ -859,10 +860,17 @@ function swing() {
 function animateTurn(responseJSON) {
 	var responseObject = JSON.parse(responseJSON);
 	var newPlayers = responseObject.players;
+	var disconnectedIds = responseObject.disconnectedIds;
 	var myPlayer = newPlayers[parseInt(id)];
 	entireGameOver = responseObject.entireGameOver;
 	var oldPlayers = players;   
 	animateBalls(0);
+
+	for (var i = 0; i < disconnectedIds.length; i++) {
+		var disconnectedId = disconnectedIds[i];
+		balls[disconnectedId].remove();
+		messagepopup(newPlayers[disconnectedId].name + " has disconnected!");
+	}
 
 	function animateBalls(i) {
 		var timeDelay = 1;
@@ -876,10 +884,10 @@ function animateTurn(responseJSON) {
 			var otherPlayerNew = newPlayers[i];
 
 			if (otherPlayerOld != null && !otherPlayerOld.isGameOver && otherPlayerNew != null) {
-				setTimeout(function() {
-					console.log("inside the settimeout function!!");
+				setTimeout(function() {					
 					if (otherPlayerNew.isGameOver) {
-						moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
+						//moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
+						moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);
 					} else if (otherPlayerNew.outOfBounds || distance == -14) {
 						if (otherPlayerNew.id == id) {
 							addStroke(2);
@@ -923,11 +931,11 @@ $(document).on("keydown", disableRefreshKeys);
 function pingServer() {
 	setTimeout(function() {
 		console.log("Pinging server");
-		
+
 		var postParameters = {};
 		$.post("/ping", postParameters, function(responseJSON) {
 		});
-		
+
 		pingServer();
 	}, 10000);
 }
