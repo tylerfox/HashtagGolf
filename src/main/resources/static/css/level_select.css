@@ -14,6 +14,7 @@
 }
 
 #settings {
+	visibility: hidden;
 	margin: 50px;
 	float: right;
 }
