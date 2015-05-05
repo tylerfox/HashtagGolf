@@ -269,65 +269,65 @@ p {
 /*Terrains */
 
 .terrain_tee {
-	top: 40px;
+	top: 650px;
+	left:100px;
 	text-align: center;
 	background-color: #77C35F;
 	border: solid;
 	border-color: black;
 	float: left;
-	margin-left: -24%;
 	position: absolute;
 	font-size: 20pt;
 	z-index: 10;
 }
 
 .terrain_bunker {
-	top: 40px;
+	top: 650px;
+	left:100px;
 	text-align: center;
 	background-color: #f0c3a2;
 	border: solid;
 	border-color: black;
 	float: left;
-	margin-left: -24%;
 	position: absolute;
 	font-size: 20pt;
 	z-index: 10;
 }
 
 .terrain_fairway {
-	top: 40px;
+	top: 650px;
+	left:100px;
 	text-align: center;
 	background-color: #3AB54A;
 	border: solid;
 	border-color: black;
 	float: left;
-	margin-left: -24%;
 	position: absolute;
 	font-size: 20pt;
 	z-index: 10;
 }
 
 .terrain_rough {
-	top: 40px;
+	top: 650px;
+	left:100px;
 	text-align: center;
 	background-color: #0B9444;
 	border: solid;
 	border-color: black;
 	float: left;
-	margin-left: -24%;
 	position: absolute;
 	font-size: 20pt;
 	z-index: 10;
 }
 
 .terrain_green{
-	top: 40px;
+	top: 650px;
+	left:100px;
 	text-align: center;
 	background-color: #8FC965;
 	border: solid;
 	border-color: black;
 	float: left;
-	margin-left: -24%;
 	position: absolute;
 	font-size: 20pt;
 	z-index: 10;

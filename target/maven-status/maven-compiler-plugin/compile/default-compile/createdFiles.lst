@@ -4,7 +4,6 @@ edu\brown\gui\SparkServer.class
 edu\brown\gui\SparkServer$HostStartHandler.class
 edu\brown\gui\SparkServer$BallSelectHandler.class
 edu\brown\hashtaggolf\Referee$1.class
-edu\brown\socialdata\FacebookQuery.class
 edu\brown\gui\SparkServerWithMultiplayer$HostHandler.class
 edu\brown\gui\SparkServer$MultiplayerHandler.class
 edu\brown\gui\SparkServer$JoinHandler.class
@@ -12,6 +11,7 @@ edu\brown\gui\SparkServerWithMultiplayer$SetupHandler.class
 edu\brown\gui\SparkServer$SwingHandler.class
 edu\brown\socialdata\TwitterQuery.class
 edu\brown\hashtaggolf\Main.class
+edu\brown\gui\SparkServerWithMultiplayer$NextLevelMultiHandlerHost.class
 edu\brown\gui\SparkServerWithMultiplayer$StartHandler.class
 edu\brown\gui\SparkServer$PlayerReadyHandler.class
 edu\brown\gui\SparkServer$PlayHandler.class
@@ -23,6 +23,7 @@ edu\brown\gui\SparkServerWithMultiplayer$LobbyHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$MultiLevelHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$HostLobbyHandler.class
 edu\brown\imageprocessing\PixelColor.class
+edu\brown\gui\SparkServerWithMultiplayer$NextLevelMultiHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$SinglePlayerSelectHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$FrontPageHandler.class
 edu\brown\gui\SparkServerWithMultiplayer$SwingHandler.class
