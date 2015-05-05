@@ -131,14 +131,16 @@ function closeFullScreenPopup() {
 //displayScorecard();
 
 function displayScorecard() {
-	console.log("displaying score card");
-	var playerInfo = "<h3>par: " + par + "</h3><br>";
-	for (var i = 0; i < players.length; i++) {
-		var name = endPlayers[i].name.toLowerCase();
-		playerInfo = playerInfo + name + ": " + (endPlayers[i].stroke - 1) + "<br>";
-	}
-	document.getElementById("info").innerHTML = playerInfo;
-	$('#basic-modal-content').modal();
+	
+	setTimeout(function() {
+		var playerInfo = "<h3>par: " + par + "</h3><br>";
+		for (var i = 0; i < players.length; i++) {
+			var name = endPlayers[i].name.toLowerCase();
+			playerInfo = playerInfo + name + ": " + (endPlayers[i].stroke - 1) + "<br>";
+		}
+		document.getElementById("info").innerHTML = playerInfo;
+		$('#basic-modal-content').modal();
+	}, 2500);
 }
 
 function nextlevel() {
