@@ -418,7 +418,8 @@ function moveBall(ball, dest_X, dest_Y, player) {
           if (terrain === "WATER") {
             if (player.id == id) {
               messagepopup("your ball is sleeping with the fishes!");
-              splash2(ball.x,ball.y);
+              splash();
+              //splash2(ball.x,ball.y);
             }
             sink(ball, preX, preY);
           } else if (terrain == "OUT_OF_BOUNDS") {
