@@ -143,13 +143,36 @@ function nextlevel() {
   if (players.length == 1) {
     singlepostParameters ={};
     $.get("/single_player_select", singlepostParameters, function(responseJSON) {
-      colpostParameters={"color":"red"};
-      console.log("c");
+      
+      var color = "white";
+      
+	switch (balls[id].fill) {
+		case "#fff": color = "white";
+		break;
+		case "#f00" : color = "red";
+		break;
+		case "#00f" : color = "blue";
+		break;
+		case "#0f0" : color = "green";
+		break;
+		case "#ff0" : color = "yellow";
+		break;
+	}
+      colpostParameters={"color": color};
+
       $.get("/play", colpostParameters, function(responseJSON) {
-        lvlpostParameters={"level":"2"};
-        console.log("b");
+	      var level = "1";
+	      switch (myguihole) {
+			case "js/gui_hole1.png": level = "2";
+			break;
+			case "js/gui_hole2.png" : level = "3";
+			break;
+			case "js/gui_hole3.png" : level = "1";
+			break;
+		}
+      
+        lvlpostParameters={"level": level};
         $.get("/level_select", lvlpostParameters, function(responseJSON) {
-          console.log("a");
           document.location.href = "/play";
         });
       });
@@ -161,7 +184,6 @@ function nextlevel() {
     });
    
   } else {
-
     // all other players
     $.post("/next_level_multi", postParameters, function(){  
        setTimeout(function() {
@@ -732,9 +754,9 @@ function messagepopup(message){
 }
 
 function showmessagepopup(message){
-	waitmessagediv = document.getElementById('waitmessage');	
+	/*waitmessagediv = document.getElementById('waitmessage');	
 	waitmessagediv.innerHTML = message;
-	waitmessagediv.style.visibility = "visible";	
+	waitmessagediv.style.visibility = "visible";	*/
 }
 
 function hidemessagepopup() {
@@ -793,6 +815,7 @@ function splash2(x,y) {
 }
 
 function swing() {
+	console.log(myguihole);
 	var word = document.getElementById("tweetme").value.toLowerCase();
 	if (word == "") {
 		messagepopup("you didn't input a word!");
