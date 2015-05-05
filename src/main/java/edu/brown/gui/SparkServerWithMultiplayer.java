@@ -394,7 +394,7 @@ public final class SparkServerWithMultiplayer {
 
         return GSON.toJson(variables);
       } catch (Exception e) {
-        System.out.println("ERROR: Failure to swing.");
+        System.out.println("ERROR: Failure to swing. " + e.getMessage());
       }
       return null;
     }
