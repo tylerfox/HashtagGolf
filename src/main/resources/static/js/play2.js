@@ -892,7 +892,7 @@ function animateTurn(responseJSON) {
 	var oldPlayers = players;   
 	animateBalls(0);
 
-	for (int i = 0; i < disconnectedIds.length(); i++) {
+	for (var i = 0; i < disconnectedIds.length; i++) {
 		var disconnectedId = disconnectedIds[i];
 		balls[disconnectedId].remove();
 		alert(newPlayers[disconnectedId].name + " has disconnected!");

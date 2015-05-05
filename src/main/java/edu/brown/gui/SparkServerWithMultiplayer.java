@@ -446,10 +446,9 @@ public final class SparkServerWithMultiplayer {
             ipAddresses.add(req.ip());
           }
 
-          Game game = new Game("new_hole1.png", "key.png");
-          game.addPlayer(playerName);
-
           if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
+            Game game = new Game("new_hole1.png", "key.png");
+            game.addPlayer(playerName);
             rooms.put(roomName, game);
           }
 
