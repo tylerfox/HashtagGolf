@@ -215,6 +215,9 @@ public final class SparkServerWithMultiplayer {
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
+        
+        assert (id != null);
+        
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -300,7 +303,7 @@ public final class SparkServerWithMultiplayer {
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
-        // rooms.remove(room); //TODO GET RID OF THIS
+        // rooms.remove(room);
         // System.out.println("Removed room " + room);
       }
 

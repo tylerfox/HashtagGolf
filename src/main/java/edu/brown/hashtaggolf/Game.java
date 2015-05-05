@@ -167,6 +167,9 @@ public class Game {
         if (pingTimes.containsKey(player) && pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
           hasPlayerDisconnected = true;
           disconnectedIds.add(i);
+          players.set(i, null);
+          decrementNumPlayers();
+          
           System.out.println("Player " + i + " has disconnected!");
         }
 
