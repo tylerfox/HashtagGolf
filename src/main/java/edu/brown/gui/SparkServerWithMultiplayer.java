@@ -174,7 +174,6 @@ public final class SparkServerWithMultiplayer {
         for (int i = 0; i < levelnum; i++) {
           read = reader.readLine();
         }
-
         String[] readarr = read.split(",");
         String roomName = req.cookie("room");
         Game game = rooms.get(roomName);
@@ -185,8 +184,12 @@ public final class SparkServerWithMultiplayer {
         int holey = Integer.parseInt(readarr[5]);
         int par = Integer.parseInt(readarr[6]);
         String guihole = readarr[7];
-        game.setLevel(readarr[0], readarr[1], startx,
-            starty, holex, holey, par, guihole);
+        try {
+          game.setLevel(readarr[0], readarr[1], startx, starty, holex, holey, par, guihole);
+        } catch (Exception e) {
+          System.err.println(e.getMessage());
+        }
+            
         reader.close();
 
       } catch (IOException e1) {
