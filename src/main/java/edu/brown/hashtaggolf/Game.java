@@ -318,6 +318,10 @@ public class Game {
     return savedPlayers;
   }
   
+  public void clearSavedPlayers() {
+    savedPlayers = null;
+  }
+  
   public void resetGame() {
     savePlayers();
     roomReadiness = new AtomicInteger(0);

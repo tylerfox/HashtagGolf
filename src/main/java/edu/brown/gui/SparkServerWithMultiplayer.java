@@ -277,7 +277,7 @@ public final class SparkServerWithMultiplayer {
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
       List<Player> players = game.getPlayers();
-
+      game.clearSavedPlayers();
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf").put("color", color).put("players", players)
           .put("id", id).put("holex", game.getHoleX())
@@ -630,14 +630,17 @@ public final class SparkServerWithMultiplayer {
       Game game = rooms.get(roomName);
       
       List<Player> lastGame = game.getSavedPlayers();
-
-      String idStr = game.addPlayer(lastGame.get(id).getName());
-      res.cookie("id", idStr);
-      System.out.println("id for past : " + id + " new : " + idStr);
-      System.out.println("Players in game: " + game.getPlayers());
+      boolean readyGame = true;
+      if (lastGame == null) {
+        readyGame = false;
+      } else {
+        String idStr = game.addPlayer(lastGame.get(id).getName());
+        res.cookie("id", idStr);
+      }
       
       final Map<String, Object> variables =
           new ImmutableMap.Builder<String, Object>()
+          .put("readyGame", readyGame)
           .build();
       return GSON.toJson(variables);
     }
