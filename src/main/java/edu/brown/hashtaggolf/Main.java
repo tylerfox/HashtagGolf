@@ -27,7 +27,7 @@ public class Main {
 
   public Main() {
     try {
-      System.out.println(InetAddress.getLocalHost());
+      System.out.println(InetAddress.getLocalHost() + ":" + SparkServerWithMultiplayer.PORT);
     } catch (UnknownHostException e) {
       System.out.println("ERROR: Could not trace IP.");
     }
