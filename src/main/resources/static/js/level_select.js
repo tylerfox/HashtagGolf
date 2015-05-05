@@ -20,7 +20,7 @@ function chooselevel(lvl) {
 		break;
 		case "3": levelimg.style.backgroundImage = "url(css/gui_hole3.png)";
 		levelimg.style.backgroundSize = "512px 288px";
-		leveldescrip.innerHTML = "level 3: par: 5 distance to hole: 593 yards <br>" +  
+		leveldescrip.innerHTML = "level 3: par: 5 distance to hole: 529 yards <br>" +  
 		"difficulty: <img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starfilled.png'>";
 		playbtn.disabled = false;
 		break;
