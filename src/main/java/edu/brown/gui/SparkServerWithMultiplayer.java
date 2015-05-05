@@ -181,7 +181,6 @@ public final class SparkServerWithMultiplayer {
 
         for (int i = 0; i < levelnum; i++) {
           read = reader.readLine();
-          System.out.println(read);
         }
         String[] readarr = read.split(",");
         String roomName = req.cookie("room");
@@ -209,16 +208,13 @@ public final class SparkServerWithMultiplayer {
   private static class SinglePlayerSelectHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      System.out.println("Single Player Select Handler");
       if (req.cookie("id") == null) {
-        System.out.println("Initial assignment of ID cookie.");
         res.cookie("id", "0");
       }
 
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
-        System.out.println("Added player to game with id: " + id);
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -228,12 +224,9 @@ public final class SparkServerWithMultiplayer {
 
         String roomName = String.valueOf(hashKey);
 
-        System.out.println("Adding the room to the hashmap.");
         System.out.println(String.valueOf(hashKey));
 
         rooms.put(roomName, game);
-        System.out.println("Getting room to check if it's there: "
-            + rooms.get(roomName));
 
         res.cookie("room", String.valueOf(hashKey));
 
@@ -294,9 +287,7 @@ public final class SparkServerWithMultiplayer {
     @Override
     public Object handle(Request req, Response res) {
       int id = Integer.parseInt(req.cookie("id"));
-      boolean ipFoundAndRemoved = ipAddresses.remove(req.ip());
-      System.out.println("Whether user's IP address was found and removed: "
-          + ipFoundAndRemoved);
+      ipAddresses.remove(req.ip());
       System.out.println(ipAddresses.toString());
 
       String room = req.cookie("room");
@@ -394,6 +385,7 @@ public final class SparkServerWithMultiplayer {
 
         return GSON.toJson(variables);
       } catch (Exception e) {
+        e.printStackTrace();
         System.out.println("ERROR: Failure to swing.");
       }
       return null;
