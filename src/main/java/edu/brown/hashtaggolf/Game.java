@@ -3,6 +3,8 @@ package edu.brown.hashtaggolf;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game {
@@ -21,12 +23,14 @@ public class Game {
   private int par = 0;
   private String guihole = "";
   private boolean active = false;
+  private static Map<Player, Long> pingTimes;
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
     ref = new Referee(level, key);
+    pingTimes = new ConcurrentHashMap<>();
   }
 
   public void setLevel(String level, String key, int startX, int startY,
@@ -90,7 +94,15 @@ public class Game {
     }
   }
 
-  public List<Player> swing(int id, String word, double angle) {
+  /**
+   * Calculates the result of a player's swing and waits on all other players before resolving.
+   * @param id The ID of the player swinging.
+   * @param word The word the player entered.
+   * @param angle The angle of the swing.
+   * @param disconnectedIds A list to be populated by the IDs of players that have disconnected.
+   * @return A list of copies of all players in the game with updated positions.
+   */
+  public List<Player> swing(int id, String word, double angle, List<Integer> disconnectedIds) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
 
@@ -99,7 +111,7 @@ public class Game {
     ref.swing(myPlayer, word, angle);
     myPlayer.setReady(true);
 
-    waitUntilAllPlayersReady();
+    waitUntilAllPlayersReady(disconnectedIds);
 
     // makes copies of all players
     List<Player> newPlayers = getCopyOfPlayers();
@@ -129,7 +141,7 @@ public class Game {
     if (!myPlayer.isSpectating()) {
       myPlayer.setSpectating(true);
       myPlayer.setReady(true);
-      waitUntilAllPlayersReady();
+      waitUntilAllPlayersReady(new ArrayList<Integer>());
 
       // makes copies of all players
       List<Player> newPlayers = getCopyOfPlayers();
@@ -142,7 +154,7 @@ public class Game {
     }
   }
 
-  private synchronized void waitUntilAllPlayersReady() {
+  private synchronized void waitUntilAllPlayersReady(List<Integer> disconnectedIds) {
     boolean allPlayersReady = false;
 
     while (!allPlayersReady) {
@@ -150,12 +162,18 @@ public class Game {
 
       for (int i = 0; i < players.size(); i++) {
         Player player = players.get(i);
+        boolean hasPlayerDisconnected = false;
+        
+        if (pingTimes.containsKey(player) && pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
+          hasPlayerDisconnected = true;
+          disconnectedIds.add(i);
+          System.out.println("Player " + i + " has disconnected!");
+        }
 
-        if (player != null && !player.isReady()) {
+        if (player != null && !player.isReady() && !hasPlayerDisconnected) {
           allPlayersReady = false;
         }
       }
-
     }
   }
 
@@ -252,8 +270,9 @@ public class Game {
     if (myPlayer != null) {
       myPlayer.setReady(true);
     }
-
-    waitUntilAllPlayersReady();
+    
+    List<Integer> disconnectedIds = new ArrayList<Integer>();
+    waitUntilAllPlayersReady(disconnectedIds);
     roomReadiness.addAndGet(1);
   }
 
@@ -309,10 +328,18 @@ public class Game {
     return savedPlayers;
   }
   
+  public void clearSavedPlayers() {
+    savedPlayers = null;
+  }
+  
   public void resetGame() {
     savePlayers();
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
+  }
+  
+  public void updatePingTime(int id, long time) {
+    pingTimes.put(players.get(id), time);
   }
 }

@@ -51,7 +51,7 @@ function confirmExit(e) {
 	if (e && !gameover) {   
 		var postParameters = {};
 		$.post("/exit", postParameters, function(responseJSON) {
-			window.location.href = "/start";
+			//window.location.href = "/start";
 		});
 	}
 }
@@ -187,10 +187,13 @@ function nextlevel() {
 
 } else {
     // all other players
-    $.post("/next_level_multi", postParameters, function(){  
-    	setTimeout(function() {
-    		document.location.href = "/lobby/nextLevel";
-    	}, 2000);
+    $.post("/next_level_multi", postParameters, function(responseJSON){  
+       var startedRoom = JSON.parse(responseJSON).readyRoom;
+       if (startedRoom) {
+       	 	document.location.href = "/lobby/nextLevel";
+       	} else {
+       		alert("Host has not yet created a room.");
+       	}
     });
     
 }
@@ -236,6 +239,22 @@ $.post("/setup", postParameters, function(responseJSON){
 	ballcolorhud = document.getElementById("ballcolorhud");
 	if (players.length !=1) {
 		switch (balls[id].fill) {
+			case "#fff": hudballcolor = "white";
+			break;
+			case "#f00" : hudballcolor = "<font color=\"red\">red</font>";
+			break;
+			case "#00f" : hudballcolor = "<font color=\"blue\">blue</font>";
+			break;
+			case "#0f0" : hudballcolor = "<font color=\"green\">green</font>";
+			break;
+			case "#ff0" : hudballcolor = "<font color=\"yellow\">yellow</font>";
+			break;
+		}
+		ballcolorhud.innerHTML = ballcolorhud.innerHTML + "<br>" +
+		"<b>you: " + hudballcolor + "</b>";
+		for (person in players) {
+			var hudballcolor;
+			switch(balls[person].fill) {
 			case "#fff": hudballcolor = "white";
 			break;
 			case "#f00" : hudballcolor = "red";
@@ -372,7 +391,6 @@ function magnitude(x, y) {
 }
 
 function moveBall(ball, dest_X, dest_Y, player) { 
-	console.log(dest_X + " " + dest_Y);
 	terrain = player.terrain;
 	var playerId = player.id;
 	var preX = ball.x;
@@ -442,6 +460,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
       				callback: function () { 
       					enableSwingButton();
                   /*if (outofbounds(ball, canvas)) {	
+
                       ball.x = preX;
                       ball.y = preY;
                       if (playerId == id) {
@@ -756,9 +775,9 @@ function messagepopup(message){
 }
 
 function showmessagepopup(message){
-	/*waitmessagediv = document.getElementById('waitmessage');	
+	waitmessagediv = document.getElementById('waitmessage');	
 	waitmessagediv.innerHTML = message;
-	waitmessagediv.style.visibility = "visible";	*/
+	waitmessagediv.style.visibility = "visible";	
 }
 
 function hidemessagepopup() {
@@ -918,3 +937,25 @@ function animateTurn(responseJSON) {
 		}
 	}
 }
+
+function disableF5(e) {
+	if ((e.which || e.keyCode) == 116) {
+		e.preventDefault();
+	}
+}
+
+$(document).on("keydown", disableF5);
+
+function pingServer() {
+	setTimeout(function() {
+		console.log("Pinging server");
+		
+		var postParameters = {};
+		$.post("/ping", postParameters, function(responseJSON) {
+		});
+		
+		pingServer();
+	}, 10000);
+}
+
+pingServer();

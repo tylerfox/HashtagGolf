@@ -85,6 +85,7 @@ public final class SparkServerWithMultiplayer {
     Spark.post("/availableRooms", new AvailableRoomsHandler());
     Spark.post("/next_level_multi", new NextLevelMultiHandler());
     Spark.post("/next_level_multi_host", new NextLevelMultiHandlerHost());
+    Spark.post("/ping", new PingHandler());
   }
 
   /**
@@ -180,7 +181,6 @@ public final class SparkServerWithMultiplayer {
 
         for (int i = 0; i < levelnum; i++) {
           read = reader.readLine();
-          System.out.println(read);
         }
         String[] readarr = read.split(",");
         String roomName = req.cookie("room");
@@ -208,16 +208,13 @@ public final class SparkServerWithMultiplayer {
   private static class SinglePlayerSelectHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      System.out.println("Single Player Select Handler");
       if (req.cookie("id") == null) {
-        System.out.println("Initial assignment of ID cookie.");
         res.cookie("id", "0");
       }
 
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
-        System.out.println("Added player to game with id: " + id);
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -227,12 +224,9 @@ public final class SparkServerWithMultiplayer {
 
         String roomName = String.valueOf(hashKey);
 
-        System.out.println("Adding the room to the hashmap.");
         System.out.println(String.valueOf(hashKey));
 
         rooms.put(roomName, game);
-        System.out.println("Getting room to check if it's there: "
-            + rooms.get(roomName));
 
         res.cookie("room", String.valueOf(hashKey));
 
@@ -276,7 +270,7 @@ public final class SparkServerWithMultiplayer {
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
       List<Player> players = game.getPlayers();
-
+      game.clearSavedPlayers();
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf").put("color", color).put("players", players)
           .put("id", id).put("holex", game.getHoleX())
@@ -293,9 +287,7 @@ public final class SparkServerWithMultiplayer {
     @Override
     public Object handle(Request req, Response res) {
       int id = Integer.parseInt(req.cookie("id"));
-      boolean ipFoundAndRemoved = ipAddresses.remove(req.ip());
-      System.out.println("Whether user's IP address was found and removed: "
-          + ipFoundAndRemoved);
+      ipAddresses.remove(req.ip());
       System.out.println(ipAddresses.toString());
 
       String room = req.cookie("room");
@@ -376,7 +368,9 @@ public final class SparkServerWithMultiplayer {
 
         String room = req.cookie("room");
         Game game = rooms.get(room);
-        List<Player> players = game.swing(id, word, angle);
+
+        List<Integer> disconnectedIds = new ArrayList<>();
+        List<Player> players = game.swing(id, word, angle, disconnectedIds);
 
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
@@ -387,11 +381,12 @@ public final class SparkServerWithMultiplayer {
         // }
 
         final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-            .put("players", players).put("entireGameOver", entireGameOver)
-            .build();
+            .put("players", players).put("disconnectedIds", disconnectedIds)
+            .put("entireGameOver", entireGameOver).build();
 
         return GSON.toJson(variables);
       } catch (Exception e) {
+        e.printStackTrace();
         System.out.println("ERROR: Failure to swing.");
       }
       return null;
@@ -626,15 +621,35 @@ public final class SparkServerWithMultiplayer {
 
       List<Player> lastGame = game.getSavedPlayers();
 
-      String idStr = game.addPlayer(lastGame.get(id).getName());
-      res.cookie("id", idStr);
-      System.out.println("id for past : " + id + " new : " + idStr);
-      System.out.println("Players in game: " + game.getPlayers());
+      boolean readyGame = true;
+      if (lastGame == null) {
+        readyGame = false;
+      } else {
+        String idStr = game.addPlayer(lastGame.get(id).getName());
+        res.cookie("id", idStr);
+      }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .build();
+          .put("readyGame", readyGame).build();
       return GSON.toJson(variables);
     }
   }
 
+  private static class PingHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      long timeReceived = System.currentTimeMillis();
+
+      String room = req.cookie("room");
+      Game game = rooms.get(room);
+
+      int id = Integer.parseInt(req.cookie("id"));
+      game.updatePingTime(id, timeReceived);
+
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .build();
+
+      return GSON.toJson(variables);
+    }
+  }
 }
