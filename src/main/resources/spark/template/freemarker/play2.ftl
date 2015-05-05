@@ -41,6 +41,9 @@
     <div id="messagediv">
         <p id="mymessage">Message!</p>
     </div>
+    <div id="waitmessagediv">
+        <p id="waitmessage">Message!</p>
+    </div>
     <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
     <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
     
