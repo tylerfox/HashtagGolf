@@ -127,7 +127,6 @@ public class Referee {
     }
     try {
       int count = tq.getCount(word, seconds);
-      System.out.println(count);
       return player.powerup(count);
     } catch (TwitterException e) {
       e.printStackTrace();

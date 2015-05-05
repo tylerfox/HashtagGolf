@@ -98,14 +98,23 @@ function fullScreen() {
 	// Supports most browsers and their versions.
 	var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
 
-	if (requestMethod) { // Native full screen.
+	/*if (requestMethod) { // Native full screen.
 		requestMethod.call(element);
 	} else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
 		var wscript = new ActiveXObject("WScript.Shell");
 		if (wscript !== null) {
 			wscript.SendKeys("{F11}");
 		}
-	}
+	}*/
+	if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if(element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if(element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
 	fullScreenPopup.hide();
 	$.modal.close();       
 }
@@ -489,6 +498,7 @@ function enableSwingButton() {
 		canenter = true;
 		document.getElementById("check").disabled = false;
 		document.getElementById("tweetme").value = "";
+		hidemessagepopup();
 		//Terrain
 		var myPlayer = players[id];
 		var terrainpic = document.getElementById("terrainpic");
@@ -578,6 +588,13 @@ function disableSwingButton() {
 	wastoggleable = linetoggleable;
 	linetoggleable = false;
 	canenter = false;
+	var waitMessage;
+		if (players.length > 1) {
+			waitMessage = "waiting for other players...";
+		} else {
+			waitMessage = "searching twitter...";
+		}
+	showmessagepopup(waitMessage);
 	document.getElementById("check").disabled = true;
 }
 function rollIn(ball, playerId) {
@@ -598,15 +615,15 @@ function rollIn(ball, playerId) {
 
 					if (playerId == id && !entireGameOver) {
 						if (strokenum == 1) {
-							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
+							showmessagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
 						} else if (!entireGameOver){
-							messagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + (players[playerId].stroke - 1) + " strokes!");
+							showmessagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + (players[playerId].stroke - 1) + " strokes!");
 						}
 					} else {
 						if (players[playerId].stroke == 1 && !entireGameOver) {
-							messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
+							showmessagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
 						} else if (!entireGameOver){
-							messagepopup(players[playerId].name.toLowerCase() + " finished in " + (players[playerId].stroke - 1) + " strokes!");
+							showmessagepopup(players[playerId].name.toLowerCase() + " finished in " + (players[playerId].stroke - 1) + " strokes!");
 						}
 					}
 
@@ -748,6 +765,24 @@ function messagepopup(message){
 	}, 2000);
 }
 
+function showmessagepopup(message){
+	waitmessagediv = document.getElementById('waitmessage');	
+	waitmessagediv.innerHTML = message;
+	waitmessagediv.style.visibility = "visible";	
+}
+
+function hidemessagepopup() {
+	waitmessagediv = document.getElementById("waitmessage");	
+		messageinterval = setInterval(function(){ 
+			if (waitmessagediv.style.opacity > 0) {
+				waitmessagediv.style.opacity -= 0.01;
+			} else {
+				clearInterval(messageinterval);
+				waitmessagediv.style.visibility = "hidden";
+			}
+		}, 10);	
+}
+
 function splash() {
 	var waterdiv = document.getElementById("watereffect");
 	waterdiv.style.visibility = "visible";
@@ -820,11 +855,17 @@ function swing() {
 			enableSwingButton();
 		} else if(wordSplit[wordSplit.length - 1] === "-n") {
 			$.post("/swing", postParameters, function(responseJSON) {
+				if (players.length == 1) {
+					hidemessagepopup();
+				}
 				animateTurn(responseJSON);
 			});
 		} else {
 			usedWords[word]  = 1;
 			$.post("/swing", postParameters, function(responseJSON) {
+				if (players.length == 1) {
+					hidemessagepopup();
+				}
 				animateTurn(responseJSON);
 			});
 		}
