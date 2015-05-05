@@ -8,6 +8,7 @@ var hole_x;
 var hole_y;
 var dest_X = hole_x;
 var dest_Y = hole_y;
+var scaleFactor;
 var linetoggleable = true;
 var linemoveable = true;
 var angle = 0;
@@ -143,6 +144,7 @@ function nextlevel() {
     hole_x = responseObject.holex;
     hole_y = responseObject.holey;
     par = responseObject.par;
+    scaleFactor = responseObject.scaleFactor;    
     /*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
     /*document.getElementById("myCanvas").style.background = "white";*/
     myguihole = "js/" + responseObject.guihole;
@@ -185,6 +187,7 @@ $.post("/setup", postParameters, function(responseJSON){
   hole_x = responseObject.holex;
   hole_y = responseObject.holey;
   par = responseObject.par;
+  scaleFactor = responseObject.scaleFactor;
   /*document.getElementById("myCanvas").style.backgroundImage = responseObject.guihole;*/
   /*document.getElementById("myCanvas").style.background = "white";*/
   myguihole = "js/" + responseObject.guihole;
@@ -357,7 +360,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
   var mag = magnitude(deltaX, deltaY);
   var scale;
   var bounce; 
-  if ((mag / 3.5) <= 25) {
+  if ((mag / scaleFactor) <= 25) {
     scale = 0;
     bounce = 0;
   } else {
@@ -447,7 +450,7 @@ if (distance == -14) {
 }
 
 function calcDistToHole(ball) {
-  return Math.round(Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2))) / 3.5);
+  return Math.round(Math.round(Math.sqrt(Math.pow(ball.x - hole_x,2) + Math.pow(ball.y - hole_y,2))) / scaleFactor);
 }
 
 function addStroke(num) {
@@ -743,8 +746,8 @@ function splash2(x,y) {
   waterdiv.style.visibility = "visible";
   waterdiv.style.opacity = 0.7;
   waterdiv.style.zIndex = 50;
-  waterdiv.style.left = (x-50) + "px"
-  waterdiv.style.top = (y-50) + "px"
+  waterdiv.style.left = ((x-50) + 20) + "px"
+  waterdiv.style.top = ((y-50) + 20) + "px"
   /*waterdiv.style.height = "50px";
   waterdiv.style.width = "50";
   waterdiv.style.left = "500px";*/

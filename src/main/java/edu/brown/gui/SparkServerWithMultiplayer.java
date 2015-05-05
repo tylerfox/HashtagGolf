@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import edu.brown.hashtaggolf.Game;
 import edu.brown.hashtaggolf.Player;
+import edu.brown.hashtaggolf.Referee;
 import freemarker.template.Configuration;
 
 /**
@@ -56,18 +57,18 @@ public final class SparkServerWithMultiplayer {
     Spark.get("/", new FrontPageHandler(), freeMarker);
     Spark.get("/start", new StartHandler(), freeMarker);
     Spark.get("/play", new PlayHandler(), new FreeMarkerEngine());
-    Spark.get("/instructions", new InstructionsHandler(), new FreeMarkerEngine());
+    Spark.get("/instructions", new InstructionsHandler(),
+        new FreeMarkerEngine());
     Spark.get("/tutorial", new TutorialHandler(), new FreeMarkerEngine());
     Spark.get("/single_player_select", new SinglePlayerSelectHandler(),
         new FreeMarkerEngine());
     Spark.get("/level_select", new LevelHandler(), new FreeMarkerEngine());
-    Spark.get("/multi_levelselect", new MultiLevelHandler(), new FreeMarkerEngine());
+    Spark.get("/multi_levelselect", new MultiLevelHandler(),
+        new FreeMarkerEngine());
     Spark.get("/multiplayer", new MultiplayerHandler(), new FreeMarkerEngine());
 
     Spark.get("/lobby/:room", new LobbyHandler(), new FreeMarkerEngine());
-    Spark.get("/hostlobby", new HostLobbyHandler(),
-        new FreeMarkerEngine());
-
+    Spark.get("/hostlobby", new HostLobbyHandler(), new FreeMarkerEngine());
 
     // Front End Requesting Information
     Spark.post("/setup", new SetupHandler());
@@ -105,6 +106,7 @@ public final class SparkServerWithMultiplayer {
       return new ModelAndView(variables, "multiplayer.ftl");
     }
   }
+
   /**
    * Displays front page of #golf.
    */
@@ -166,12 +168,12 @@ public final class SparkServerWithMultiplayer {
     QueryParamsMap qm = req.queryMap();
     String newlevel = qm.value("level");
 
-    if (newlevel != null){
+    if (newlevel != null) {
       int levelnum = Integer.parseInt(newlevel);
 
       try {
-        BufferedReader reader = new BufferedReader(new FileReader(
-            new File("src/main/resources/levelconfig.txt")));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(
+            "src/main/resources/levelconfig.txt")));
         String read = "";
 
         for (int i = 0; i < levelnum; i++) {
@@ -188,8 +190,9 @@ public final class SparkServerWithMultiplayer {
         int holey = Integer.parseInt(readarr[5]);
         int par = Integer.parseInt(readarr[6]);
         String guihole = readarr[7];
-        game.setLevel(readarr[0], readarr[1], startx,
-            starty, holex, holey, par, guihole);
+        Referee.setScaleFactor(Double.parseDouble(readarr[8]));
+        game.setLevel(readarr[0], readarr[1], startx, starty, holex, holey,
+            par, guihole);
         reader.close();
 
       } catch (IOException e1) {
@@ -227,7 +230,8 @@ public final class SparkServerWithMultiplayer {
         System.out.println("ERROR: Issue with loading level.");
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id", "0");
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "id",
+          "0");
       return new ModelAndView(variables, "player_select.ftl");
     }
   }
@@ -240,14 +244,15 @@ public final class SparkServerWithMultiplayer {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String newcolor = qm.value("color");
-      
+
       if (newcolor != null) {
         color = newcolor;
       }
-      
+
       ipAddresses.add(req.ip());
-      
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "color", color);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "color", color);
       return new ModelAndView(variables, "play2.ftl");
     }
   }
@@ -263,17 +268,12 @@ public final class SparkServerWithMultiplayer {
       List<Player> players = game.getPlayers();
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
-          .put("title", "#golf")
-          .put("color", color)
-          .put("players", players)
-          .put("id", id)
-          .put("holex", game.getHoleX())
-          .put("holey", game.getHoleY())
-          .put("startx", game.getStartX())
-          .put("starty", game.getStartY())
-          .put("par", game.getPar())
+          .put("title", "#golf").put("color", color).put("players", players)
+          .put("id", id).put("holex", game.getHoleX())
+          .put("holey", game.getHoleY()).put("startx", game.getStartX())
+          .put("starty", game.getStartY()).put("par", game.getPar())
           .put("guihole", game.getGuihole())
-          .build();
+          .put("scaleFactor", Referee.getScaleFactor()).build();
 
       return GSON.toJson(variables);
     }
@@ -284,15 +284,16 @@ public final class SparkServerWithMultiplayer {
     public Object handle(Request req, Response res) {
       int id = Integer.parseInt(req.cookie("id"));
       boolean ipFoundAndRemoved = ipAddresses.remove(req.ip());
-      System.out.println("Whether user's IP address was found and removed: " + ipFoundAndRemoved);
+      System.out.println("Whether user's IP address was found and removed: "
+          + ipFoundAndRemoved);
       System.out.println(ipAddresses.toString());
-      //assert ipFoundAndRemoved;
-      
+      // assert ipFoundAndRemoved;
+
       String room = req.cookie("room");
       Game game = rooms.get(room);
       assert game != null;
       List<Player> players = game.getPlayers();
-      
+
       players.set(id, null);
       game.decrementNumPlayers();
 
@@ -300,13 +301,12 @@ public final class SparkServerWithMultiplayer {
       if (game.getNumPlayers() == 0) {
         rooms.remove(room);
       }
-      
+
       res.removeCookie("id");
       res.removeCookie("room");
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
-          "color", color, "players", players,
-          "id", id);
+          "color", color, "players", players, "id", id);
       return GSON.toJson(variables);
     }
   }
@@ -335,7 +335,8 @@ public final class SparkServerWithMultiplayer {
     @Override
     public ModelAndView handle(Request req, Response res) {
       String roomName = req.cookie("room");
-      Map<String, Object> variables = ImmutableMap.of("title", "#golf", "roomName", roomName);
+      Map<String, Object> variables = ImmutableMap.of("title", "#golf",
+          "roomName", roomName);
       return new ModelAndView(variables, "lobby.ftl");
     }
   }
@@ -373,10 +374,8 @@ public final class SparkServerWithMultiplayer {
         if (entireGameOver) {
           rooms.remove(room);
         }
-        final Map<String, Object> variables =
-            new ImmutableMap.Builder<String, Object>()
-            .put("players", players)
-            .put("entireGameOver", entireGameOver)
+        final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+            .put("players", players).put("entireGameOver", entireGameOver)
             .build();
 
         return GSON.toJson(variables);
@@ -407,10 +406,8 @@ public final class SparkServerWithMultiplayer {
           if (entireGameOver) {
             rooms.remove(room);
           }
-          final Map<String, Object> variables =
-              new ImmutableMap.Builder<String, Object>()
-              .put("players", players)
-              .put("entireGameOver", entireGameOver)
+          final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+              .put("players", players).put("entireGameOver", entireGameOver)
               .build();
           return GSON.toJson(variables);
         }
@@ -437,10 +434,10 @@ public final class SparkServerWithMultiplayer {
           } else {
             ipAddresses.add(req.ip());
           }
-          
+
           Game game = new Game("new_hole1.png", "key.png");
           game.addPlayer(playerName);
-          
+
           if (nameAvailable && !(duplicateIp && uniqueIpRequired)) {
             rooms.put(roomName, game);
           }
@@ -453,13 +450,10 @@ public final class SparkServerWithMultiplayer {
         System.out.println("ERROR: Issue loading level.");
       }
 
-      
       System.out.println(duplicateIp);
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("nameAvailable", nameAvailable)
-          .put("duplicateIp", duplicateIp && uniqueIpRequired)
-          .build();
+          .put("duplicateIp", duplicateIp && uniqueIpRequired).build();
       return GSON.toJson(variables);
     }
   }
@@ -493,12 +487,9 @@ public final class SparkServerWithMultiplayer {
         }
       }
 
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("roomExists", roomExists)
-          .put("roomFull", roomFull)
-          .put("duplicateIp", duplicateIp && uniqueIpRequired)
-          .build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("roomExists", roomExists).put("roomFull", roomFull)
+          .put("duplicateIp", duplicateIp && uniqueIpRequired).build();
 
       return GSON.toJson(variables);
     }
@@ -553,10 +544,8 @@ public final class SparkServerWithMultiplayer {
       Game game = rooms.get(room);
       List<Player> players = game.getCopyOfPlayers();
 
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("players", players)
-          .build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("players", players).build();
       return GSON.toJson(variables);
 
     }
@@ -578,10 +567,8 @@ public final class SparkServerWithMultiplayer {
         }
       }
 
-      final Map<String, Object> variables =
-          new ImmutableMap.Builder<String, Object>()
-          .put("rooms", listRooms)
-          .build();
+      final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
+          .put("rooms", listRooms).build();
       return GSON.toJson(variables);
 
     }
