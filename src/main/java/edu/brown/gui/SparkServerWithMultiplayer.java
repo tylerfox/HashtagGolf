@@ -652,6 +652,7 @@ public final class SparkServerWithMultiplayer {
 
       int id = Integer.parseInt(req.cookie("id"));
       game.updatePingTime(id, timeReceived);
+      System.out.println("Ping received from ID " + id + " at time " + timeReceived);
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .build();
