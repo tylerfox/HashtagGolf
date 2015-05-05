@@ -273,7 +273,6 @@ $.post("/setup", postParameters, function(responseJSON) {
 				players[person].name.toLowerCase() + ": " + hudballcolor;
 			}
 		}
-
 		if (players.length > 1) {
 			messagepopup("let's play! your ball color is " + colors[id]); 
 		} else {
@@ -375,6 +374,7 @@ function magnitude(x, y) {
 }
 
 function moveBall(ball, dest_X, dest_Y, player) { 
+	console.log(dest_X + " " + dest_Y);
 	terrain = player.terrain;
 	var playerId = player.id;
 	var preX = ball.x;
@@ -591,13 +591,13 @@ function disableSwingButton() {
 	document.getElementById("check").disabled = true;
 }
 function rollIn(ball, playerId) {
-	ball.animate({
+/*	ball.animate({
 		x: hole_x,
 		y: hole_y
 	}, {
 		duration: "long",
 		easing: "linear",
-		callback: function () { 
+		callback: function () { */
 			ball.animate({
 				radius: 0
 			}, {
@@ -626,8 +626,8 @@ function rollIn(ball, playerId) {
 
 				}
 			});
-		}
-	});
+//		}
+//	});
 }
 
 function outOfBounds(ball, x, y) {     
@@ -730,10 +730,6 @@ function outofbounds(ball, canvas) {
 	return ball.x < 0 || ball.x > canvas.width || ball.y < 0 || ball.y > canvas.height;
 }
 
-function isgameover(ball) {
-	return Math.abs(ball.x - hole_x) < 5 && Math.abs(ball.y - hole_y) < 5;
-}
-
 function isenter(evt) {
 	//TODO: CHANGE ME TO ACCOUNT FOR NOT ABLE TO SWING
 	if (evt.keyCode == 13 && canenter) {
@@ -819,7 +815,18 @@ function splash2(x,y) {
 	}, 500);
 }
 
-function swing() {	
+function isOnline() {
+	if(navigator.onLine){
+  		return true;
+ 	} else {
+ 	 	return false;
+ 	}
+}
+
+function swing() {
+	if (!isOnline()) {
+		messagepopup("couldn't query twitter. try again when you are online.");
+	} else {
 	preterrain = terrain;
 	var word = document.getElementById("tweetme").value.toLowerCase();
 	if (word == "") {
@@ -854,8 +861,8 @@ function swing() {
 				animateTurn(responseJSON);
 			});
 		}
-	
-}
+	}
+  }
 
 
 function animateTurn(responseJSON) {
@@ -887,8 +894,8 @@ function animateTurn(responseJSON) {
 			if (otherPlayerOld != null && !otherPlayerOld.isGameOver && otherPlayerNew != null) {
 				setTimeout(function() {					
 					if (otherPlayerNew.isGameOver) {
-						//moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
-						moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);
+						moveBall(balls[i], hole_x, hole_y, otherPlayerNew);
+						//moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);
 					} else if (otherPlayerNew.outOfBounds || distance == -14) {
 						if (otherPlayerNew.id == id) {
 							addStroke(2);
