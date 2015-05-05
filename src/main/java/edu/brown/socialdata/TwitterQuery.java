@@ -72,7 +72,7 @@ public class TwitterQuery implements SocialQuery {
     q.setResultType(Query.RECENT);
     numTweets = 0;
     long maxId;
-    while ((maxId = query(q, duration)) > 0) {
+    while ((maxId = query(q, duration)) > 0 && numTweets < 1000) {
       q.setMaxId(maxId);
     }
     return numTweets;

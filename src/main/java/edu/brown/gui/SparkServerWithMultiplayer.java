@@ -178,6 +178,7 @@ public final class SparkServerWithMultiplayer {
 
         for (int i = 0; i < levelnum; i++) {
           read = reader.readLine();
+          System.out.println(read);
         }
         String[] readarr = read.split(",");
         String roomName = req.cookie("room");
