@@ -164,7 +164,7 @@ public class Game {
         Player player = players.get(i);
         boolean hasPlayerDisconnected = false;
         
-        if (player != null && pingTimes.containsKey(player) && pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
+        if (player != null && pingTimes.containsKey(player) && (pingTimes.get(player) + 10000 <= System.currentTimeMillis())) {
           hasPlayerDisconnected = true;
           disconnectedIds.add(i);
           players.set(i, null);

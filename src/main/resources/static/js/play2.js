@@ -365,7 +365,8 @@ function loadcanvas() {
 	if (!(screen.width == window.outerWidth && screen.height == window.outerHeight)) {
 		displayFullscreenModal();
 	}
-
+	
+	pingServer();
 }
 
 
@@ -937,7 +938,5 @@ function pingServer() {
 		});
 
 		pingServer();
-	}, 10000);
+	}, 4000);
 }
-
-pingServer();
