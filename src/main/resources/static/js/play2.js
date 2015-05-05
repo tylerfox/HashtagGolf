@@ -81,9 +81,13 @@ $(document).bind("keydown", redirectOnRefresh);
 function waitForOthers() {
   disableSwingButton();
   var postParameters={};
-  $.post("/spectate", postParameters, function(responseJSON) {
-    animateTurn(responseJSON);
-  });
+  if (entireGameOver) {
+
+  } else {
+    $.post("/spectate", postParameters, function(responseJSON) {
+      animateTurn(responseJSON);
+    });
+  }
 }
 
 function displayFullscreenModal() {
@@ -128,22 +132,36 @@ function displayScorecard() {
 }
 
 function nextlevel() {
-  singlepostParameters ={};
-  $.get("/single_player_select", singlepostParameters, function(responseJSON) {
-    colpostParameters={"color":"red"};
-    console.log("c");
-    $.get("/play", colpostParameters, function(responseJSON) {
-      lvlpostParameters={"level":"2"};
-      console.log("b");
-      $.get("/level_select", lvlpostParameters, function(responseJSON) {
-        console.log("a");
-        document.location.href = "/play";
+  if (players.length == 1) {
+    singlepostParameters ={};
+    $.get("/single_player_select", singlepostParameters, function(responseJSON) {
+      colpostParameters={"color":"red"};
+      console.log("c");
+      $.get("/play", colpostParameters, function(responseJSON) {
+        lvlpostParameters={"level":"2"};
+        console.log("b");
+        $.get("/level_select", lvlpostParameters, function(responseJSON) {
+          console.log("a");
+          document.location.href = "/play";
+        });
       });
+   });
+  } else if (id == 0) {
+    // the host
+    $.post("/next_level_multi_host", postParameters, function(){  
+       document.location.href = "/multi_levelselect";
     });
-  });
+   
+  } else {
 
-
-
+    // all other players
+    $.post("/next_level_multi", postParameters, function(){  
+       setTimeout(function() {
+        document.location.href = "/lobby/nextLevel";
+       }, 2000);
+    });
+    
+  }
 
   //js/gui_hole1.png
   //console.log(myguihole);

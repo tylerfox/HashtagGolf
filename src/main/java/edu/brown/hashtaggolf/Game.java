@@ -10,6 +10,7 @@ public class Game {
 
   private AtomicInteger roomReadiness;
   private Player[] savedState;
+  private List<Player> savedPlayers;
   private List<Player> players;
   private AtomicInteger numPlayers;
   private Referee ref;
@@ -67,6 +68,7 @@ public class Game {
    * @return id of player else null
    */
   public synchronized String addPlayer(String name) {
+    System.out.println("numPlayers " + numPlayers.get());
     if (numPlayers.get() < MAX_PLAYERS) {
       int intId = numPlayers.get();
       for (int i = 0; i < numPlayers.get(); i++) {
@@ -81,7 +83,7 @@ public class Game {
       players.add(myPlayer);
       numPlayers.getAndIncrement();
       savedState = new Player[MAX_PLAYERS];
-
+      System.out.println("numPlayers should be incremented " + numPlayers.get());
       return id;
     } else {
       return null;
@@ -294,8 +296,23 @@ public class Game {
   public void setActive(boolean active) {
     this.active = active;
   }
+  
+  private void savePlayers() {
+    savedPlayers = getCopyOfPlayers();
+  }
 
   public int getMaxPlayers() {
     return MAX_PLAYERS;
+  }
+
+  public List<Player> getSavedPlayers() {
+    return savedPlayers;
+  }
+  
+  public void resetGame() {
+    savePlayers();
+    roomReadiness = new AtomicInteger(0);
+    players = new ArrayList<>();
+    numPlayers = new AtomicInteger(0);
   }
 }

@@ -82,6 +82,8 @@ public final class SparkServerWithMultiplayer {
     Spark.post("/ready", new PlayerReadyHandler());
     Spark.post("/joinedPlayers", new JoinedPlayersHandler());
     Spark.post("/availableRooms", new AvailableRoomsHandler());
+    Spark.post("/next_level_multi", new NextLevelMultiHandler());
+    Spark.post("/next_level_multi_host", new NextLevelMultiHandlerHost());
   }
 
   /**
@@ -273,10 +275,7 @@ public final class SparkServerWithMultiplayer {
 
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
-      System.out.println("room: " + room);
-      System.out.println("game: " + game);
       List<Player> players = game.getPlayers();
-      System.out.println("Setup handler players: " + players);
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf")
@@ -290,7 +289,6 @@ public final class SparkServerWithMultiplayer {
           .put("par", game.getPar())
           .put("guihole", game.getGuihole())
           .build();
-      System.out.println("Setup handler is returning");
       return GSON.toJson(variables);
     }
   }
@@ -310,7 +308,7 @@ public final class SparkServerWithMultiplayer {
       List<Player> players = game.getPlayers();
 
       //players.set(id, null);
-      game.decrementNumPlayers();
+      //game.decrementNumPlayers();
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
@@ -387,10 +385,10 @@ public final class SparkServerWithMultiplayer {
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
 
-        if (entireGameOver) {
-          rooms.remove(room);
-          System.out.println("Removing room: " + room);
-        }
+        //if (entireGameOver) {
+          //rooms.remove(room);
+          //System.out.println("Removing room: " + room);
+        //}
         final Map<String, Object> variables =
             new ImmutableMap.Builder<String, Object>()
             .put("players", players)
@@ -422,10 +420,10 @@ public final class SparkServerWithMultiplayer {
           game.checkResetState();
           boolean entireGameOver = game.isGameOver();
 
-          if (entireGameOver) {
+         /* if (entireGameOver) {
             rooms.remove(room);
             System.out.println("Removing room: " + room);
-          }
+          }*/
           final Map<String, Object> variables =
               new ImmutableMap.Builder<String, Object>()
               .put("players", players)
@@ -612,4 +610,53 @@ public final class SparkServerWithMultiplayer {
 
     }
   }
+  
+  /**
+   * Next level.
+   */
+  private static class NextLevelMultiHandlerHost implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      String roomName = req.cookie("room");
+      int id = Integer.parseInt(req.cookie("id"));
+      Game game = rooms.get(roomName);
+      game.resetGame();
+      
+      List<Player> lastGame = game.getSavedPlayers();
+      String idStr = game.addPlayer(lastGame.get(id).getName());
+      res.cookie("id", idStr);
+      System.out.println("id for past : " + id + " new : " + idStr);
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .build();
+      return GSON.toJson(variables);
+    }
+  }
+  
+  /**
+   * Next level.
+   */
+  private static class NextLevelMultiHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      String roomName = req.cookie("room");
+      int id = Integer.parseInt(req.cookie("id"));
+      Game game = rooms.get(roomName);
+      
+      List<Player> lastGame = game.getSavedPlayers();
+
+      String idStr = game.addPlayer(lastGame.get(id).getName());
+      res.cookie("id", idStr);
+      System.out.println("id for past : " + id + " new : " + idStr);
+      System.out.println("Players in game: " + game.getPlayers());
+      
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>()
+          .build();
+      return GSON.toJson(variables);
+    }
+  }
+
+  
+  
 }

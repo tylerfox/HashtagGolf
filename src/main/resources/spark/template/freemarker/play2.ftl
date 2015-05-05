@@ -22,7 +22,7 @@
     <div id="basic-modal-content">
         <h1>score card</h1>
         <h2 id="info"> congrats on completing this course! </h2>
-        <button class="myButton" id= "nxtlvlbtn" onclick="nextlevel()"> next level </button>
+        <button class="myButton" id= "nxtlvlbtn" onclick="nextlevel()"> new level </button>
         <button class="myButton" onclick="start()"> menu </button>
     </div>
     <div id="fullscreen-modal-content" style="display: none;">
