@@ -49,7 +49,7 @@ function confirmExit(e) {
   if (e && !gameover) {   
     var postParameters = {};
     $.post("/exit", postParameters, function(responseJSON) {
-    	window.location.href = "/start";
+    	//window.location.href = "/start";
     });
   }
 }
@@ -64,7 +64,7 @@ function checkRefresh() {
         console.log("refreshField has been changed to " + document.getElementById("refreshField").value);
 	} else { //on refresh
 		console.log("Refresh detected");
-	    window.location.href = "/start";  
+	    //window.location.href = "/start";  
 	}
 }
 
@@ -72,7 +72,7 @@ function redirectOnRefresh(evt) {
   /**
   if (evt.keyCode == 116) {
   	alert("Redirecting to home page."); //Do NOT delete this alert. It is necessary for functionality.
-    window.location.href = "/start";
+    //window.location.href = "/start";
   } */
 }
 
@@ -151,8 +151,12 @@ function nextlevel() {
   //console.log("after");
   /*var postParameters = {};
   $.post("/setup", postParameters, function(responseJSON){
+  	alert("gets here");
+  	console.log("a");
     console.log(responseObject);
     responseObject = JSON.parse(responseJSON);
+    console.log(responseObject);
+    
     id = responseObject.id;
     players = responseObject.players;
     START_X = responseObject.startx;
@@ -195,6 +199,7 @@ function nextlevel() {
 var postParameters = {};
 $.post("/setup", postParameters, function(responseJSON){
   responseObject = JSON.parse(responseJSON);
+  console.log(responseObject);
   id = responseObject.id;
   players = responseObject.players;
   START_X = responseObject.startx;

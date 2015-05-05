@@ -207,6 +207,7 @@ public final class SparkServerWithMultiplayer {
   private static class SinglePlayerSelectHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      System.out.println("Single Player Select Handler");
       if (req.cookie("id") == null) {
         System.out.println("Initial assignment of ID cookie.");
         res.cookie("id", "0");
@@ -214,7 +215,8 @@ public final class SparkServerWithMultiplayer {
 
       try {
         Game game = new Game("new_hole1.png", "key.png");
-        game.addPlayer("You");
+        String id = game.addPlayer("You");
+        System.out.println("Added player to game with id: " + id);
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -222,8 +224,16 @@ public final class SparkServerWithMultiplayer {
           hashKey++;
         }
 
+
         String roomName = String.valueOf(hashKey);
+        
+        System.out.println("Adding the room to the hashmap.");
+        System.out.println(String.valueOf(hashKey));
+        
         rooms.put(roomName, game);
+        System.out.println("Getting room to check if it's there: " + 
+        rooms.get(roomName));
+        
         res.cookie("room", String.valueOf(hashKey));
 
       } catch (IOException e) {
@@ -263,7 +273,10 @@ public final class SparkServerWithMultiplayer {
 
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
+      System.out.println("room: " + room);
+      System.out.println("game: " + game);
       List<Player> players = game.getPlayers();
+      System.out.println("Setup handler players: " + players);
 
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf")
@@ -277,7 +290,7 @@ public final class SparkServerWithMultiplayer {
           .put("par", game.getPar())
           .put("guihole", game.getGuihole())
           .build();
-
+      System.out.println("Setup handler is returning");
       return GSON.toJson(variables);
     }
   }
@@ -296,16 +309,17 @@ public final class SparkServerWithMultiplayer {
       assert game != null;
       List<Player> players = game.getPlayers();
 
-      players.set(id, null);
+      //players.set(id, null);
       game.decrementNumPlayers();
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
-        rooms.remove(room);
+        //rooms.remove(room); //TODO GET RID OF THIS
+        //System.out.println("Removed room " + room);
       }
 
-      res.removeCookie("id");
-      res.removeCookie("room");
+     // res.removeCookie("id");
+      //res.removeCookie("room");
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players,
@@ -375,6 +389,7 @@ public final class SparkServerWithMultiplayer {
 
         if (entireGameOver) {
           rooms.remove(room);
+          System.out.println("Removing room: " + room);
         }
         final Map<String, Object> variables =
             new ImmutableMap.Builder<String, Object>()
@@ -409,6 +424,7 @@ public final class SparkServerWithMultiplayer {
 
           if (entireGameOver) {
             rooms.remove(room);
+            System.out.println("Removing room: " + room);
           }
           final Map<String, Object> variables =
               new ImmutableMap.Builder<String, Object>()
