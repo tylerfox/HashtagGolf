@@ -29,7 +29,7 @@ var playerId;
 var gameover = false;
 var displayPlayerDeparture = [true, true, true, true];
 var endPlayers = {};
-var par = 3;
+var par;
 var entireGameOver = false;
 var myguihole = "";
 var canvas;
@@ -459,7 +459,7 @@ function moveBall(ball, dest_X, dest_Y, player) {
 										}
 										//}
 										if (player.isGameOver) {                      
-											rollIn(ball, playerId);
+											rollIn(ball, playerId);											
 										}
 									}
 								});
@@ -608,17 +608,13 @@ function rollIn(ball, playerId) {
 				callback: function() {
 					endPlayers[parseInt(playerId)] = players[playerId];
 
-					if (playerId == id && !entireGameOver) {
-						if (strokenum == 1) {
-							showmessagepopup("congratulations, " + players[id].name.toLowerCase() + "! you got a hole-in-one!");
-						} else if (!entireGameOver){
-							showmessagepopup("congratulations, " + players[id].name.toLowerCase() + "! you finished in " + (players[playerId].stroke - 1) + " strokes!");
-						}
+					if (playerId == id) {
+						showmessagepopup(getScoreName(players[playerId]));						
 					} else {
 						if (players[playerId].stroke == 1 && !entireGameOver) {
-							showmessagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
+							messagepopup(players[playerId].name.toLowerCase() + " got a hole-in-one!");
 						} else if (!entireGameOver){
-							showmessagepopup(players[playerId].name.toLowerCase() + " finished in " + (players[playerId].stroke - 1) + " strokes!");
+							messagepopup(players[playerId].name.toLowerCase() + " finished in " + (players[playerId].stroke - 1) + " strokes!");
 						}
 					}
 
@@ -630,6 +626,41 @@ function rollIn(ball, playerId) {
 			});
 //		}
 //	});
+}
+
+function getScoreName(player) {
+	var strokeDiff = strokenum - par;
+	var name;
+	if (strokenum == 1) {
+		name = "hole in one!!!"
+	} else {
+	switch (strokeDiff) {
+		case -3:
+			name = "double eagle!";
+			break;
+		case -2:
+			name = "eagle!";
+			break;
+		case -1:
+			name = "birdie!";
+			break;
+		case 0:
+			name = "par";
+			break;
+		case 1:
+			name = "bogey";
+			break;
+		case 2:
+			name = "double bogey";
+			break;
+		case 3:
+			name = "triple bogey";
+			break;
+		default:
+			name = "+" + strokeDiff;
+	}
+}
+return name;
 }
 
 function outOfBounds(ball, x, y) {     
@@ -902,10 +933,7 @@ function animateTurn(responseJSON) {
 						if (otherPlayerNew.id == id) {
 							addStroke(2);
 						}             
-						moveBall(balls[i], balls[i].x + 1000 * Math.cos(angle * Math.PI / 180), 
-								balls[i].y - 1000 * Math.sin(angle * Math.PI / 180),
-								otherPlayerNew);
-
+						moveBall(balls[i], otherPlayerNew.x, otherPlayerNew.y, otherPlayerNew);
 					} else {
 						if (otherPlayerNew.id == id) {
 							addStroke(1);

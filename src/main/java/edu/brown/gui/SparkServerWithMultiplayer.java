@@ -215,9 +215,9 @@ public final class SparkServerWithMultiplayer {
       try {
         Game game = new Game("new_hole1.png", "key.png");
         String id = game.addPlayer("You");
-        
+
         assert (id != null);
-        
+
         game.setActive(true);
 
         int hashKey = game.hashCode();
@@ -377,10 +377,10 @@ public final class SparkServerWithMultiplayer {
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
 
-        //if (entireGameOver) {
-          //rooms.remove(room);
-          //System.out.println("Removing room: " + room);
-        //}
+        // if (entireGameOver) {
+        // rooms.remove(room);
+        // System.out.println("Removing room: " + room);
+        // }
 
         final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
             .put("players", players).put("disconnectedIds", disconnectedIds)
@@ -389,7 +389,7 @@ public final class SparkServerWithMultiplayer {
         return GSON.toJson(variables);
       } catch (Exception e) {
         e.printStackTrace();
-        System.out.println("ERROR: Failure to swing.");
+        System.err.println("ERROR: Failure to swing.");
       }
       return null;
     }
@@ -488,11 +488,11 @@ public final class SparkServerWithMultiplayer {
         }
 
         String id = null;
-        
+
         if (!(duplicateIp && uniqueIpRequired)) {
           id = game.addPlayer(playerName);
         }
-        
+
         if (id != null) {
           res.cookie("id", id);
           res.cookie("room", roomName);
@@ -652,6 +652,8 @@ public final class SparkServerWithMultiplayer {
 
       int id = Integer.parseInt(req.cookie("id"));
       game.updatePingTime(id, timeReceived);
+      System.out.println("Ping received from ID " + id + " at time "
+          + timeReceived);
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .build();

@@ -87,7 +87,8 @@ public class Game {
       players.add(myPlayer);
       numPlayers.getAndIncrement();
       savedState = new Player[MAX_PLAYERS];
-      System.out.println("numPlayers should be incremented " + numPlayers.get());
+      System.out
+          .println("numPlayers should be incremented " + numPlayers.get());
       return id;
     } else {
       return null;
@@ -95,14 +96,17 @@ public class Game {
   }
 
   /**
-   * Calculates the result of a player's swing and waits on all other players before resolving.
+   * Calculates the result of a player's swing and waits on all other players
+   * before resolving.
    * @param id The ID of the player swinging.
    * @param word The word the player entered.
    * @param angle The angle of the swing.
-   * @param disconnectedIds A list to be populated by the IDs of players that have disconnected.
+   * @param disconnectedIds A list to be populated by the IDs of players that
+   * have disconnected.
    * @return A list of copies of all players in the game with updated positions.
    */
-  public List<Player> swing(int id, String word, double angle, List<Integer> disconnectedIds) {
+  public List<Player> swing(int id, String word, double angle,
+      List<Integer> disconnectedIds) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
 
@@ -154,7 +158,8 @@ public class Game {
     }
   }
 
-  private synchronized void waitUntilAllPlayersReady(List<Integer> disconnectedIds) {
+  private synchronized void waitUntilAllPlayersReady(
+      List<Integer> disconnectedIds) {
     boolean allPlayersReady = false;
 
     while (!allPlayersReady) {
@@ -163,13 +168,14 @@ public class Game {
       for (int i = 0; i < players.size(); i++) {
         Player player = players.get(i);
         boolean hasPlayerDisconnected = false;
-        
-        if (player != null && pingTimes.containsKey(player) && (pingTimes.get(player) + 10000 <= System.currentTimeMillis())) {
+
+        if (player != null && pingTimes.containsKey(player)
+            && (pingTimes.get(player) + 10000 <= System.currentTimeMillis())) {
           hasPlayerDisconnected = true;
           disconnectedIds.add(i);
           players.set(i, null);
           decrementNumPlayers();
-          
+
           System.out.println("Player " + i + " has disconnected!");
         }
 
@@ -208,7 +214,7 @@ public class Game {
       // Moves the ball back to its original positioning, since it
       // went into the water (however the front ends receives
       // where the ball went in the water)
-      if (player != null){
+      if (player != null) {
         // if player is out, revert state back to past state
         if (player.getTerrain() == Terrain.WATER
             || player.getTerrain() == Terrain.OUT_OF_BOUNDS) {
@@ -273,7 +279,7 @@ public class Game {
     if (myPlayer != null) {
       myPlayer.setReady(true);
     }
-    
+
     List<Integer> disconnectedIds = new ArrayList<Integer>();
     waitUntilAllPlayersReady(disconnectedIds);
     roomReadiness.addAndGet(1);
@@ -318,7 +324,7 @@ public class Game {
   public void setActive(boolean active) {
     this.active = active;
   }
-  
+
   private void savePlayers() {
     savedPlayers = getCopyOfPlayers();
   }
@@ -330,18 +336,18 @@ public class Game {
   public List<Player> getSavedPlayers() {
     return savedPlayers;
   }
-  
+
   public void clearSavedPlayers() {
     savedPlayers = null;
   }
-  
+
   public void resetGame() {
     savePlayers();
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
   }
-  
+
   public void updatePingTime(int id, long time) {
     pingTimes.put(players.get(id), time);
   }
