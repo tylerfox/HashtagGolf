@@ -273,7 +273,7 @@ public final class SparkServerWithMultiplayer {
       assert rooms.get(room) != null;
       Game game = rooms.get(room);
       List<Player> players = game.getPlayers();
-      game.clearSavedPlayers();
+//      game.clearSavedPlayers();
       Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("title", "#golf").put("color", color).put("players", players)
           .put("id", id).put("holex", game.getHoleX())
@@ -298,16 +298,16 @@ public final class SparkServerWithMultiplayer {
       assert game != null;
       List<Player> players = game.getPlayers();
 
-      if (players.get(id) != null) {
-        players.set(id, null);
-        game.decrementNumPlayers();
-      }
+//      if (players.get(id) != null) {
+//        players.set(id, null);
+//        game.decrementNumPlayers();
+//      }
 
       // if all players left the game, then remove the room from the hashmap
-      if (game.getNumPlayers() == 0) {
-        System.out.println("removing game!");
-        rooms.remove(room);
-      }
+//      if (game.getNumPlayers() == 0) {
+//        System.out.println("removing game!");
+//        rooms.remove(room);
+//      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players, "id", id);
@@ -630,13 +630,16 @@ public final class SparkServerWithMultiplayer {
       boolean readyGame = true;
       if (lastGame == null) {
         readyGame = false;
+        //System.out.println("ready game is false");
       } else {
+        //System.out.println("ready game is true!");
         String idStr = game.addPlayer(lastGame.get(id).getName());
         res.cookie("id", idStr);
       }
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .put("readyGame", readyGame).build();
+      System.err.println(variables.get("readyGame"));
       return GSON.toJson(variables);
     }
   }

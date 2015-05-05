@@ -190,7 +190,7 @@ function nextlevel() {
 	} else {
 		// all other players
 		$.post("/next_level_multi", postParameters, function(responseJSON){  
-			var startedRoom = JSON.parse(responseJSON).readyRoom;
+			var startedRoom = JSON.parse(responseJSON).readyGame;
 			if (startedRoom) {
 				document.location.href = "/lobby/nextLevel";
 			} else {
