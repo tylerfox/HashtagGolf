@@ -49,7 +49,7 @@ function confirmExit(e) {
 	if (e && !gameover) {   
 		var postParameters = {};
 		$.post("/exit", postParameters, function(responseJSON) {
-			//window.location.href = "/start";
+			window.location.href = "/start";
 		});
 	}
 }

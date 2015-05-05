@@ -33,7 +33,7 @@ import freemarker.template.Configuration;
  * Runs the GUI for hashtag golf.
  */
 public final class SparkServerWithMultiplayer {
-  private static final int PORT = 1234; // change this
+  public static final int PORT = 1234; // change this
   private static final Gson GSON = new Gson();
   private static Map<String, Game> rooms;
   private static Set<String> ipAddresses;
