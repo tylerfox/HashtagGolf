@@ -373,7 +373,6 @@ public final class SparkServerWithMultiplayer {
         game.checkResetState();
         boolean entireGameOver = game.isGameOver();
 
-
         //if (entireGameOver) {
           //rooms.remove(room);
           //System.out.println("Removing room: " + room);

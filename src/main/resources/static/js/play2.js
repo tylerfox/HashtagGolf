@@ -832,15 +832,6 @@ function swing() {
 	postParameters={"word":word, "angle":angle};
 	curLine.remove();
 	//cheats
-	if(!isNaN(+word)) {
-		var num = +word;    
-		moveBall(balls[id], 
-				balls[id].x + num * Math.cos(angle * Math.PI / 180), 
-				balls[id].y - num * Math.sin(angle * Math.PI / 180),
-				players[id]);
-	} else if (word == "hole!") {    
-		moveBall(balls[id], hole_x, hole_y, players[id]);
-	} else {
 		var wordSplit = word.split(" ");
 		if (usedWords[word] == 1) {
 			messagepopup("word already used!");
@@ -861,7 +852,7 @@ function swing() {
 				animateTurn(responseJSON);
 			});
 		}
-	}
+	
 }
 
 
@@ -920,13 +911,14 @@ function animateTurn(responseJSON) {
 	}
 }
 
-function disableF5(e) {
+function disableRefreshKeys(e) {
 	if ((e.which || e.keyCode) == 116) {
 		e.preventDefault();
 	}
 }
 
-$(document).on("keydown", disableF5);
+
+$(document).on("keydown", disableRefreshKeys);
 
 function pingServer() {
 	setTimeout(function() {

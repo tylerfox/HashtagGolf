@@ -1,5 +1,5 @@
 var MAX_NAME_LENGTH = 18;
-
+var players ={};
 /**
  * Redirects to the start page
  */
@@ -19,31 +19,32 @@ function host() {
 		} else {
 			var player = prompt("Your name");
 
-			if (player == null && room.length > MAX_NAME_LENGTH) {
-				alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
-				host();
-			} else {
-				var postParameters = {
-						"room" : room,
-						"player" : player
-				};
+			if (player != null) {
+				if (player.length > MAX_NAME_LENGTH) {
+					alert("Please input a name less than or equal to "+ MAX_NAME_LENGTH + " characters.");
+					host();
+				} else {
+					var postParameters = {
+							"room" : room,
+							"player" : player
+					};
 
-				$.post("/host", postParameters, function(responseJSON) {
-					var nameAvailable = JSON.parse(responseJSON).nameAvailable;
-					var duplicateIp = JSON.parse(responseJSON).duplicateIp;
+					$.post("/host", postParameters, function(responseJSON) {
+						var nameAvailable = JSON.parse(responseJSON).nameAvailable;
+						var duplicateIp = JSON.parse(responseJSON).duplicateIp;
 
-					if (duplicateIp) {
-						alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
-					} else if (nameAvailable) {
-						window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
-					} else {
-						alert("Room name has already been taken. Please enter a new room name.");
-						host();
-					}
-				});
-			} 			
+						if (duplicateIp) {
+							alert("You are already playing #golf in another window. Please finish that round before starting a new one.");
+						} else if (nameAvailable) {
+							window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/multi_levelselect";
+						} else {
+							alert("Room name has already been taken. Please enter a new room name.");
+							host();
+						}
+					});
+				} 			
+			}
 		}
-
 	}
 }
 
@@ -94,17 +95,22 @@ function join() {
  * When the host clicks start game, send request to backend to see if all players are ready yet.
  */
 function startGame() {
-	var postParameters = {};
+	if (players.length > 1) {
+		var postParameters = {};
 
-	$.post("/hoststart", postParameters, function(responseJSON) {
-		var startGame = JSON.parse(responseJSON).startGame;
-		console.log(startGame);
-		if (startGame){
-			window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
-		} else {
-			alert("Not all players are ready yet. Please tell all players to click the ready button.");
-		}
-	});
+		$.post("/hoststart", postParameters, function(responseJSON) {
+			var startGame = JSON.parse(responseJSON).startGame;
+			console.log(startGame);
+			if (startGame){
+				window.location.href = "http://" + window.location.hostname + ":" + window.location.port + "/play";
+			} else {
+				alert("Not all players are ready yet. Please tell all players to click the ready button.");
+			}
+		});
+	} else {
+		alert("No friends connected to game!");
+	}
+	
 }
 
 /**
@@ -130,7 +136,7 @@ function checkPlayers() {
 		var postParameters = {};
 		$.post("/joinedPlayers", postParameters, function(responseJSON) {
 			var jsonObject = JSON.parse(responseJSON);
-			var players = jsonObject.players;
+			players = jsonObject.players;
 			var hostQuit = jsonObject.hostQuit;
 			if (hostQuit) {
 				alert("Whoops!  Looks like the host quit the game." +
