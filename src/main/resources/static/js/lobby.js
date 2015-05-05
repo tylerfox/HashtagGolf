@@ -5,8 +5,8 @@ function confirmExit(e) {
 
 	if (e) {   
 		var postParameters = {};
-		$.post("/exit", postParameters, function(responseJSON) {
+		/*$.post("/exit", postParameters, function(responseJSON) {
 			
-		});
+		});*/
 	}
 }

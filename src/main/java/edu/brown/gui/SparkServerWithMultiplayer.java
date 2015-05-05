@@ -298,17 +298,16 @@ public final class SparkServerWithMultiplayer {
       assert game != null;
       List<Player> players = game.getPlayers();
 
-      // players.set(id, null);
-      // game.decrementNumPlayers();
+      if (players.get(id) != null) {
+        players.set(id, null);
+        game.decrementNumPlayers();
+      }
 
       // if all players left the game, then remove the room from the hashmap
       if (game.getNumPlayers() == 0) {
-        // rooms.remove(room);
-        // System.out.println("Removed room " + room);
+        System.out.println("removing game!");
+        rooms.remove(room);
       }
-
-      // res.removeCookie("id");
-      // res.removeCookie("room");
 
       Map<String, Object> variables = ImmutableMap.of("title", "#golf",
           "color", color, "players", players, "id", id);
@@ -642,6 +641,7 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
+
   private static class PingHandler implements Route {
     @Override
     public Object handle(Request req, Response res) {
@@ -652,7 +652,6 @@ public final class SparkServerWithMultiplayer {
 
       int id = Integer.parseInt(req.cookie("id"));
       game.updatePingTime(id, timeReceived);
-      System.out.println("Ping received from ID " + id + " at time " + timeReceived);
 
       final Map<String, Object> variables = new ImmutableMap.Builder<String, Object>()
           .build();

@@ -50,9 +50,9 @@ function confirmExit(e) {
 
 	if (e && !gameover) {   
 		var postParameters = {};
-		$.post("/exit", postParameters, function(responseJSON) {
+		/*$.post("/exit", postParameters, function(responseJSON) {
 			//window.location.href = "/start";
-		});
+		});*/
 	}
 }
 
