@@ -41,7 +41,8 @@
     <div id="messagediv">
         <p id="mymessage">Message!</p>
     </div>
-    <canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>
+    <canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="1280" height="720"></canvas>
+    <!--<canvas id="myCanvas" onmousemove="try {linedraw(event);} catch (e) {console.log(e instanceof ReferenceError);}" onclick="toggleline();" width="1280" height="720"></canvas>-->
     <!--<canvas id="myCanvas" onmousemove="linedraw(event);" onclick="toggleline();" width="900" height="500"></canvas>-->
     
         <div id = "terrainpic" class="terrain_tee">on the tee <br> <img src="css/clock.png"> 60 seconds</div>
