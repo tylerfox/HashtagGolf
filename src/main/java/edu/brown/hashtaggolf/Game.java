@@ -3,6 +3,8 @@ package edu.brown.hashtaggolf;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game {
@@ -21,12 +23,14 @@ public class Game {
   private int par = 0;
   private String guihole = "";
   private boolean active = false;
+  private static Map<Player, Long> pingTimes;
 
   public Game(String level, String key) throws IOException {
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
     ref = new Referee(level, key);
+    pingTimes = new ConcurrentHashMap<>();
   }
 
   public void setLevel(String level, String key, int startX, int startY,
@@ -150,12 +154,17 @@ public class Game {
 
       for (int i = 0; i < players.size(); i++) {
         Player player = players.get(i);
+        boolean hasPlayerDisconnected = false;
+        
+        if (pingTimes.get(player) + 30000 <= System.currentTimeMillis()) {
+          hasPlayerDisconnected = true;
+          System.out.println("A player has disconnected!");
+        }
 
-        if (player != null && !player.isReady()) {
+        if (player != null && !player.isReady() && !hasPlayerDisconnected) {
           allPlayersReady = false;
         }
       }
-
     }
   }
 
@@ -314,5 +323,9 @@ public class Game {
     roomReadiness = new AtomicInteger(0);
     players = new ArrayList<>();
     numPlayers = new AtomicInteger(0);
+  }
+  
+  public void updatePingTime(int id, long time) {
+    pingTimes.put(players.get(id), time);
   }
 }

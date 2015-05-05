@@ -79,13 +79,13 @@ function redirectOnRefresh(evt) {
 $(document).bind("keydown", redirectOnRefresh);
 
 function waitForOthers() {
-  disableSwingButton();
-  var postParameters={};
-  if (!entireGameOver) {
-    $.post("/spectate", postParameters, function(responseJSON) {
-      animateTurn(responseJSON);
-    });
-  }
+	disableSwingButton();
+	var postParameters={};
+	if (!entireGameOver) {
+		$.post("/spectate", postParameters, function(responseJSON) {
+			animateTurn(responseJSON);
+		});
+	}
 
 }
 
@@ -110,14 +110,14 @@ function fullScreen() {
 		}
 	}*/
 	if(element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if(element.mozRequestFullScreen) {
-    element.mozRequestFullScreen();
-  } else if(element.webkitRequestFullscreen) {
-    element.webkitRequestFullscreen();
-  } else if(element.msRequestFullscreen) {
-    element.msRequestFullscreen();
-  }
+		element.requestFullscreen();
+	} else if(element.mozRequestFullScreen) {
+		element.mozRequestFullScreen();
+	} else if(element.webkitRequestFullscreen) {
+		element.webkitRequestFullscreen();
+	} else if(element.msRequestFullscreen) {
+		element.msRequestFullscreen();
+	}
 	fullScreenPopup.hide();
 	$.modal.close();       
 }
@@ -140,36 +140,36 @@ function displayScorecard() {
 }
 
 function nextlevel() {
-  if (players.length == 1) {
-    singlepostParameters ={};
-    $.get("/single_player_select", singlepostParameters, function(responseJSON) {
-      colpostParameters={"color":"red"};
-      console.log("c");
-      $.get("/play", colpostParameters, function(responseJSON) {
-        lvlpostParameters={"level":"2"};
-        console.log("b");
-        $.get("/level_select", lvlpostParameters, function(responseJSON) {
-          console.log("a");
-          document.location.href = "/play";
-        });
-      });
-   });
-  } else if (id == 0) {
-    // the host
-    $.post("/next_level_multi_host", postParameters, function(){  
-       document.location.href = "/multi_levelselect";
-    });
-   
-  } else {
+	if (players.length == 1) {
+		singlepostParameters ={};
+		$.get("/single_player_select", singlepostParameters, function(responseJSON) {
+			colpostParameters={"color":"red"};
+			console.log("c");
+			$.get("/play", colpostParameters, function(responseJSON) {
+				lvlpostParameters={"level":"2"};
+				console.log("b");
+				$.get("/level_select", lvlpostParameters, function(responseJSON) {
+					console.log("a");
+					document.location.href = "/play";
+				});
+			});
+		});
+	} else if (id == 0) {
+		// the host
+		$.post("/next_level_multi_host", postParameters, function(){  
+			document.location.href = "/multi_levelselect";
+		});
 
-    // all other players
-    $.post("/next_level_multi", postParameters, function(){  
-       setTimeout(function() {
-        document.location.href = "/lobby/nextLevel";
-       }, 2000);
-    });
-    
-  }
+	} else {
+
+		// all other players
+		$.post("/next_level_multi", postParameters, function(){  
+			setTimeout(function() {
+				document.location.href = "/lobby/nextLevel";
+			}, 2000);
+		});
+
+	}
 }
 
 var postParameters = {};
@@ -348,75 +348,75 @@ function magnitude(x, y) {
 }
 
 function moveBall(ball, dest_X, dest_Y, player) { 
-  var terrain = player.terrain;
-  var playerId = player.id;
-  var preX = ball.x;
-  var preY = ball.y;
-  var deltaX = dest_X - ball.x;
-  var deltaY = dest_Y - ball.y;
-  var mag = magnitude(deltaX, deltaY);
-  var scale;
-  var bounce; 
-  if ((mag / scaleFactor) <= 25) {
-    scale = 0;
-    bounce = 0;
-  } else {
-    scale = Math.min(maxRad, mag * .05);
-    bounce = Math.min(maxBounce, mag * .01);
-  }
-  var airX;
-  var airY;
-  if (terrain === "WATER") {    
-    airX = deltaX * .5;
-    airY = deltaY * .5;
-  } else {
-    airX = deltaX * .45;
-    airY = deltaY * .45;
-  }
-  ball.animate({
-    x: ball.x + airX,
-    y: ball.y + airY,
-    radius: ball.radius + scale
-  }, {
-    duration: "normal",
-    easing: "linear",
-    callback: function () {     
-      ball.animate({
-        x: ball.x + airX,
-        y: ball.y + airY,
-        radius: ball.radius - scale
-      }, {
-        duration: "normal",
-        easing: "linear",
-        callback: function () {           
-          if (terrain === "WATER") {
-            if (player.id == id) {
-              messagepopup("your ball is sleeping with the fishes!");
-              splash();
-              //splash2(ball.x,ball.y);
-            }
-            sink(ball, preX, preY);
-          } else if (terrain == "OUT_OF_BOUNDS") {
-            outOfBounds(ball, preX, preY);
-          } else {
-            ball.animate({
-              x: ball.x + deltaX * .05,
-              y: ball.y + deltaY * .05,
-              radius: ball.radius + bounce      
-            }, {
-              duration: "short",
-              easing: "linear",
-              callback: function () {
-                ball.animate({
-                  x: ball.x + deltaX * .05,
-                  y: ball.y + deltaY * .05,
-                  radius: ball.radius - bounce
-                }, {
-                  duration: "normal",
-                  easing: "linear",
-                  callback: function () { 
-                    enableSwingButton();
-                  /*if (outofbounds(ball, canvas)) {	
+	var terrain = player.terrain;
+	var playerId = player.id;
+	var preX = ball.x;
+	var preY = ball.y;
+	var deltaX = dest_X - ball.x;
+	var deltaY = dest_Y - ball.y;
+	var mag = magnitude(deltaX, deltaY);
+	var scale;
+	var bounce; 
+	if ((mag / scaleFactor) <= 25) {
+		scale = 0;
+		bounce = 0;
+	} else {
+		scale = Math.min(maxRad, mag * .05);
+		bounce = Math.min(maxBounce, mag * .01);
+	}
+	var airX;
+	var airY;
+	if (terrain === "WATER") {    
+		airX = deltaX * .5;
+		airY = deltaY * .5;
+	} else {
+		airX = deltaX * .45;
+		airY = deltaY * .45;
+	}
+	ball.animate({
+		x: ball.x + airX,
+		y: ball.y + airY,
+		radius: ball.radius + scale
+	}, {
+		duration: "normal",
+		easing: "linear",
+		callback: function () {     
+			ball.animate({
+				x: ball.x + airX,
+				y: ball.y + airY,
+				radius: ball.radius - scale
+			}, {
+				duration: "normal",
+				easing: "linear",
+				callback: function () {           
+					if (terrain === "WATER") {
+						if (player.id == id) {
+							messagepopup("your ball is sleeping with the fishes!");
+							splash();
+							//splash2(ball.x,ball.y);
+						}
+						sink(ball, preX, preY);
+					} else if (terrain == "OUT_OF_BOUNDS") {
+						outOfBounds(ball, preX, preY);
+					} else {
+						ball.animate({
+							x: ball.x + deltaX * .05,
+							y: ball.y + deltaY * .05,
+							radius: ball.radius + bounce      
+						}, {
+							duration: "short",
+							easing: "linear",
+							callback: function () {
+								ball.animate({
+									x: ball.x + deltaX * .05,
+									y: ball.y + deltaY * .05,
+									radius: ball.radius - bounce
+								}, {
+									duration: "normal",
+									easing: "linear",
+									callback: function () { 
+										enableSwingButton();
+										/*if (outofbounds(ball, canvas)) {	
                       ball.x = preX;
                       ball.y = preY;
                       if (playerId == id) {
@@ -555,11 +555,11 @@ function disableSwingButton() {
 	linetoggleable = false;
 	canenter = false;
 	var waitMessage;
-		if (players.length > 1) {
-			waitMessage = "waiting for other players...";
-		} else {
-			waitMessage = "searching twitter...";
-		}
+	if (players.length > 1) {
+		waitMessage = "waiting for other players...";
+	} else {
+		waitMessage = "searching twitter...";
+	}
 	showmessagepopup(waitMessage);
 	document.getElementById("check").disabled = true;
 }
@@ -739,14 +739,14 @@ function showmessagepopup(message){
 
 function hidemessagepopup() {
 	waitmessagediv = document.getElementById("waitmessage");	
-		messageinterval = setInterval(function(){ 
-			if (waitmessagediv.style.opacity > 0) {
-				waitmessagediv.style.opacity -= 0.01;
-			} else {
-				clearInterval(messageinterval);
-				waitmessagediv.style.visibility = "hidden";
-			}
-		}, 10);	
+	messageinterval = setInterval(function(){ 
+		if (waitmessagediv.style.opacity > 0) {
+			waitmessagediv.style.opacity -= 0.01;
+		} else {
+			clearInterval(messageinterval);
+			waitmessagediv.style.visibility = "hidden";
+		}
+	}, 10);	
 }
 
 function splash() {
@@ -893,3 +893,17 @@ function animateTurn(responseJSON) {
 		}
 	}
 }
+
+function pingServer() {
+	setTimeout(function() {
+		console.log("Pinging server");
+		
+		var postParameters = {};
+		$.post("/ping", postParameters, function(responseJSON) {
+		});
+		
+		pingServer();
+	}, 10000);
+}
+
+pingServer();

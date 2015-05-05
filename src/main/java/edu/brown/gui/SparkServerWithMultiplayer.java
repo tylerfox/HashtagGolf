@@ -85,6 +85,7 @@ public final class SparkServerWithMultiplayer {
     Spark.post("/availableRooms", new AvailableRoomsHandler());
     Spark.post("/next_level_multi", new NextLevelMultiHandler());
     Spark.post("/next_level_multi_host", new NextLevelMultiHandlerHost());
+    Spark.post("/ping", new PingHandler());
   }
 
   /**
@@ -642,6 +643,21 @@ public final class SparkServerWithMultiplayer {
     }
   }
 
-  
-  
+  private static class PingHandler implements Route {
+    @Override
+    public Object handle(Request req, Response res) {
+      long timeReceived = System.currentTimeMillis();
+      
+      String room = req.cookie("room");
+      Game game = rooms.get(room);
+      
+      int id = Integer.parseInt(req.cookie("id"));
+      game.updatePingTime(id, timeReceived);
+
+      final Map<String, Object> variables =
+          new ImmutableMap.Builder<String, Object>().build();
+
+      return GSON.toJson(variables);
+    }
+  }
 }
