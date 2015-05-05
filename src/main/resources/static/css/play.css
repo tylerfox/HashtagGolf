@@ -13,16 +13,16 @@
 	visibility:hidden;
 	
 	/*small splash, used with splash2(x,y)*/
-	background-image: url(splash2.png);
+	/*background-image: url(splash2.png);
 	background-repeat: none;
 	width:100px;
 	height:100px;
-	border-radius:50%;
+	border-radius:50%;*/
 
-	/*Big splash, use with splash();
-	/*background-image: url(watereffect.png);*/
-	/*width:1280px;
-	height:720px;*/
+	/*Big splash, use with splash();*/
+	background-image: url(watereffect.png);
+	width:1280px;
+	height:720px;
 
 	z-index:50;
 }
@@ -31,14 +31,19 @@
 	text-transform: lowercase;
     font-family:"Comics";
     src: url("comics.ttf");
-    /*position: absolute;
-    top:500px;*/
+    position: absolute;
+    top:620px;
     left:20%;
 	width: 300px;
 	height: 40px;
 	margin :50px;
-	padding:8px 36px;
 	vertical-align: middle;
+}
+
+#swingButton {
+    position: absolute;
+    top:665px;
+    left:650px;
 }
 
 body {
@@ -91,18 +96,21 @@ body {
 }
 
 #check {
-	/*position:absolute;
-	left:55%;
-	top:570px;
+	position:absolute;
+	left:850px;
+	top:675px;
 	z-index: 20;
-	text-align: center;*/
+	text-align: center;
 	width: 30px;
 	height: 30px;
 	vertical-align: middle;
 }
 
 label{
-	margin-right:30px;
+	position:absolute;
+	left:890px;
+	top:675px;
+	z-index: 20;
 }
 
 #messagediv {
@@ -249,6 +257,7 @@ p {
 /*Terrains */
 
 .terrain_tee {
+	top: 40px;
 	text-align: center;
 	background-color: #77C35F;
 	border: solid;
@@ -261,6 +270,7 @@ p {
 }
 
 .terrain_bunker {
+	top: 40px;
 	text-align: center;
 	background-color: #f0c3a2;
 	border: solid;
@@ -273,6 +283,7 @@ p {
 }
 
 .terrain_fairway {
+	top: 40px;
 	text-align: center;
 	background-color: #3AB54A;
 	border: solid;
@@ -285,6 +296,7 @@ p {
 }
 
 .terrain_rough {
+	top: 40px;
 	text-align: center;
 	background-color: #0B9444;
 	border: solid;
@@ -297,6 +309,7 @@ p {
 }
 
 .terrain_green{
+	top: 40px;
 	text-align: center;
 	background-color: #8FC965;
 	border: solid;

@@ -12,7 +12,7 @@ import edu.brown.socialdata.TwitterQuery;
  * Referee Class for HashtagGolf.
  */
 public class Referee {
-  private final double SCALE_FACTOR = 3.5;
+  private static double scaleFactor;
   private PixelColor image;
   private int level;
   private int par;
@@ -65,7 +65,7 @@ public class Referee {
     }
     if (yards == -1) {
       System.out
-      .println("Network Error. Please swing again when you have a connection.");
+          .println("Network Error. Please swing again when you have a connection.");
       return -1;
     } else if (yards == -2) {
       System.out.println("Invalid query. Please try again");
@@ -76,9 +76,9 @@ public class Referee {
     }
 
     int newX = player.getX()
-        + (int) (Math.cos(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+        + (int) (Math.cos(Math.toRadians(angle)) * yards * scaleFactor);
     int newY = player.getY()
-        - (int) (Math.sin(Math.toRadians(angle)) * yards * SCALE_FACTOR);
+        - (int) (Math.sin(Math.toRadians(angle)) * yards * scaleFactor);
 
     // System.out.println("Ball hit to (" + newX + ", " + newY + ")");
     Terrain newTerrain = image.getTerrainAt(newX, newY);
@@ -96,8 +96,8 @@ public class Referee {
         player.setTerrain(newTerrain);
     }
     // System.out.println(newTerrain);
-    //System.out.println("You are now at (" + player.getX() + ", "
-    //   + player.getY() + ")");
+    // System.out.println("You are now at (" + player.getX() + ", "
+    // + player.getY() + ")");
     player.isGameOver();
     return yards;
   }
@@ -127,7 +127,7 @@ public class Referee {
     }
     try {
       int count = tq.getCount(word, seconds);
-      //System.out.println(count);
+      System.out.println(count);
       return player.powerup(count);
     } catch (TwitterException e) {
       e.printStackTrace();
@@ -144,5 +144,13 @@ public class Referee {
   @Override
   public String toString() {
     return "Level Number: " + level + " Par: " + par;
+  }
+
+  public static void setScaleFactor(double scale) {
+    scaleFactor = scale;
+  }
+
+  public static double getScaleFactor() {
+    return scaleFactor;
   }
 }

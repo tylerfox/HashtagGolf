@@ -6,7 +6,6 @@ package edu.brown.hashtaggolf;
 public class Player {
 
   private static final int STROKE_PENALTY = 1;
-  private static final double SCALE_FACTOR = 3.5;
   private static final int WIGGLE_ROOM = 15;
 
   public static final int UNSET_COLOUR = 0;
@@ -45,14 +44,15 @@ public class Player {
     this.y = 0;
     this.hole_x = 0;
     this.hole_y = 0;
-    this.distanceToHole = 5000;//calcDistanceToHole(); // yards
+    this.distanceToHole = 5000;// calcDistanceToHole(); // yards
     this.ballColour = UNSET_COLOUR;
     this.ready = false;
     this.isGameOver = false;
     this.outOfBounds = false;
   }
 
-  public Player(String name, String id, int startx, int starty, int holex, int holey) {
+  public Player(String name, String id, int startx, int starty, int holex,
+      int holey) {
     this.name = name;
     this.id = id;
     this.terrain = Terrain.TEE;
@@ -102,14 +102,16 @@ public class Player {
    * @param angle the angle at which the ball moves
    */
   public void moveBall(int distance, double angle) {
-    //System.out.println("Ball went " + distance + " yards!");
+    // System.out.println("Ball went " + distance + " yards!");
     if (distanceToHole - distance < 0) {
-     // System.out.println("Whoops! Overshot the hole.");
+      // System.out.println("Whoops! Overshot the hole.");
     }
 
     // distanceToHole = Math.abs(distanceToHole - distance);
-    x += (int) (distance * Math.cos(Math.toRadians(angle)) * SCALE_FACTOR);
-    y -= (int) (distance * Math.sin(Math.toRadians(angle)) * SCALE_FACTOR);
+    x += (int) (distance * Math.cos(Math.toRadians(angle)) * Referee
+        .getScaleFactor());
+    y -= (int) (distance * Math.sin(Math.toRadians(angle)) * Referee
+        .getScaleFactor());
 
     distanceToHole = calcDistanceToHole();
     stroke++;
@@ -120,7 +122,8 @@ public class Player {
    * @return rounded to the closest yard, distance to hole
    */
   public int calcDistanceToHole() {
-    return (int) (Math.sqrt(Math.pow(x - hole_x, 2) + Math.pow(y - hole_y, 2)) / SCALE_FACTOR);
+    return (int) (Math.sqrt(Math.pow(x - hole_x, 2) + Math.pow(y - hole_y, 2)) / Referee
+        .getScaleFactor());
   }
 
   /**

@@ -14,13 +14,15 @@ function chooselevel(lvl) {
 		break;
 		case "2": levelimg.style.backgroundImage = "url(css/gui_hole2.png)";
 		levelimg.style.backgroundSize = "512px 288px";
-		leveldescrip.innerHTML = "level 2: par: 5 distance to hole: 235 yards <br>" +  
+		leveldescrip.innerHTML = "level 2: par: 4 distance to hole: 412 yards <br>" +  
 		"difficulty: <img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starunfilled.png'>";
 		playbtn.disabled = false;
 		break;
-		case "3": levelimg.style.background = "none";
-		leveldescrip.innerHTML = "level not yet made";
-		playbtn.disabled = true;
+		case "3": levelimg.style.backgroundImage = "url(css/gui_hole3.png)";
+		levelimg.style.backgroundSize = "512px 288px";
+		leveldescrip.innerHTML = "level 2: par: 5 distance to hole: 412 yards <br>" +  
+		"difficulty: <img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starfilled.png'><img src='css/starfilled.png'>";
+		playbtn.disabled = false;
 		break;
 		case "4": levelimg.style.background = "none";
 		leveldescrip.innerHTML = "level not yet made";
