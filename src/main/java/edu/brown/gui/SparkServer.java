@@ -293,7 +293,7 @@ public final class SparkServer {
       List<Player> players = game.getPlayers();
 
       if (players.get(id) != null) {
-        players.set(id, null);
+        //players.set(id, null);
         game.decrementNumPlayers();
       }
 
