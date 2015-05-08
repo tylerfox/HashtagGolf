@@ -3,3 +3,61 @@
 | |_) |  _|   / _ \ | | | | |\/| |  _|  
 |  _ <| |___ / ___ \| |_| | |  | | |___ 
 |_| \_\_____/_/   \_\____/|_|  |_|_____|
+
+How to Play:
+	
+	Objective: get the ball in the hole in as few strokes as possible.
+
+	1. Choose a direction -  move the black line on the screen with your mouse to select a direction for your swing. click to lock-in direction.
+Check the “Always to Hole” box to keep your shot pointed in a straight line towards the hole.
+	2. Input a word - the distance the ball travels will be based on how many times this word (case insensitive) has been tweeted in the past 60 seconds.
+Different types of terrain will cause the number of seconds to vary, so be careful where you aim!
+Fairway, Green, and Tee searches the past 60 seconds
+Rough searches the past 45 seconds
+Bunker searches the past 30 seconds
+An additional 1 stroke penalty will be added if your ball goes out of bounds.
+
+	Note: your game data will not be saved if you refresh or close the page.
+
+	A tutorial and instructions pages are available on the main screen.
+
+Known Bugs:
+
+No known ‘bugs’
+     -One thing to note is that refresh behavior isn’t ideal, although that is a limitation of the Chrome browser.  To prevent malicious code, the browser prevents intercepting the ‘refresh’ command with javascript.  An alert can be displayed, but no alternative action can be displayed.  As a result #golf will return to the main menu upon a refresh.  While this isn’t a bug, it isn’t the most ideal behavior.  However, it is the best solution there is (we researched this extensively).
+
+
+How to run any tests you wrote/tried by hand:
+To run tests, first build the program. Then:
+To run system tests run
+		cs032_system_tester_slow ./run tests/system/* -t 30
+
+	To run junit tests, run
+		mvn test
+
+We also performed general tests by hand, such as, but not limited to:
+Making sure Twitter Querying returns a reasonable number
+-We compared twitter api results to search.twitter.com to make sure we were retreiving 
+
+		Ball animation
+		Getting in the hole ends the game for that player
+		Exiting in the middle of a game exits cleanly for other players
+		Going to all pages / all buttons work as expected
+		Play testing all levels
+			User play testing / input
+
+
+How to build/run your program:
+
+	To build, at cs032Maps/maps, run 
+		mvn package
+
+	To run the program simply run
+		./run [--repl] [--requireUniqueIp]
+			repl flag: runs repl instead of the GUI (default)
+			no repl flag: runs gui at url the following url: localhost:1234/start
+			requireUniqueIp flag: requires a unique ip address per client to run the program at the given url
+			
+	
+
+
