@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import edu.brown.gui.SparkServerWithMultiplayer;
+import edu.brown.gui.SparkServer;
 
 /**
  * The main golf class that is used to invoke the program.
@@ -26,8 +26,9 @@ public class Main {
   }
 
   public Main() {
+    // prints out the IP address of the host to make hosting games easier
     try {
-      System.out.println(InetAddress.getLocalHost() + ":" + SparkServerWithMultiplayer.PORT);
+      System.out.println(InetAddress.getLocalHost() + ":" + SparkServer.PORT);
     } catch (UnknownHostException e) {
       System.out.println("ERROR: Could not trace IP.");
     }
@@ -37,41 +38,46 @@ public class Main {
    * Runs the program.
    */
   public void run(String[] args) {
-    // runSparkServer();
-    // TwitterQuery tq = new TwitterQuery();
-    // 1ST ARG IS QUERY, 2ND IS DURATION IN SECONDS
-    // tq.getCount("", 60);
-    //SparkServer.run();
-    
+
     OptionParser parser = new OptionParser();
     parser.accepts("requireUniqueIp");
+    parser.accepts("repl");
 
     OptionSet ops;
     try {
       ops = parser.parse(args);
     } catch (OptionException e) {
-      System.out.println("ERROR: Please use ./run [--requireUniqueIp]");
+      System.out.println("ERROR: Please use ./run [--requireUniqueIp] [--repl]");
       return;
     }
-    
-    SparkServerWithMultiplayer.run(ops.has("requireUniqueIp"));
-    // play();
+    if (ops.has("repl")) {
+      repl();
+    } else {
+      SparkServer.run(ops.has("requireUniqueIp"));
+    }
   }
 
   /**
    * Opens a REPL to play a Command Line version of HashtagGolf.
    */
-  public void play() {
+  public void repl() {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(
         System.in))) {
       Referee ref = new Referee("new_hole1.png", "key.png");
+      ref.setRepl(true);
+      int scaleFactor = 1;
+      ref.setScaleFactor(scaleFactor);
 
       System.out.println("Please enter your name.");
       String input = reader.readLine();
+
       if (input == null || input.equals("")) {
-        input = "Player 1";
+        input = "Tiger";
       }
-      Player player = new Player(input, "");
+
+      Player player = new Player(input, "", 310, 355, 971, 350, ref.getScaleFactor());
+      player.setRepl(true);
+
       System.out.println("Hello " + input + "!  Let's play #golf.\n");
       System.out.println(player);
       System.out.println("Enter your query to swing!");
@@ -90,13 +96,7 @@ public class Main {
         }
       }
 
-      // if (input != null && input.startsWith("#")) {
-      // input = input.substring(1);
-      // }
-
       while (!isGameOver && input != null) {
-        // TODO: Add club choice (this may be an extra argument to the swing
-        // method in referee)
         ref.swing(player, input, angle);
         if (player.isGameOver()) {
           isGameOver = true;

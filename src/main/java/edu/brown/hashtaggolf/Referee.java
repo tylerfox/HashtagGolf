@@ -12,12 +12,13 @@ import edu.brown.socialdata.TwitterQuery;
  * Referee Class for HashtagGolf.
  */
 public class Referee {
-  private static double scaleFactor;
+  private double scaleFactor;
   private PixelColor image;
   private int level;
   private int par;
   private SocialQuery tq;
   public static final int OUT = -4;
+  private boolean repl = false;
 
   /**
    * Instantiates a Referee class; A referee class is created at the start of a
@@ -27,23 +28,20 @@ public class Referee {
    */
   public Referee(String courseImage, String terrainKey) throws IOException {
     tq = new TwitterQuery();
-
     this.image = new FileColor(courseImage);
     Terrain.setColors(new FileColor(terrainKey));
     this.par = 3;
-
   }
 
-  // gets word count
-  // gets terrain of ball
-  // checks powerUp of player for new distance
-  // if new distance is out of bounds,
-  // send out of bounds,
-  // else moves ball the distance
 
-  // possibly add a club option
+
   /**
    * Updates all of the relevant information after a swing.
+   * - gets word count
+   * - gets terrain of ball
+   * - checks powerUp of player for new distance
+   * - if new distance is out of bounds, send out of bounds
+   *  else moves ball the distance
    * @param player the player who is swinging
    * @param word the word the player input
    * @param angle the angle at which the ball should go in the direction of
@@ -63,15 +61,15 @@ public class Referee {
     } else {
       yards = applyEnvironment(player, word);
     }
+
     if (yards == -1) {
-      System.out
-          .println("Network Error. Please swing again when you have a connection.");
+      System.err.println("Network Error. Please swing again when you have a connection.");
       return -1;
     } else if (yards == -2) {
-      System.out.println("Invalid query. Please try again");
+      System.err.println("Invalid query. Please try again");
       return -2;
     } else if (yards == -3) {
-      System.out.println("Problem fetching tweets. Please try again");
+      System.err.println("Problem fetching tweets. Please try again");
       return -3;
     }
 
@@ -80,7 +78,10 @@ public class Referee {
     int newY = player.getY()
         - (int) (Math.sin(Math.toRadians(angle)) * yards * scaleFactor);
 
-    // System.out.println("Ball hit to (" + newX + ", " + newY + ")");
+    if (repl) {
+      System.out.println("Ball hit to (" + newX + ", " + newY + ")");
+    }
+
     Terrain newTerrain = image.getTerrainAt(newX, newY);
 
     switch (newTerrain) {
@@ -95,9 +96,12 @@ public class Referee {
         player.moveBall(yards, angle);
         player.setTerrain(newTerrain);
     }
-    // System.out.println(newTerrain);
-    // System.out.println("You are now at (" + player.getX() + ", "
-    // + player.getY() + ")");
+
+    if (repl) {
+      System.out.println(newTerrain);
+      System.out.println("You are now at (" + player.getX() + ", " + player.getY() + ")");
+    }
+
     player.isGameOver();
     return yards;
   }
@@ -145,11 +149,27 @@ public class Referee {
     return "Level Number: " + level + " Par: " + par;
   }
 
-  public static void setScaleFactor(double scale) {
+  /**
+   * Sets the scale factor.
+   * @param scale scale factor to set
+   */
+  public void setScaleFactor(double scale) {
     scaleFactor = scale;
   }
 
-  public static double getScaleFactor() {
+  /**
+   * Gets the scale factor.
+   * @return scale factor
+   */
+  public double getScaleFactor() {
     return scaleFactor;
+  }
+
+  /**
+   * Sets repl to true/false.
+   * @param repl true if want to run repl else false
+   */
+  public void setRepl(boolean repl) {
+    this.repl = repl;
   }
 }

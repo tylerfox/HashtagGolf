@@ -7,9 +7,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Game {
-  private static final int MAX_PLAYERS = 4;
 
+/**
+ * Game class which stores all information
+ * relevant to a single game including
+ * the players' states and the level's attributes.
+ */
+public class Game {
+
+  private static final int MAX_PLAYERS = 4;
   private AtomicInteger roomReadiness;
   private Player[] savedState;
   private List<Player> savedPlayers;
@@ -33,9 +39,24 @@ public class Game {
     pingTimes = new ConcurrentHashMap<>();
   }
 
+  /**
+   * Sets the level in a game by changing all players' levels
+   * to this level and saving attributes in Game class.
+   * @param level level number
+   * @param key key image file
+   * @param startX x-coordinate of the ball start/tee
+   * @param startY y-coordinate of the ball start/tee
+   * @param holeX x-coordinate of the hole
+   * @param holeY y-coordinate of the hole
+   * @param par par of the level
+   * @param guihole image file for the hole
+   * @param scale scale factor
+   * @throws IOException if IO Exception
+   */
   public void setLevel(String level, String key, int startX, int startY,
-      int holeX, int holeY, int par, String guihole) throws IOException {
+      int holeX, int holeY, int par, String guihole, double scale) throws IOException {
     ref = new Referee(level, key);
+    ref.setScaleFactor(scale);
     this.startX = startX;
     this.startY = startY;
     this.holeX = holeX;
@@ -49,13 +70,14 @@ public class Game {
       p.setHoleX(holeX);
       p.setHoleY(holeY);
       p.setDistanceToHole(p.calcDistanceToHole());
+      p.setScaleFactor(ref.getScaleFactor());
     }
   }
 
-  public int getNumPlayers() {
-    return numPlayers.get();
-  }
-
+  /**
+   * Checks in the game is over.
+   * @return true if the game is over false otherwise
+   */
   public boolean isGameOver() {
     boolean gameover = true;
 
@@ -72,7 +94,6 @@ public class Game {
    * @return id of player else null
    */
   public synchronized String addPlayer(String name) {
-    System.out.println("numPlayers " + numPlayers.get());
     if (numPlayers.get() < MAX_PLAYERS) {
       int intId = numPlayers.get();
       for (int i = 0; i < numPlayers.get(); i++) {
@@ -83,12 +104,10 @@ public class Game {
       }
 
       String id = String.valueOf(intId);
-      Player myPlayer = new Player(name, id, startX, startY, holeX, holeY);
+      Player myPlayer = new Player(name, id, startX, startY, holeX, holeY, ref.getScaleFactor());
       players.add(myPlayer);
       numPlayers.getAndIncrement();
       savedState = new Player[MAX_PLAYERS];
-      System.out
-          .println("numPlayers should be incremented " + numPlayers.get());
       return id;
     } else {
       return null;
@@ -139,6 +158,11 @@ public class Game {
     return playerCopies;
   }
 
+  /**
+   * Allows players to spectate after they've won the game.
+   * @param id id of player who is spectating
+   * @return updated list of players and their new balls
+   */
   public List<Player> spectate(int id) {
     assert players.get(id) != null;
     Player myPlayer = players.get(id);
@@ -158,6 +182,11 @@ public class Game {
     }
   }
 
+  /**
+   * Waits until all players' ready flags are set
+   * to true.
+   * @param disconnectedIds list of disconnected ids
+   */
   private void waitUntilAllPlayersReady(
       List<Integer> disconnectedIds) {
     boolean allPlayersReady = false;
@@ -186,6 +215,9 @@ public class Game {
     }
   }
 
+  /**
+   * Resets the state if it is the end of a turn.
+   */
   public synchronized void checkResetState() {
     int activePlayers = getActivePlayerCount();
 
@@ -245,6 +277,13 @@ public class Game {
     return count;
   }
 
+  /**
+   * Indicates to the program the host would like to start the game.
+   * Will not start until all other players are ready.
+   * @param id id of the host
+   * @return list of unready players - will be empty if all players
+   * are ready
+   */
   public List<Player> hostStart(String id) {
     Player myPlayer = players.get(Integer.parseInt(id));
 
@@ -272,6 +311,11 @@ public class Game {
     return unreadyPlayers;
   }
 
+  /**
+   * Sets a player to ready.  Waits for
+   * other players to be ready to continue.
+   * @param id id of the player to set to ready
+   */
   public void playerReady(String id) {
     int numId = Integer.parseInt(id);
     Player myPlayer = players.get(numId);
@@ -285,42 +329,83 @@ public class Game {
     roomReadiness.addAndGet(1);
   }
 
+  /**
+   * Decrements the number of players.
+   */
   public void decrementNumPlayers() {
     numPlayers.getAndDecrement();
   }
 
+  /**
+   * Gets the list of players (can mutate).
+   * @return list of players
+   */
   public List<Player> getPlayers() {
     return players;
   }
 
+  /**
+   * Gets the par.
+   * @return par
+   */
   public int getPar() {
     return par;
   }
 
+  /**
+   * Gets the guihole image file name.
+   * @return guihole image file name
+   */
   public String getGuihole() {
     return guihole;
   }
 
+  /**
+   * Gets the x-coordinate of the hole.
+   * @return x-coordinate of hole
+   */
   public int getHoleX() {
     return holeX;
   }
 
+  /**
+   * Gets the y-coordinate of the hole.
+   * @return y-coordinate of hole
+   */
   public int getHoleY() {
     return holeY;
   }
 
+  /**
+   * Gets the x-coordinate of the tee/starting ball position.
+   * @return x-coordinate of tee/starting ball position
+   */
   public int getStartX() {
     return startX;
   }
 
+  /**
+   * Gets the y-coordinate of the tee/starting ball position.
+   * @return y-coordinate of tee/starting ball position
+   */
   public int getStartY() {
     return startY;
   }
 
+  /**
+   * Gets the active boolean.
+   * @return true if the game is active
+   * else returns false
+   */
   public boolean isActive() {
     return active;
   }
 
+  /**
+   * Sets the game to active or inactive.
+   * @param active set to true if active,
+   * else set to false
+   */
   public void setActive(boolean active) {
     this.active = active;
   }
@@ -329,18 +414,34 @@ public class Game {
     savedPlayers = getCopyOfPlayers();
   }
 
+  /**
+   * Gets the max number of players.
+   * @return max number of players
+   */
   public int getMaxPlayers() {
     return MAX_PLAYERS;
   }
 
+  /**
+   * Gets list of saved players from last game.
+   * @return list of saved players
+   */
   public List<Player> getSavedPlayers() {
     return savedPlayers;
   }
 
-//  public void clearSavedPlayers() {
-//    savedPlayers = null;
-//  }
+  /**
+   * Gets the number of players currently in the game.
+   * @return number of players in the game
+   */
+  public int getNumPlayers() {
+    return numPlayers.get();
+  }
 
+  /**
+   * Resets the state of the game to allow to play
+   * a new level on this game.
+   */
   public void resetGame() {
     savePlayers();
     roomReadiness = new AtomicInteger(0);
@@ -348,7 +449,20 @@ public class Game {
     numPlayers = new AtomicInteger(0);
   }
 
+  /**
+   * Updates the ping time.
+   * @param id of the client
+   * @param time time of ping
+   */
   public void updatePingTime(int id, long time) {
     pingTimes.put(players.get(id), time);
+  }
+
+  /**
+   * Gets the scale factor from the referee.
+   * @return
+   */
+  public double getScaleFactor() {
+    return ref.getScaleFactor();
   }
 }

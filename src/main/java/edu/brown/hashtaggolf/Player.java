@@ -22,50 +22,65 @@ public class Player {
   private Terrain terrain;
   private int hole_x;
   private int hole_y;
-  private int ballColour;
+  private int ballColor;
   private boolean ready;
   private boolean isGameOver = false;
   private boolean outOfBounds;
   private String id;
   private boolean spectating = false;
+  private boolean repl = false;
+  private double scaleFactor = 1.0;
 
   /**
-   * Instantiates a player.
+   * Instantiates a player without knowledge of a level.
    * @param name the name of the player
+   * @param id id of the player
    */
   public Player(String name, String id) {
     this.name = name;
     this.id = id;
     this.terrain = Terrain.TEE;
 
-    // TODO: will need to figure out how to set this based on the level
-    this.stroke = 0;
+    this.stroke = 1;
     this.x = 0;
     this.y = 0;
     this.hole_x = 0;
     this.hole_y = 0;
     this.distanceToHole = 5000;// calcDistanceToHole(); // yards
-    this.ballColour = UNSET_COLOUR;
+    this.ballColor = UNSET_COLOUR;
     this.ready = false;
     this.isGameOver = false;
     this.outOfBounds = false;
   }
 
+  /**
+   * Creates a Player with information about level.
+   * @param name name of player
+   * @param id id of player
+   * @param startx x-coordinate of start position
+   * @param starty y-coordinate of start position
+   * @param holex x-coordinate of hole
+   * @param holey y-coordinate of hole
+   * @param scale scale factor
+   */
   public Player(String name, String id, int startx, int starty, int holex,
-      int holey) {
+      int holey, double scale) {
     this.name = name;
     this.id = id;
     this.terrain = Terrain.TEE;
-
-    // TODO: will need to figure out how to set this based on the level
     this.stroke = 1;
     this.x = startx;
     this.y = starty;
     this.hole_x = holex;
     this.hole_y = holey;
     this.distanceToHole = calcDistanceToHole(); // yards
+    this.scaleFactor = scale;
   }
 
+  /**
+   * For creating a copy of the player.
+   * @param p player
+   */
   public Player(Player p) {
     this.distanceToHole = p.distanceToHole;
     this.name = p.name;
@@ -81,8 +96,6 @@ public class Player {
     this.id = p.id;
   }
 
-  // Players with powerups will override
-  // this method
   /**
    * If another PlayerType overrides this method, the distance the ball goes
    * will change based on the ability.
@@ -94,24 +107,24 @@ public class Player {
     return distance;
   }
 
-  // updates the ball's location
-  // will increment score + 1
   /**
-   * Updates the coordinates of the player to the new location.
+   * Updates the coordinates of the player's ball to the new location.
+   * Increments score + 1.
    * @param distance the distance the ball moved
    * @param angle the angle at which the ball moves
    */
   public void moveBall(int distance, double angle) {
-    // System.out.println("Ball went " + distance + " yards!");
-    if (distanceToHole - distance < 0) {
-      // System.out.println("Whoops! Overshot the hole.");
+    if (repl) {
+      System.out.println("Ball went " + distance + " yards!");
+
+      if (distanceToHole - distance < 0) {
+        System.out.println("Whoops! Overshot the hole.");
+      }
     }
 
-    // distanceToHole = Math.abs(distanceToHole - distance);
-    x += (int) (distance * Math.cos(Math.toRadians(angle)) * Referee
-        .getScaleFactor());
-    y -= (int) (distance * Math.sin(Math.toRadians(angle)) * Referee
-        .getScaleFactor());
+    distanceToHole = Math.abs(distanceToHole - distance);
+    x += (int) (distance * Math.cos(Math.toRadians(angle)) * scaleFactor);
+    y -= (int) (distance * Math.sin(Math.toRadians(angle)) * scaleFactor);
 
     distanceToHole = calcDistanceToHole();
     stroke++;
@@ -122,8 +135,7 @@ public class Player {
    * @return rounded to the closest yard, distance to hole
    */
   public int calcDistanceToHole() {
-    return (int) (Math.sqrt(Math.pow(x - hole_x, 2) + Math.pow(y - hole_y, 2)) / Referee
-        .getScaleFactor());
+    return (int) (Math.sqrt(Math.pow(x - hole_x, 2) + Math.pow(y - hole_y, 2)) / scaleFactor);
   }
 
   /**
@@ -134,7 +146,6 @@ public class Player {
     return terrain;
   }
 
-  // if ball goes out of bounds, score increments by 3
   /**
    * Applies a stroke penalty for when the ball goes out of bounds.
    */
@@ -250,39 +261,90 @@ public class Player {
     this.y = y;
   }
 
+  /**
+   * Checks readiness of the player.
+   * @return true if ready else false
+   */
   public boolean isReady() {
     return ready;
   }
 
+  /**
+   * Sets the player to ready or not ready.
+   * @param ready true if ready else false
+   */
   public void setReady(boolean ready) {
     this.ready = ready;
   }
 
-  public int getBallColour() {
-    return ballColour;
+  /**
+   * Gets the ball color.
+   * @return ball color
+   */
+  public int getBallColor() {
+    return ballColor;
   }
 
-  public void setBallColour(int ballColour) {
-    this.ballColour = ballColour;
+  /**
+   * Sets the ball color.
+   * @param ballColor color of the ball
+   */
+  public void setBallColor(int ballColor) {
+    this.ballColor = ballColor;
   }
 
+  /**
+   * Sets the id of the player.
+   * @param id id of player
+   */
   public void setId(String id) {
     this.id = id;
   }
 
+  /**
+   * Gets the ID of the player.
+   * @return id
+   */
   public String getId() {
     return id;
   }
 
+  /**
+   * Gets the name of the player.
+   * @return name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Gets spectating boolean.
+   * @return true if spectating set to true else false
+   */
   public boolean isSpectating() {
     return spectating;
   }
 
+  /**
+   * Sets spectating.
+   * @param spectating true if spectacting else false
+   */
   public void setSpectating(boolean spectating) {
     this.spectating = spectating;
+  }
+
+  /**
+   * Tells program to run repl if repl is set to true.
+   */
+  public void setRepl(boolean repl) {
+    this.repl = repl;
+  }
+
+  /**
+   * Sets the scale factor.
+   * @param scale scale factor
+   */
+  public void setScaleFactor(double scale) {
+    scaleFactor = scale;
   }
 }
