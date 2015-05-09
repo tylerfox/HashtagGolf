@@ -1,8 +1,6 @@
- ____  _____    _    ____  __  __ _____ 
-|  _ \| ____|  / \  |  _ \|  \/  | ____|
-| |_) |  _|   / _ \ | | | | |\/| |  _|  
-|  _ <| |___ / ___ \| |_| | |  | | |___ 
-|_| \_\_____/_/   \_\____/|_|  |_|_____|
+<h1>CS032 TERM PROJECT</h1>
+
+AUTHORS: Tyler Fox, Brandon Rothman, Beverly Tai, Dan Wang
 
 How to Play:
 	
@@ -47,10 +45,7 @@ Making sure Twitter Querying returns a reasonable number
 			User play testing / input
 
 
-How to build/run your program:
-
-	To build, at cs032Maps/maps, run 
-		mvn package
+How to build/run your program:	
 
 	To run the program simply run
 		./run [--repl] [--requireUniqueIp]
