@@ -1,8 +1,7 @@
-<h1>CS032 TERM PROJECT</h1>
-
+#CS032 TERM PROJECT
 AUTHORS: Tyler Fox, Brandon Rothman, Beverly Tai, Dan Wang
 
-How to Play:
+##How to Play:
 	
 	Objective: get the ball in the hole in as few strokes as possible.
 
@@ -19,13 +18,13 @@ An additional 1 stroke penalty will be added if your ball goes out of bounds.
 
 	A tutorial and instructions pages are available on the main screen.
 
-Known Bugs:
+##Known Bugs:
 
 No known ‘bugs’
      -One thing to note is that refresh behavior isn’t ideal, although that is a limitation of the Chrome browser.  To prevent malicious code, the browser prevents intercepting the ‘refresh’ command with javascript.  An alert can be displayed, but no alternative action can be displayed.  As a result #golf will return to the main menu upon a refresh.  While this isn’t a bug, it isn’t the most ideal behavior.  However, it is the best solution there is (we researched this extensively).
 
 
-How to run any tests you wrote/tried by hand:
+##Testing
 To run tests, first build the program. Then:
 To run system tests run
 		cs032_system_tester_slow ./run tests/system/* -t 30
@@ -45,7 +44,7 @@ Making sure Twitter Querying returns a reasonable number
 			User play testing / input
 
 
-How to build/run your program:	
+##How to build/run:
 
 	To run the program simply run
 		./run [--repl] [--requireUniqueIp]
