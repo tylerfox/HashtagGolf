@@ -25,13 +25,10 @@ public class TwitterQuery implements SocialQuery {
   public void init() {
     cb = new ConfigurationBuilder();
     cb.setDebugEnabled(true)
-        .setOAuthConsumerKey("LdHRl9Lp7AaoxTRp6p316IHd5")
-        .setOAuthConsumerSecret(
-            "gkE5FZJv1xNbInq01TWJqJjZ2vXuy2ra2FMpJO0X4G4v7ppLeD")
-        .setOAuthAccessToken(
-            "285842636-zuA21Cw3DNlpn6abviuFyUHqEaY5m4tM9GAE8YiH")
-        .setOAuthAccessTokenSecret(
-            "PMOLTk5nCagNlgLmfkaf6lx5ijPm2wJLJh3wiWJjKsIHv");
+        .setOAuthConsumerKey("XXXXXXXXXX")
+        .setOAuthConsumerSecret("XXXXXXXX")
+        .setOAuthAccessToken("XXXXXXX")
+        .setOAuthAccessTokenSecret("XXXXXXXX");
     TwitterFactory tf = new TwitterFactory(cb.build());
     twitter = tf.getInstance();
   }
